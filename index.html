@@ -8,200 +8,410 @@
 <meta name="theme-color" content="#efe9dc">
 <title>高校入試カウントダウン</title>
 
-<!-- さっきのサムネイルをそのまま使用 -->
+<!-- 以前のサムネイルをそのまま使用 -->
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
 <style>
 :root{
   --paper:#efe9dc;
   --ink:#171717;
-  --muted:#5d5a54;
   --blue:#477f9a;
   --yellow:#d9a70e;
   --red:#df4b27;
   --line:rgba(23,23,23,.72);
 }
+
 *{box-sizing:border-box}
-html,body{
-  margin:0;width:100%;height:100%;overflow:hidden;
-  background:var(--paper);color:var(--ink);
+
+html{
+  width:100%;
+  height:100%;
+  background:var(--paper);
 }
+
 body{
+  margin:0;
+  width:100%;
+  height:100%;
+  min-height:100%;
+  overflow:hidden;
+  background:var(--paper);
+  color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",
   "Hiragino Sans","Yu Gothic",sans-serif;
 }
+
+/* iPad Safari / Webアプリの実表示領域に合わせる */
 .page{
-  width:100vw;height:100vh;
-  padding:max(24px,env(safe-area-inset-top))
-          max(38px,env(safe-area-inset-right))
-          max(24px,env(safe-area-inset-bottom))
-          max(38px,env(safe-area-inset-left));
+  width:100vw;
+  height:100vh;
+  height:100dvh;
+  max-height:100dvh;
+  overflow:hidden;
+
+  padding:
+    max(14px, env(safe-area-inset-top))
+    max(28px, env(safe-area-inset-right))
+    max(14px, env(safe-area-inset-bottom))
+    max(28px, env(safe-area-inset-left));
+
   display:grid;
-  grid-template-rows:auto 1fr auto auto;
-  gap:0;
+  grid-template-rows:auto minmax(0,1fr) auto auto;
 }
+
 .top{
   display:grid;
   grid-template-columns:auto 1fr auto;
   align-items:center;
-  gap:20px;
+  gap:18px;
+  min-height:34px;
 }
+
 .entrance{
-  font-size:clamp(16px,2vw,30px);
+  font-size:clamp(13px,1.45vw,22px);
   letter-spacing:.30em;
   white-space:nowrap;
 }
-.topline{height:1px;background:var(--ink)}
+
+.topline{
+  height:1px;
+  background:var(--ink);
+}
+
 .today{
-  display:flex;align-items:baseline;gap:12px;white-space:nowrap;
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  white-space:nowrap;
 }
+
 .today b{
-  font-size:clamp(10px,.9vw,14px);letter-spacing:.28em;
+  font-size:clamp(9px,.72vw,12px);
+  letter-spacing:.26em;
 }
+
 .today span{
-  font-size:clamp(11px,1.2vw,18px);letter-spacing:.12em;font-weight:650;
+  font-size:clamp(10px,.95vw,15px);
+  letter-spacing:.10em;
+  font-weight:650;
 }
+
+/* 中央部を画面高に合わせて自動圧縮 */
 .hero{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
   min-height:0;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:.7vh 0;
 }
+
 h1{
-  margin:.6vh 0 .4vh;
-  font-size:clamp(48px,6vw,92px);
-  line-height:1;
+  margin:0 0 .6vh;
+  font-size:clamp(38px,5.1vw,72px);
+  line-height:.95;
   letter-spacing:.03em;
 }
+
 .daysrow{
-  display:flex;align-items:center;justify-content:center;gap:2vw;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:1.6vw;
+  min-height:0;
 }
+
 .digits{
   display:flex;
-  font-size:clamp(180px,24vw,390px);
-  line-height:.78;font-weight:850;letter-spacing:-.085em;
+  font-size:clamp(132px,19.5vw,280px);
+  line-height:.76;
+  font-weight:850;
+  letter-spacing:-.085em;
   font-variant-numeric:tabular-nums;
 }
+
 .digits span:nth-child(1){color:var(--blue)}
 .digits span:nth-child(2){color:var(--yellow)}
 .digits span:nth-child(3){color:var(--red)}
+
 .dayslabel{
-  font-size:clamp(25px,3vw,50px);
-  font-weight:800;letter-spacing:.22em;
+  font-size:clamp(21px,2.45vw,38px);
+  font-weight:800;
+  letter-spacing:.20em;
 }
+
 .timer{
-  margin-top:1vh;
-  display:flex;align-items:flex-start;justify-content:center;
+  margin-top:.45vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
 }
-.tunit{text-align:center;min-width:140px}
+
+.tunit{
+  text-align:center;
+  min-width:105px;
+}
+
 .tnum{
-  font-size:clamp(38px,4.4vw,70px);
-  font-weight:800;line-height:1;
+  font-size:clamp(30px,3.55vw,54px);
+  font-weight:800;
+  line-height:1;
   font-variant-numeric:tabular-nums;
 }
+
 .tlabel{
-  margin-top:7px;font-size:clamp(8px,.75vw,12px);
-  letter-spacing:.35em;font-weight:750;
+  margin-top:5px;
+  font-size:clamp(7px,.62vw,10px);
+  letter-spacing:.32em;
+  font-weight:750;
 }
+
 .colon{
-  font-size:clamp(36px,4vw,64px);
-  line-height:.85;padding:0 12px;
+  font-size:clamp(28px,3.2vw,48px);
+  line-height:.86;
+  padding:0 9px;
 }
+
 .examdate{
-  margin-top:1.6vh;
-  font-size:clamp(13px,1.4vw,21px);
-  letter-spacing:.20em;font-weight:650;
+  margin-top:1vh;
+  font-size:clamp(11px,1.05vw,16px);
+  letter-spacing:.17em;
+  font-weight:650;
 }
+
+/* NEXT EXAM */
 .nextExam{
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
-  display:grid;grid-template-columns:1fr 1px .85fr;
+  display:grid;
+  grid-template-columns:1fr 1px .78fr;
   align-items:center;
-  padding:1.7vh 1.5vw;
-  min-height:125px;
+  padding:1.1vh 1.3vw;
+  min-height:92px;
 }
-.vertical{width:1px;height:75%;background:var(--line);justify-self:center}
+
+.vertical{
+  width:1px;
+  height:72%;
+  background:var(--line);
+  justify-self:center;
+}
+
 .kicker{
-  font-size:clamp(10px,.9vw,14px);
-  letter-spacing:.34em;font-weight:800;
+  font-size:clamp(8px,.7vw,11px);
+  letter-spacing:.31em;
+  font-weight:800;
 }
+
 .nextName{
-  margin-top:7px;
-  font-size:clamp(27px,3.1vw,48px);
-  font-weight:800;line-height:1.1;
+  margin-top:5px;
+  font-size:clamp(21px,2.35vw,36px);
+  font-weight:800;
+  line-height:1.05;
 }
+
 .smallDate{
-  margin-top:8px;
-  font-size:clamp(11px,1.15vw,17px);
-  letter-spacing:.16em;font-weight:650;
+  margin-top:6px;
+  font-size:clamp(9px,.88vw,14px);
+  letter-spacing:.13em;
+  font-weight:650;
 }
+
 .nextRight{
-  display:flex;align-items:center;justify-content:flex-end;gap:1.4vw;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:1vw;
 }
+
 .nextDays{
   color:var(--red);
-  font-size:clamp(78px,9vw,145px);
-  line-height:.75;font-weight:850;
-  letter-spacing:-.05em;font-variant-numeric:tabular-nums;
+  font-size:clamp(56px,6.7vw,105px);
+  line-height:.78;
+  font-weight:850;
+  letter-spacing:-.05em;
+  font-variant-numeric:tabular-nums;
 }
+
 .nextDaysLabel{
-  font-size:clamp(18px,2vw,32px);
-  font-weight:800;letter-spacing:.20em;
+  font-size:clamp(14px,1.55vw,24px);
+  font-weight:800;
+  letter-spacing:.18em;
 }
+
+/* 下段 */
 .bottom{
-  display:grid;grid-template-columns:1fr 1px 1fr;
+  display:grid;
+  grid-template-columns:1fr 1px 1fr;
   align-items:stretch;
-  min-height:112px;
+  min-height:88px;
 }
+
 .info{
-  padding:1.7vh 1.5vw .8vh;
+  padding:1.05vh 1.3vw .35vh;
+  min-width:0;
 }
-.info.school{padding-left:3.6vw}
+
+.info.school{
+  padding-left:3vw;
+}
+
 .infoTitle{
-  margin-top:7px;
-  font-size:clamp(22px,2.5vw,38px);
-  font-weight:800;line-height:1.1;
+  margin-top:5px;
+  font-size:clamp(18px,1.9vw,29px);
+  font-weight:800;
+  line-height:1.08;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
+
 .infoDateRow{
-  margin-top:10px;display:flex;align-items:center;gap:14px;
+  margin-top:7px;
+  display:flex;
+  align-items:center;
+  gap:11px;
 }
+
 .calendar{
-  width:32px;height:32px;border:4px solid currentColor;border-radius:3px;
-  position:relative;flex:0 0 auto;
+  width:25px;
+  height:25px;
+  border:3px solid currentColor;
+  border-radius:3px;
+  position:relative;
+  flex:0 0 auto;
 }
+
 .calendar:before{
-  content:"";position:absolute;left:-4px;right:-4px;top:6px;
-  border-top:4px solid currentColor;
+  content:"";
+  position:absolute;
+  left:-3px;
+  right:-3px;
+  top:5px;
+  border-top:3px solid currentColor;
 }
+
 .calendar:after{
-  content:"";position:absolute;left:6px;top:-8px;width:4px;height:8px;
-  background:currentColor;box-shadow:12px 0 0 currentColor;
+  content:"";
+  position:absolute;
+  left:5px;
+  top:-6px;
+  width:3px;
+  height:6px;
+  background:currentColor;
+  box-shadow:9px 0 0 currentColor;
 }
+
 .career .calendar{color:var(--blue)}
 .school .calendar{color:var(--yellow)}
+
 .infoDate{
-  font-size:clamp(11px,1.15vw,17px);
-  letter-spacing:.13em;font-weight:650;
+  font-size:clamp(9px,.86vw,13px);
+  letter-spacing:.11em;
+  font-weight:650;
+  white-space:nowrap;
 }
+
+/* iPadで高さが厳しい時だけ、さらに少し圧縮 */
+@media (max-height: 820px) and (orientation: landscape){
+  .page{
+    padding-top:max(10px, env(safe-area-inset-top));
+    padding-bottom:max(10px, env(safe-area-inset-bottom));
+  }
+
+  .top{min-height:28px}
+
+  h1{
+    font-size:clamp(34px,4.5vw,62px);
+    margin-bottom:.2vh;
+  }
+
+  .digits{
+    font-size:clamp(118px,17.5vw,245px);
+  }
+
+  .timer{margin-top:.1vh}
+  .examdate{margin-top:.55vh}
+
+  .nextExam{
+    min-height:80px;
+    padding:.75vh 1.2vw;
+  }
+
+  .bottom{
+    min-height:76px;
+  }
+
+  .info{
+    padding-top:.75vh;
+  }
+}
+
+/* 縦置き時の保険 */
 @media(max-width:850px) and (orientation:portrait){
-  .page{padding-left:24px;padding-right:24px}
-  .top{grid-template-columns:1fr auto}.topline{display:none}
-  .digits{font-size:clamp(155px,31vw,290px)}
-  .tunit{min-width:90px}
-  .nextExam{grid-template-columns:1fr}
+  body{overflow:auto}
+
+  .page{
+    height:auto;
+    min-height:100dvh;
+    max-height:none;
+    overflow:visible;
+    padding-left:22px;
+    padding-right:22px;
+    grid-template-rows:auto auto auto auto;
+  }
+
+  .top{
+    grid-template-columns:1fr auto;
+  }
+
+  .topline{display:none}
+
+  .hero{
+    padding:4vh 0;
+  }
+
+  .digits{
+    font-size:clamp(128px,30vw,250px);
+  }
+
+  .tunit{min-width:82px}
+
+  .nextExam{
+    grid-template-columns:1fr;
+  }
+
   .nextExam .vertical{display:none}
-  .nextRight{justify-content:flex-start;margin-top:12px}
-  .bottom{grid-template-columns:1fr}
+
+  .nextRight{
+    justify-content:flex-start;
+    margin-top:10px;
+  }
+
+  .bottom{
+    grid-template-columns:1fr;
+  }
+
   .bottom>.vertical{display:none}
-  .info.school{padding-left:1.5vw}
+
+  .info.school{
+    padding-left:1.3vw;
+  }
 }
 </style>
 </head>
 
 <body>
 <div class="page">
+
   <header class="top">
     <div class="entrance">ENTRANCE EXAMINATION</div>
     <div class="topline"></div>
-    <div class="today"><b>TODAY</b><span id="today">----</span></div>
+    <div class="today">
+      <b>TODAY</b>
+      <span id="today">----</span>
+    </div>
   </header>
 
   <main class="hero">
@@ -215,11 +425,20 @@ h1{
     </div>
 
     <div class="timer">
-      <div class="tunit"><div class="tnum" id="hours">00</div><div class="tlabel">HOURS</div></div>
+      <div class="tunit">
+        <div class="tnum" id="hours">00</div>
+        <div class="tlabel">HOURS</div>
+      </div>
       <div class="colon">:</div>
-      <div class="tunit"><div class="tnum" id="minutes">00</div><div class="tlabel">MINUTES</div></div>
+      <div class="tunit">
+        <div class="tnum" id="minutes">00</div>
+        <div class="tlabel">MINUTES</div>
+      </div>
       <div class="colon">:</div>
-      <div class="tunit"><div class="tnum" id="seconds">00</div><div class="tlabel">SECONDS</div></div>
+      <div class="tunit">
+        <div class="tnum" id="seconds">00</div>
+        <div class="tlabel">SECONDS</div>
+      </div>
     </div>
 
     <div class="examdate">2027年3月9日（火）　8:30</div>
@@ -231,10 +450,12 @@ h1{
       <div class="nextName" id="nextExamName">---</div>
       <div class="smallDate" id="nextExamDate">---</div>
     </div>
+
     <div class="vertical"></div>
+
     <div class="nextRight">
       <div class="nextDays" id="nextExamDays">--</div>
-      <div class="nextDaysLabel">DAYS</div>
+      <div class="nextDaysLabel" id="nextExamDaysLabel">DAYS</div>
     </div>
   </section>
 
@@ -266,38 +487,52 @@ h1{
   const JST = "+09:00";
   const entrance = Date.parse("2027-03-09T08:30:00+09:00");
 
-  // 第6回実力テストは「12月上旬」で日付未確定のため、
-  // 正確なカウントダウンには入れていません。日付決定後に追加できます。
   const exams = [
-    ["第1回基礎学力テスト","2026-10-07","08:30"],
-    ["第5回実力テスト","2026-10-26","08:30"],
-    ["第2回基礎学力テスト","2026-11-11","08:30"],
-    ["2学期末テスト","2026-11-24","08:30"],
-    ["第3回基礎学力テスト","2027-01-12","08:30"],
-    ["第7回実力テスト","2027-01-21","08:30"],
-    ["卒業テスト","2027-02-12","08:30"],
-    ["直前テスト","2027-02-24","08:30"]
+    {name:"進級テスト", date:"2026-04-10", time:"08:30"},
+    {name:"第1回実力テスト", date:"2026-04-27", time:"08:30"},
+    {name:"第2回実力テスト", date:"2026-06-01", time:"08:30"},
+    {name:"1学期末テスト", date:"2026-06-22", time:"08:30"},
+    {name:"第3回実力テスト", date:"2026-07-06", time:"08:30"},
+    {name:"第4回実力テスト", date:"2026-08-28", time:"08:30"},
+    {name:"第1回基礎学力テスト", date:"2026-10-07", time:"08:30"},
+    {name:"第5回実力テスト", date:"2026-10-26", time:"08:30"},
+    {name:"第2回基礎学力テスト", date:"2026-11-11", time:"08:30"},
+    {name:"2学期末テスト", date:"2026-11-24", time:"08:30"},
+    {name:"第6回実力テスト", approx:"2026年12月上旬", sort:"2026-12-05"},
+    {name:"第3回基礎学力テスト", date:"2027-01-12", time:"08:30"},
+    {name:"第7回実力テスト", date:"2027-01-21", time:"08:30"},
+    {name:"卒業テスト", date:"2027-02-12", time:"08:30"},
+    {name:"直前テスト", date:"2027-02-24", time:"08:30"}
   ];
 
   const careers = [
-    ["高校進学説明会①","2026-10-14"],
-    ["高校進学説明会②","2026-10-15"]
-    // 日付決定後ここへ追加：
-    // ["第3回進路希望調査","2026-10-XX"],
-    // ["三者面談（第4回進路希望調査）","2026-XX-XX"],
-    // ["三者面談調印（私立・育成型）","2027-XX-XX"],
-    // ["三者面談調印・公立願書受付","2027-XX-XX"]
+    {name:"三者面談", date:"2026-04-20"},
+    {name:"第1回進路希望調査", date:"2026-05-07"},
+    {name:"三者面談（第2回進路希望調査）", date:"2026-07-09"},
+    {name:"高校進学説明会①", date:"2026-10-14"},
+    {name:"高校進学説明会②", date:"2026-10-15"},
+    {name:"第3回進路希望調査", approx:"2026年10月下旬", sort:"2026-10-25"},
+    {name:"三者面談（第4回進路希望調査）"},
+    {name:"三者面談調印（私立・育成型）"},
+    {name:"三者面談調印・公立願書受付"}
   ];
 
   const schoolEvents = [
-    ["文化祭","2026-09-05"],
-    ["代休","2026-09-07"],
-    ["遠足（USJ）","2026-10-22"],
-    ["臨時休校","2026-10-23"]
-    // 日付決定後ここへ追加：
-    // ["2学期終業式","2026-XX-XX"],
-    // ["3学期始業式","2027-XX-XX"],
-    // ["卒業式","2027-XX-XX"]
+    {name:"始業式", date:"2026-04-08"},
+    {name:"授業参観・PTA総会", date:"2026-04-18"},
+    {name:"代休", date:"2026-05-01"},
+    {name:"体育祭", date:"2026-05-15"},
+    {name:"代休", date:"2026-06-15"},
+    {name:"終業式", date:"2026-07-17"},
+    {name:"PTA奉仕作業", date:"2026-08-16"},
+    {name:"始業式", date:"2026-08-27"},
+    {name:"文化祭", date:"2026-09-05"},
+    {name:"代休", date:"2026-09-07"},
+    {name:"遠足USJ", date:"2026-10-22"},
+    {name:"臨時休校", date:"2026-10-23"},
+    {name:"2学期終業式"},
+    {name:"3学期始業式"},
+    {name:"卒業式"}
   ];
 
   const pad = n => String(n).padStart(2,"0");
@@ -328,31 +563,76 @@ h1{
 
   function todayKey(){
     const parts=new Intl.DateTimeFormat("en-CA",{
-      timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit"
+      timeZone:"Asia/Tokyo",
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit"
     }).formatToParts(new Date());
+
     const o={};
     parts.forEach(x=>o[x.type]=x.value);
     return `${o.year}-${o.month}-${o.day}`;
   }
 
-  function nextTimed(list, now){
-    return list
-      .map(x=>({name:x[0],date:x[1],time:x[2],ts:parseJST(x[1],x[2])}))
-      .filter(x=>x.ts>=now)
-      .sort((a,b)=>a.ts-b.ts)[0];
-  }
-
-  function nextDated(list){
-    const today=todayKey();
-    return list
-      .map(x=>({name:x[0],date:x[1]}))
-      .filter(x=>x.date>=today)
-      .sort((a,b)=>a.date.localeCompare(b.date))[0];
-  }
-
   function setThreeDigits(n){
     const s=String(Math.max(0,n)).padStart(3,"0").slice(-3);
-    document.querySelectorAll("#mainDays span").forEach((el,i)=>el.textContent=s[i]);
+    document.querySelectorAll("#mainDays span")
+      .forEach((el,i)=>el.textContent=s[i]);
+  }
+
+  function nextExam(now){
+    const today=todayKey();
+
+    const candidates = exams.map(x => {
+      if(x.date){
+        return {...x, key:x.date, ts:parseJST(x.date,x.time||"08:30"), exact:true};
+      }
+      if(x.approx){
+        return {...x, key:x.sort, exact:false};
+      }
+      return null;
+    }).filter(Boolean);
+
+    for(const x of candidates){
+      if(x.exact && x.ts >= now) return x;
+      if(!x.exact && x.key >= today) return x;
+    }
+    return null;
+  }
+
+  function nextCalendarItem(list){
+    const today=todayKey();
+
+    const dated = list
+      .filter(x=>x.date && x.date>=today)
+      .sort((a,b)=>a.date.localeCompare(b.date));
+
+    const approx = list
+      .filter(x=>x.approx && x.sort && x.sort>=today)
+      .sort((a,b)=>a.sort.localeCompare(b.sort));
+
+    if(!dated.length) return approx[0] || null;
+    if(!approx.length) return dated[0];
+
+    return (approx[0].sort < dated[0].date) ? approx[0] : dated[0];
+  }
+
+  function displayCalendarItem(item, nameEl, dateEl){
+    if(!item){
+      nameEl.textContent="日程未定";
+      dateEl.textContent="—";
+      return;
+    }
+
+    nameEl.textContent=item.name;
+    if(item.date){
+      const today=todayKey();
+      dateEl.textContent = item.date===today
+        ? `本日　${jpDate(item.date)}`
+        : jpDate(item.date);
+    }else{
+      dateEl.textContent=item.approx || "日程未定";
+    }
   }
 
   function tick(){
@@ -363,32 +643,50 @@ h1{
     document.getElementById("hours").textContent=pad(p.h);
     document.getElementById("minutes").textContent=pad(p.m);
     document.getElementById("seconds").textContent=pad(p.s);
-
     document.getElementById("today").textContent=jpDate(todayKey());
 
-    const ex=nextTimed(exams,now);
+    const ex=nextExam(now);
+    const name=document.getElementById("nextExamName");
+    const date=document.getElementById("nextExamDate");
+    const days=document.getElementById("nextExamDays");
+    const label=document.getElementById("nextExamDaysLabel");
+
     if(ex){
-      document.getElementById("nextExamName").textContent=`${ex.name}まで`;
-      document.getElementById("nextExamDate").textContent=jpDate(ex.date);
-      document.getElementById("nextExamDays").textContent=parts(ex.ts-now).d;
+      name.textContent=`${ex.name}まで`;
+
+      if(ex.exact){
+        date.textContent=jpDate(ex.date);
+        days.textContent=parts(ex.ts-now).d;
+        label.textContent="DAYS";
+      }else{
+        date.textContent=ex.approx;
+        days.textContent="—";
+        label.textContent="日程未確定";
+      }
     }else{
-      document.getElementById("nextExamName").textContent="高校入試";
-      document.getElementById("nextExamDate").textContent="2027年3月9日（火）";
-      document.getElementById("nextExamDays").textContent=parts(entrance-now).d;
+      name.textContent="高校入試まで";
+      date.textContent="2027年3月9日（火）";
+      days.textContent=p.d;
+      label.textContent="DAYS";
     }
 
-    const career=nextDated(careers);
-    document.getElementById("careerName").textContent=career ? career.name : "日程未定";
-    document.getElementById("careerDate").textContent=career ? jpDate(career.date) : "—";
+    displayCalendarItem(
+      nextCalendarItem(careers),
+      document.getElementById("careerName"),
+      document.getElementById("careerDate")
+    );
 
-    const school=nextDated(schoolEvents);
-    document.getElementById("schoolName").textContent=school ? school.name : "日程未定";
-    document.getElementById("schoolDate").textContent=school ? jpDate(school.date) : "—";
+    displayCalendarItem(
+      nextCalendarItem(schoolEvents),
+      document.getElementById("schoolName"),
+      document.getElementById("schoolDate")
+    );
   }
 
   tick();
   setInterval(tick,1000);
 })();
 </script>
+
 </body>
 </html>
