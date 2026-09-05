@@ -13,90 +13,76 @@
 
 <style>
 :root{
-  --paper:#efe9dc;
-  --ink:#171717;
-  --blue:#477f9a;
-  --yellow:#d9a70e;
-  --red:#df4b27;
-  --line:rgba(23,23,23,.72);
+  --paper:#f1eee4;
+  --ink:#111;
+  --blue:#1683d8;
+  --yellow:#efc400;
+  --red:#ee202d;
+  --line:rgba(17,17,17,.58);
 }
 
 *{box-sizing:border-box}
-
-html{
+html,body{
+  margin:0;
   width:100%;
   height:100%;
   background:var(--paper);
 }
-
 body{
-  margin:0;
-  width:100%;
-  height:100%;
-  min-height:100%;
   overflow:hidden;
-  background:var(--paper);
   color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",
   "Hiragino Sans","Yu Gothic",sans-serif;
 }
 
-/* iPad Safari / Webアプリの実表示領域に合わせる */
 .page{
   width:100vw;
   height:100vh;
   height:100dvh;
-  max-height:100dvh;
   overflow:hidden;
-
   padding:
-    max(14px, env(safe-area-inset-top))
-    max(28px, env(safe-area-inset-right))
-    max(14px, env(safe-area-inset-bottom))
-    max(28px, env(safe-area-inset-left));
-
+    max(12px,env(safe-area-inset-top))
+    max(24px,env(safe-area-inset-right))
+    max(10px,env(safe-area-inset-bottom))
+    max(24px,env(safe-area-inset-left));
   display:grid;
   grid-template-rows:auto minmax(0,1fr) auto auto;
 }
 
+/* ===== TOP ===== */
 .top{
   display:grid;
   grid-template-columns:auto 1fr auto;
   align-items:center;
-  gap:18px;
+  gap:16px;
   min-height:34px;
 }
-
 .entrance{
-  font-size:clamp(13px,1.45vw,22px);
-  letter-spacing:.30em;
+  font-size:clamp(13px,1.6vw,24px);
+  letter-spacing:.32em;
   white-space:nowrap;
 }
-
-.topline{
-  height:1px;
-  background:var(--ink);
-}
-
+.topline{height:1px;background:var(--ink)}
 .today{
   display:flex;
   align-items:baseline;
   gap:10px;
   white-space:nowrap;
+  text-decoration:none;
+  color:inherit;
+  padding:8px 0;
 }
-
 .today b{
-  font-size:clamp(9px,.72vw,12px);
-  letter-spacing:.26em;
+  font-size:clamp(9px,.7vw,11px);
+  letter-spacing:.25em;
 }
-
 .today span{
   font-size:clamp(10px,.95vw,15px);
-  letter-spacing:.10em;
+  letter-spacing:.1em;
   font-weight:650;
 }
 
-/* 中央部を画面高に合わせて自動圧縮 */
+/* ===== HERO ===== */
 .hero{
   min-height:0;
   overflow:hidden;
@@ -104,185 +90,164 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  padding:.7vh 0;
+  padding:.3vh 0 .8vh;
 }
-
-h1{
-  margin:0 0 .6vh;
-  font-size:clamp(38px,5.1vw,72px);
+.hero h1{
+  margin:0 0 .3vh;
+  font-size:clamp(54px,7vw,108px);
   line-height:.95;
-  letter-spacing:.03em;
+  font-weight:850;
+  letter-spacing:.01em;
 }
-
 .daysrow{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:1.6vw;
-  min-height:0;
+  gap:1.3vw;
+  line-height:1;
 }
-
 .digits{
   display:flex;
-  font-size:clamp(132px,19.5vw,280px);
-  line-height:.76;
-  font-weight:850;
-  letter-spacing:-.085em;
+  font-size:clamp(230px,31vw,500px);
+  line-height:.70;
+  font-weight:900;
+  letter-spacing:-.095em;
   font-variant-numeric:tabular-nums;
 }
-
 .digits span:nth-child(1){color:var(--blue)}
 .digits span:nth-child(2){color:var(--yellow)}
 .digits span:nth-child(3){color:var(--red)}
-
 .dayslabel{
-  font-size:clamp(21px,2.45vw,38px);
-  font-weight:800;
-  letter-spacing:.20em;
+  align-self:center;
+  margin-top:4vh;
+  font-size:clamp(26px,3.3vw,54px);
+  font-weight:900;
+  letter-spacing:.16em;
 }
 
 .timer{
-  margin-top:.45vh;
+  margin-top:.2vh;
   display:flex;
-  align-items:flex-start;
   justify-content:center;
+  align-items:flex-start;
 }
-
 .tunit{
+  min-width:140px;
   text-align:center;
-  min-width:105px;
 }
-
 .tnum{
-  font-size:clamp(30px,3.55vw,54px);
-  font-weight:800;
-  line-height:1;
+  font-size:clamp(46px,5.8vw,88px);
+  line-height:.95;
+  font-weight:850;
   font-variant-numeric:tabular-nums;
 }
-
-.tlabel{
-  margin-top:5px;
-  font-size:clamp(7px,.62vw,10px);
-  letter-spacing:.32em;
-  font-weight:750;
-}
-
 .colon{
-  font-size:clamp(28px,3.2vw,48px);
-  line-height:.86;
-  padding:0 9px;
+  padding:0 16px;
+  font-size:clamp(40px,4.5vw,72px);
+  line-height:.95;
+  font-weight:500;
 }
-
+.tlabel{
+  margin-top:7px;
+  font-size:clamp(8px,.72vw,11px);
+  letter-spacing:.38em;
+  font-weight:800;
+}
 .examdate{
-  margin-top:1vh;
-  font-size:clamp(11px,1.05vw,16px);
-  letter-spacing:.17em;
+  margin-top:1.1vh;
+  font-size:clamp(14px,1.45vw,22px);
+  letter-spacing:.16em;
   font-weight:650;
 }
 
-/* NEXT EXAM */
+/* ===== NEXT EXAM ===== */
 .nextExam{
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
   display:grid;
-  grid-template-columns:1fr 1px .78fr;
+  grid-template-columns:1fr 1px .72fr;
   align-items:center;
-  padding:1.1vh 1.3vw;
+  padding:.95vh 1vw;
   min-height:92px;
 }
-
 .vertical{
   width:1px;
   height:72%;
   background:var(--line);
   justify-self:center;
 }
-
 .kicker{
   font-size:clamp(8px,.7vw,11px);
-  letter-spacing:.31em;
-  font-weight:800;
+  letter-spacing:.33em;
+  font-weight:850;
 }
-
 .nextName{
-  margin-top:5px;
-  font-size:clamp(21px,2.35vw,36px);
-  font-weight:800;
-  line-height:1.05;
+  margin-top:4px;
+  font-size:clamp(23px,2.45vw,38px);
+  line-height:1.02;
+  font-weight:850;
 }
-
 .smallDate{
-  margin-top:6px;
-  font-size:clamp(9px,.88vw,14px);
-  letter-spacing:.13em;
+  margin-top:5px;
+  font-size:clamp(9px,.9vw,14px);
+  letter-spacing:.12em;
   font-weight:650;
 }
-
 .nextRight{
   display:flex;
-  align-items:center;
   justify-content:flex-end;
+  align-items:center;
   gap:1vw;
 }
-
 .nextDays{
   color:var(--red);
-  font-size:clamp(56px,6.7vw,105px);
-  line-height:.78;
-  font-weight:850;
+  font-size:clamp(66px,8vw,122px);
+  line-height:.74;
+  font-weight:900;
   letter-spacing:-.05em;
   font-variant-numeric:tabular-nums;
 }
-
 .nextDaysLabel{
-  font-size:clamp(14px,1.55vw,24px);
-  font-weight:800;
+  font-size:clamp(17px,1.75vw,28px);
   letter-spacing:.18em;
+  font-weight:900;
 }
 
-/* 下段 */
+/* ===== BOTTOM ===== */
 .bottom{
   display:grid;
   grid-template-columns:1fr 1px 1fr;
   align-items:stretch;
   min-height:88px;
 }
-
 .info{
-  padding:1.05vh 1.3vw .35vh;
+  padding:.9vh 1vw .25vh;
   min-width:0;
 }
-
-.info.school{
-  padding-left:3vw;
-}
-
+.info.school{padding-left:3.2vw}
 .infoTitle{
   margin-top:5px;
-  font-size:clamp(18px,1.9vw,29px);
-  font-weight:800;
-  line-height:1.08;
+  font-size:clamp(19px,2vw,31px);
+  line-height:1.05;
+  font-weight:850;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
-
 .infoDateRow{
   margin-top:7px;
   display:flex;
   align-items:center;
   gap:11px;
 }
-
 .calendar{
-  width:25px;
-  height:25px;
+  width:26px;
+  height:26px;
   border:3px solid currentColor;
   border-radius:3px;
   position:relative;
   flex:0 0 auto;
 }
-
 .calendar:before{
   content:"";
   position:absolute;
@@ -291,7 +256,6 @@ h1{
   top:5px;
   border-top:3px solid currentColor;
 }
-
 .calendar:after{
   content:"";
   position:absolute;
@@ -300,104 +264,84 @@ h1{
   width:3px;
   height:6px;
   background:currentColor;
-  box-shadow:9px 0 0 currentColor;
+  box-shadow:10px 0 0 currentColor;
 }
-
 .career .calendar{color:var(--blue)}
 .school .calendar{color:var(--yellow)}
-
 .infoDate{
-  font-size:clamp(9px,.86vw,13px);
+  font-size:clamp(9px,.9vw,14px);
   letter-spacing:.11em;
   font-weight:650;
   white-space:nowrap;
 }
 
-/* iPadで高さが厳しい時だけ、さらに少し圧縮 */
-@media (max-height: 820px) and (orientation: landscape){
+/* iPadで高さが厳しい時だけ少し縮める */
+@media (max-height: 820px) and (orientation:landscape){
   .page{
-    padding-top:max(10px, env(safe-area-inset-top));
-    padding-bottom:max(10px, env(safe-area-inset-bottom));
+    padding-top:max(8px,env(safe-area-inset-top));
+    padding-bottom:max(8px,env(safe-area-inset-bottom));
   }
-
-  .top{min-height:28px}
-
-  h1{
-    font-size:clamp(34px,4.5vw,62px);
-    margin-bottom:.2vh;
+  .hero h1{
+    font-size:clamp(48px,6.2vw,90px);
   }
-
   .digits{
-    font-size:clamp(118px,17.5vw,245px);
+    font-size:clamp(205px,27.5vw,430px);
   }
-
-  .timer{margin-top:.1vh}
-  .examdate{margin-top:.55vh}
-
-  .nextExam{
-    min-height:80px;
-    padding:.75vh 1.2vw;
+  .dayslabel{
+    margin-top:3vh;
+    font-size:clamp(23px,2.8vw,44px);
   }
-
-  .bottom{
-    min-height:76px;
+  .tnum{
+    font-size:clamp(40px,5vw,72px);
   }
-
-  .info{
-    padding-top:.75vh;
+  .examdate{
+    margin-top:.7vh;
   }
+  .nextExam{min-height:82px}
+  .bottom{min-height:78px}
 }
 
-/* 縦置き時の保険 */
+/* 縦向きの保険 */
 @media(max-width:850px) and (orientation:portrait){
   body{overflow:auto}
-
   .page{
     height:auto;
     min-height:100dvh;
-    max-height:none;
     overflow:visible;
-    padding-left:22px;
-    padding-right:22px;
     grid-template-rows:auto auto auto auto;
+    padding-left:20px;
+    padding-right:20px;
   }
-
   .top{
     grid-template-columns:1fr auto;
   }
-
   .topline{display:none}
-
   .hero{
-    padding:4vh 0;
+    padding:4vh 0 3vh;
   }
-
+  .hero h1{
+    font-size:clamp(42px,9vw,68px);
+  }
   .digits{
-    font-size:clamp(128px,30vw,250px);
+    font-size:clamp(160px,39vw,310px);
   }
-
-  .tunit{min-width:82px}
-
+  .dayslabel{
+    margin-top:2vh;
+  }
+  .tunit{min-width:86px}
   .nextExam{
     grid-template-columns:1fr;
   }
-
-  .nextExam .vertical{display:none}
-
+  .nextExam>.vertical{display:none}
   .nextRight{
     justify-content:flex-start;
     margin-top:10px;
   }
-
   .bottom{
     grid-template-columns:1fr;
   }
-
   .bottom>.vertical{display:none}
-
-  .info.school{
-    padding-left:1.3vw;
-  }
+  .info.school{padding-left:1vw}
 }
 </style>
 </head>
@@ -408,10 +352,12 @@ h1{
   <header class="top">
     <div class="entrance">ENTRANCE EXAMINATION</div>
     <div class="topline"></div>
-    <div class="today">
+
+    <!-- clock.html を作ったらここをタップして移動 -->
+    <a class="today" href="clock.html" aria-label="時計ページを開く">
       <b>TODAY</b>
       <span id="today">----</span>
-    </div>
+    </a>
   </header>
 
   <main class="hero">
@@ -429,12 +375,16 @@ h1{
         <div class="tnum" id="hours">00</div>
         <div class="tlabel">HOURS</div>
       </div>
+
       <div class="colon">:</div>
+
       <div class="tunit">
         <div class="tnum" id="minutes">00</div>
         <div class="tlabel">MINUTES</div>
       </div>
+
       <div class="colon">:</div>
+
       <div class="tunit">
         <div class="tnum" id="seconds">00</div>
         <div class="tlabel">SECONDS</div>
@@ -480,6 +430,7 @@ h1{
       </div>
     </div>
   </section>
+
 </div>
 
 <script>
@@ -511,10 +462,7 @@ h1{
     {name:"三者面談（第2回進路希望調査）", date:"2026-07-09"},
     {name:"高校進学説明会①", date:"2026-10-14"},
     {name:"高校進学説明会②", date:"2026-10-15"},
-    {name:"第3回進路希望調査", approx:"2026年10月下旬", sort:"2026-10-25"},
-    {name:"三者面談（第4回進路希望調査）"},
-    {name:"三者面談調印（私立・育成型）"},
-    {name:"三者面談調印・公立願書受付"}
+    {name:"第3回進路希望調査", approx:"2026年10月下旬", sort:"2026-10-25"}
   ];
 
   const schoolEvents = [
@@ -529,10 +477,7 @@ h1{
     {name:"文化祭", date:"2026-09-05"},
     {name:"代休", date:"2026-09-07"},
     {name:"遠足USJ", date:"2026-10-22"},
-    {name:"臨時休校", date:"2026-10-23"},
-    {name:"2学期終業式"},
-    {name:"3学期始業式"},
-    {name:"卒業式"}
+    {name:"臨時休校", date:"2026-10-23"}
   ];
 
   const pad = n => String(n).padStart(2,"0");
@@ -583,19 +528,13 @@ h1{
   function nextExam(now){
     const today=todayKey();
 
-    const candidates = exams.map(x => {
+    for(const x of exams){
       if(x.date){
-        return {...x, key:x.date, ts:parseJST(x.date,x.time||"08:30"), exact:true};
+        const ts=parseJST(x.date,x.time||"08:30");
+        if(ts>=now) return {...x,ts,exact:true};
+      }else if(x.approx && x.sort>=today){
+        return {...x,exact:false};
       }
-      if(x.approx){
-        return {...x, key:x.sort, exact:false};
-      }
-      return null;
-    }).filter(Boolean);
-
-    for(const x of candidates){
-      if(x.exact && x.ts >= now) return x;
-      if(!x.exact && x.key >= today) return x;
     }
     return null;
   }
@@ -603,21 +542,14 @@ h1{
   function nextCalendarItem(list){
     const today=todayKey();
 
-    const dated = list
-      .filter(x=>x.date && x.date>=today)
-      .sort((a,b)=>a.date.localeCompare(b.date));
+    const pool=list
+      .filter(x => (x.date && x.date>=today) || (x.approx && x.sort>=today))
+      .sort((a,b)=>(a.date||a.sort).localeCompare(b.date||b.sort));
 
-    const approx = list
-      .filter(x=>x.approx && x.sort && x.sort>=today)
-      .sort((a,b)=>a.sort.localeCompare(b.sort));
-
-    if(!dated.length) return approx[0] || null;
-    if(!approx.length) return dated[0];
-
-    return (approx[0].sort < dated[0].date) ? approx[0] : dated[0];
+    return pool[0] || null;
   }
 
-  function displayCalendarItem(item, nameEl, dateEl){
+  function displayCalendarItem(item,nameEl,dateEl){
     if(!item){
       nameEl.textContent="日程未定";
       dateEl.textContent="—";
@@ -625,13 +557,14 @@ h1{
     }
 
     nameEl.textContent=item.name;
+
     if(item.date){
-      const today=todayKey();
-      dateEl.textContent = item.date===today
-        ? `本日　${jpDate(item.date)}`
-        : jpDate(item.date);
+      dateEl.textContent=
+        item.date===todayKey()
+          ? `本日　${jpDate(item.date)}`
+          : jpDate(item.date);
     }else{
-      dateEl.textContent=item.approx || "日程未定";
+      dateEl.textContent=item.approx;
     }
   }
 
@@ -687,6 +620,5 @@ h1{
   setInterval(tick,1000);
 })();
 </script>
-
 </body>
 </html>
