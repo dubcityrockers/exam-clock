@@ -1,0 +1,3251 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f1eee4">
+<title>高校入試カウントダウン</title>
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<style>
+:root{
+  --paper:#f1eee4; --ink:#111; --blue:#1683d8;
+  --yellow:#efc400; --red:#ee202d; --line:rgba(17,17,17,.58);
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:var(--paper);color:var(--ink)}
+body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Hiragino Sans","Yu Gothic",sans-serif}
+.app{width:100vw;height:100vh;height:100dvh;overflow:hidden;touch-action:pan-y}
+.track{width:300%;height:100%;display:flex;transform:translateX(0);transition:transform .42s cubic-bezier(.22,.7,.2,1)}
+.track.clock-active{transform:translateX(-33.333333%)}
+.track.calendar-active{transform:translateX(-66.666667%)}
+.screen{width:33.333333%;height:100%;flex:0 0 33.333333%;overflow:hidden;background:var(--paper)}
+
+/* EXAM */
+.page{
+  width:100%;height:100%;
+  padding:max(12px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right))
+          max(10px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));
+  display:grid;grid-template-rows:auto minmax(0,1.35fr) minmax(0,.92fr);
+}
+.top{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;min-height:34px}
+.entrance{font-size:clamp(13px,1.6vw,24px);letter-spacing:.32em;white-space:nowrap}
+.topline{height:1px;background:var(--ink)}
+.today{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
+.today b{font-size:clamp(9px,.7vw,11px);letter-spacing:.25em}
+.today span{font-size:clamp(10px,.95vw,15px);letter-spacing:.1em;font-weight:650}
+
+.hero{min-height:0;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.15vh 0 .45vh}
+.hero h1{margin:0 0 .3vh;font-size:clamp(54px,7vw,108px);line-height:.95;font-weight:850}
+.daysrow{display:flex;align-items:center;justify-content:center;gap:1.3vw}
+.digits{display:flex;font-size:clamp(230px,31vw,500px);line-height:.70;font-weight:900;letter-spacing:-.095em;font-variant-numeric:tabular-nums}
+.digits span:nth-child(1){color:#d62828} .digits span:nth-child(2){color:#f2c300} .digits span:nth-child(3){color:#168447}
+.dayslabel{margin-top:4vh;font-size:clamp(26px,3.3vw,54px);font-weight:900;letter-spacing:.16em}
+.timer{margin-top:.2vh;display:flex;justify-content:center;align-items:flex-start}
+.tunit{min-width:140px;text-align:center}
+.tnum{font-size:clamp(46px,5.8vw,88px);line-height:.95;font-weight:850;font-variant-numeric:tabular-nums}
+.colon{padding:0 16px;font-size:clamp(40px,4.5vw,72px);line-height:.95}
+.tlabel{margin-top:7px;font-size:clamp(8px,.72vw,11px);letter-spacing:.38em;font-weight:800}
+.examdate{margin-top:1.1vh;font-size:clamp(14px,1.45vw,22px);letter-spacing:.16em;font-weight:650}
+
+.nextExam{border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr 1px .62fr;align-items:center;padding:.65vh .9vw;min-height:0}
+.compactExam .nextName{font-size:clamp(20px,2.1vw,33px)}
+.compactExam .nextDays{font-size:clamp(54px,6.4vw,98px)}
+.vertical{width:1px;height:72%;background:var(--line);justify-self:center}
+.kicker{font-size:clamp(8px,.7vw,11px);letter-spacing:.33em;font-weight:850}
+.nextName{margin-top:3px;font-size:clamp(21px,2.2vw,34px);line-height:1.02;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.smallDate{margin-top:4px;font-size:clamp(9px,.82vw,13px);letter-spacing:.10em;font-weight:650}
+.nextRight{display:flex;justify-content:flex-end;align-items:center;gap:.7vw}
+.nextDays{color:var(--red);font-size:clamp(58px,6.8vw,104px);line-height:.78;font-weight:900;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.nextDaysLabel{font-size:clamp(14px,1.45vw,23px);letter-spacing:.16em;font-weight:900}
+
+.dashboardLower{
+  border-top:1px solid var(--line);
+  display:grid;
+  grid-template-columns:46% 1px minmax(0,1fr);
+  min-height:0;
+  overflow:hidden;
+}
+.dashboardLower::before{
+  content:"";
+  grid-column:2;
+  grid-row:1;
+  width:1px;
+  height:calc(100% - 1.2vh);
+  background:var(--line);
+  align-self:center;
+}
+.lowerLeft{
+  grid-column:1;
+  min-width:0;
+  display:grid;
+  grid-template-rows:auto auto minmax(66px,auto);
+  overflow:hidden;
+}
+.upcomingPanel{
+  grid-column:3;
+  min-width:0;
+  padding:.9vh 1.1vw .35vh 1.8vw;
+  overflow:hidden;
+}
+.eikenPanel{
+  padding:.75vh .9vw;
+  border-bottom:1px solid var(--line);
+}
+.eikenHead{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:1vw}
+.eikenIcon{
+  width:clamp(42px,4.8vw,72px);height:clamp(42px,4.8vw,72px);
+  border-radius:10px;background:#1683d8;color:white;
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(24px,2.7vw,40px);font-weight:900;
+}
+.eikenText{min-width:0}
+.eikenName{margin-top:3px;font-size:clamp(18px,1.8vw,28px);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.eikenCount{display:flex;align-items:baseline;gap:.55vw;color:#1683d8;white-space:nowrap}
+.eikenCount span{font-size:clamp(42px,4.7vw,72px);line-height:.8;font-weight:900;font-variant-numeric:tabular-nums}
+.eikenCount b{font-size:clamp(10px,1vw,16px);letter-spacing:.18em;color:var(--ink)}
+.careerOnly{min-height:0}
+.info{padding:.72vh .9vw .2vh;min-width:0}
+.infoTitle{margin-top:4px;font-size:clamp(17px,1.7vw,27px);line-height:1.05;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.infoDateRow{margin-top:5px;display:flex;align-items:center;gap:9px}
+.calendar{width:23px;height:23px;border:3px solid currentColor;border-radius:3px;position:relative;flex:0 0 auto}
+.calendar:before{content:"";position:absolute;left:-3px;right:-3px;top:5px;border-top:3px solid currentColor}
+.calendar:after{content:"";position:absolute;left:4px;top:-6px;width:3px;height:6px;background:currentColor;box-shadow:9px 0 0 currentColor}
+.career .calendar{color:var(--blue)}
+.infoDate{font-size:clamp(9px,.82vw,13px);letter-spacing:.09em;font-weight:650;white-space:nowrap}
+
+.upcomingHeader{display:flex;align-items:baseline;justify-content:space-between;gap:1vw;margin-bottom:.7vh}
+.upcomingSub{font-size:clamp(9px,.85vw,13px);font-weight:750;letter-spacing:.03em;white-space:nowrap}
+.upcomingList{display:flex;flex-direction:column;gap:.45vh}
+.upcomingRow{
+  min-height:clamp(43px,5.2vh,64px);
+  display:grid;
+  grid-template-columns:4.3em 2.4em minmax(0,1fr) auto;
+  align-items:center;
+  gap:.65vw;
+  padding:.42vh .65vw;
+  background:rgba(255,255,255,.46);
+  border-radius:11px;
+}
+.upDate{font-size:clamp(13px,1.45vw,22px);line-height:.98;font-weight:900;font-variant-numeric:tabular-nums}
+.upDate small{display:block;font-size:.58em;margin-top:3px}
+.upIcon{
+  width:clamp(28px,2.7vw,42px);height:clamp(28px,2.7vw,42px);
+  position:relative;justify-self:center;
+}
+.upIcon.school{border:3px solid #d4aa00;border-radius:4px}
+.upIcon.school::before{content:"";position:absolute;left:-3px;right:-3px;top:6px;border-top:3px solid #d4aa00}
+.upIcon.school::after{content:"";position:absolute;left:5px;top:-6px;width:3px;height:7px;background:#d4aa00;box-shadow:11px 0 0 #d4aa00}
+.upIcon.exam{border:3px solid #d62828;border-radius:3px}
+.upIcon.exam::before{content:"";position:absolute;right:-3px;top:-3px;border-left:9px solid transparent;border-bottom:9px solid #d62828}
+.upIcon.exam::after{content:"";position:absolute;left:5px;right:5px;bottom:6px;border-top:2px solid #d62828;box-shadow:0 -6px 0 #d62828}
+.upName{min-width:0;font-size:clamp(13px,1.35vw,21px);font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upTag{
+  min-width:5.3em;text-align:center;border-radius:9px;padding:.35em .65em;
+  font-size:clamp(8px,.75vw,12px);font-weight:850;white-space:nowrap;
+}
+.upTag.exam{color:#d62828;background:#f8e1e2}
+.upTag.school{color:#a37c00;background:#f7edc9}
+.upEmpty{padding:2vh 0;color:#888;font-size:clamp(12px,1.1vw,17px);font-weight:800;letter-spacing:.08em}
+
+/* CLOCK */
+.clockPage{
+  width:100%;height:100%;
+  padding:max(16px,env(safe-area-inset-top)) max(28px,env(safe-area-inset-right))
+          max(16px,env(safe-area-inset-bottom)) max(28px,env(safe-area-inset-left));
+  display:grid;grid-template-rows:auto 1fr auto;align-items:center;
+}
+.clockTop{display:flex;align-items:center;gap:18px}
+.clockTop .label{font-size:clamp(13px,1.4vw,21px);letter-spacing:.34em;font-weight:800}
+.clockTop .line{height:1px;background:var(--ink);flex:1}
+.clockTop .dateText{font-size:clamp(10px,1vw,15px);letter-spacing:.12em;font-weight:650;white-space:nowrap}
+.clockCenter{min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%}
+.flipClock{display:flex;align-items:center;justify-content:center;gap:2vw}
+.flipCard{
+  position:relative;width:clamp(170px,20vw,300px);height:clamp(230px,30vh,370px);
+  border-radius:18px;background:#171717;box-shadow:0 12px 24px rgba(0,0,0,.15);overflow:hidden;perspective:1000px
+}
+.flipCard::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid #050505;z-index:6}
+.flipCard::after{content:"";position:absolute;left:-6px;right:-6px;top:50%;height:10px;transform:translateY(-50%);border-left:11px solid #303030;border-right:11px solid #303030;z-index:7}
+.flipNum{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:white;font-size:clamp(135px,16vw,255px);font-weight:900;letter-spacing:-.07em;font-variant-numeric:tabular-nums}
+.flipNum.animate{animation:flipPulse .42s ease}
+@keyframes flipPulse{0%{transform:rotateX(0)}45%{transform:rotateX(-18deg);filter:brightness(.72)}100%{transform:rotateX(0);filter:brightness(1)}}
+.clockColon{font-size:clamp(64px,6vw,96px);font-weight:800}
+.secondsBox{display:flex;flex-direction:column;align-items:center;gap:8px}
+.seconds{color:var(--red);font-size:clamp(64px,6.5vw,104px);font-weight:900;font-variant-numeric:tabular-nums}
+.secondsLabel{font-size:clamp(8px,.65vw,10px);letter-spacing:.34em;font-weight:800}
+
+.weekdayCollage{margin-top:3vh;display:flex;align-items:flex-end;justify-content:center;gap:.22em;max-width:94vw}
+.weekdayCollage span{
+  display:inline-flex;align-items:center;justify-content:center;min-width:.70em;padding:.02em .09em .05em;
+  line-height:.94;font-size:clamp(38px,4.25vw,68px);font-weight:900;
+  transform:rotate(var(--r));color:var(--fg);background:var(--bg);font-family:var(--font);
+}
+.waDate{margin-top:2.2vh;font-family:"Hiragino Mincho ProN","YuMincho","Yu Mincho",serif;font-size:clamp(25px,2.7vw,43px);font-weight:900;letter-spacing:0;white-space:nowrap}
+.holiday{
+  margin-top:1.3vh;color:var(--red);
+  font-size:clamp(17px,1.8vw,28px);font-weight:850;letter-spacing:.12em;
+  min-height:1.4em;
+}
+.holiday:empty{display:none}
+
+.pager{display:flex;justify-content:center;gap:26px;padding-top:.6vh}
+.pagerBtn{
+  appearance:none;border:0;background:transparent;color:var(--ink);
+  min-width:70px;min-height:44px;padding:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:6px;font:inherit;cursor:pointer
+}
+.dot{width:11px;height:11px;border-radius:50%;background:#b7b7b7}
+.pagerBtn.active .dot{background:var(--red)}
+.pagerLabel{font-size:10px;letter-spacing:.28em;font-weight:700}
+
+@media(max-height:820px) and (orientation:landscape){
+  .hero h1{font-size:clamp(48px,6.2vw,90px)}
+  .digits{font-size:clamp(205px,27.5vw,430px)}
+  .dayslabel{margin-top:3vh;font-size:clamp(23px,2.8vw,44px)}
+  .tnum{font-size:clamp(40px,5vw,72px)}
+  .nextExam{min-height:82px}.bottom{min-height:78px}
+  .flipCard{width:clamp(150px,18vw,255px);height:clamp(195px,26vh,300px)}
+  .flipNum{font-size:clamp(115px,14vw,210px)}
+  .weekdayCollage{margin-top:2vh}
+}
+
+
+@media(max-height:820px) and (orientation:landscape){
+  .dashboardLower{grid-template-columns:45% 1px minmax(0,1fr)}
+  .eikenPanel{padding:.5vh .8vw}
+  .upcomingRow{min-height:39px}
+  .upcomingList{gap:.3vh}
+  .careerOnly .info{padding:.5vh .8vw}
+}
+
+
+/* Semantic schedule colors: dismissal remains visible in calendar cells, but is excluded from lists */
+.calEvent.exam{color:#d62828}
+.calEvent.career{color:#1976d2}
+.calEvent.event{color:#168447}
+.calEvent.dismissal{color:#e67e22}
+.calEvent.garbage{color:#8b8b8b}
+.calEvent.school{color:var(--ink)}
+
+/* Upcoming list semantic icons/tags */
+.upIcon.event{border:3px solid #168447;border-radius:50%}
+.upIcon.event::before{content:"";position:absolute;left:50%;top:18%;width:3px;height:55%;background:#168447;transform:translateX(-50%)}
+.upIcon.event::after{content:"";position:absolute;left:22%;right:22%;bottom:16%;border-top:3px solid #168447}
+
+.upIcon.dismissal{border:3px solid #e67e22;border-radius:50%}
+.upIcon.dismissal::before{content:"";position:absolute;left:23%;top:48%;width:54%;border-top:3px solid #e67e22}
+.upIcon.dismissal::after{content:"";position:absolute;right:20%;top:35%;width:9px;height:9px;border-top:3px solid #e67e22;border-right:3px solid #e67e22;transform:rotate(45deg)}
+
+.upIcon.career{border:3px solid #1976d2;border-radius:4px}
+.upIcon.career::before{content:"";position:absolute;left:20%;right:20%;top:28%;border-top:3px solid #1976d2;box-shadow:0 7px 0 #1976d2,0 14px 0 #1976d2}
+
+.upIcon.garbage{border:3px solid #8b8b8b;border-radius:3px}
+.upIcon.garbage::before{content:"";position:absolute;left:25%;right:25%;top:-6px;border-top:3px solid #8b8b8b}
+.upIcon.garbage::after{content:"";position:absolute;left:30%;right:30%;top:20%;bottom:18%;border-left:2px solid #8b8b8b;border-right:2px solid #8b8b8b}
+
+.upTag.event{color:#168447;background:#e2f1e8}
+.upTag.dismissal{color:#c76512;background:#f8e7d6}
+.upTag.career{color:#1976d2;background:#e3eef9}
+.upTag.garbage{color:#6f6f6f;background:#ececec}
+.upTag.school{color:#555;background:#eeeeee}
+
+
+/* MONTH SCHEDULE semantic marker colors */
+.scheduleItem.exam .scheduleMark,.monthScheduleItem.exam .scheduleMark,.scheduleRow.exam .scheduleMark{color:#d62828}
+.scheduleItem.career .scheduleMark,.monthScheduleItem.career .scheduleMark,.scheduleRow.career .scheduleMark{color:#1976d2}
+.scheduleItem.event .scheduleMark,.monthScheduleItem.event .scheduleMark,.scheduleRow.event .scheduleMark{color:#168447}
+.scheduleItem.dismissal .scheduleMark,.monthScheduleItem.dismissal .scheduleMark,.scheduleRow.dismissal .scheduleMark{color:#e67e22}
+.scheduleItem.garbage .scheduleMark,.monthScheduleItem.garbage .scheduleMark,.scheduleRow.garbage .scheduleMark{color:#8b8b8b}
+
+/* CALENDAR */
+.calendarPage{
+  width:100%;height:100%;
+  padding:max(16px,env(safe-area-inset-top)) max(28px,env(safe-area-inset-right))
+          max(14px,env(safe-area-inset-bottom)) max(28px,env(safe-area-inset-left));
+  display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:var(--paper);
+}
+.calHeader{display:flex;align-items:flex-end;gap:2vw;border-bottom:1px solid var(--line);padding-bottom:1.2vh}
+.calMonthNo{font-size:clamp(78px,9vw,142px);line-height:.72;font-weight:900;letter-spacing:-.07em}
+.calMonthWords{display:flex;align-items:baseline;gap:1vw}
+.calMonthName{font-size:clamp(30px,3.8vw,60px);font-weight:900;letter-spacing:.02em}
+.calYear{font-size:clamp(22px,2.5vw,40px);font-weight:850;color:#bdbdb5}
+.calBody{min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 24%;gap:2vw;padding-top:2vh}
+.calGridWrap{min-width:0;overflow:hidden}
+.calWeekdays,.calGrid{display:grid;grid-template-columns:repeat(7,1fr)}
+.calWeekdays{border-bottom:1px solid var(--line)}
+.calWeekday{padding:.3vh .5vw 1vh;font-size:clamp(10px,.95vw,15px);font-weight:850;letter-spacing:.08em}
+.calWeekday.sun{color:#d62828}.calWeekday.sat{color:#1683d8}
+.calGrid{height:calc(100% - 34px);grid-template-rows:repeat(6,1fr)}
+.calCell{
+  position:relative;min-height:0;border-bottom:1px solid rgba(17,17,17,.18);
+  padding:.7vh .6vw;overflow:hidden;
+}
+.calCell:not(:nth-child(7n)){border-right:1px solid rgba(17,17,17,.12)}
+.calNum{font-size:clamp(25px,2.85vw,46px);line-height:.95;font-weight:900}
+.calCell.sun .calNum{color:#d62828}.calCell.sat .calNum{color:#1683d8}
+.calCell.out .calNum{color:#c8c8c0}
+.calCell.today{background:#f0c900}
+.calCell.today .calNum{color:#111}
+.calEvent{
+  margin-top:.38vh;
+  font-size:clamp(10px,.88vw,14px);
+  line-height:1.13;
+  font-weight:850;
+  white-space:normal;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  overflow-wrap:anywhere;
+}
+.calEvent.exam{color:#d62828}.calEvent.career{color:#1683d8}.calEvent.school{color:#725f00}
+.calSide{border-left:1px solid var(--line);padding-left:2vw;display:flex;flex-direction:column;justify-content:center}
+.calSideLabel{font-size:clamp(10px,.9vw,14px);font-weight:850;letter-spacing:.28em}
+.calTodayNum{font-size:clamp(105px,12vw,190px);line-height:.82;font-weight:900;letter-spacing:-.08em}
+.calTodayDay{margin-top:1vh;font-size:clamp(22px,2.5vw,40px);font-weight:900;color:#1683d8}
+.calTodayEvent{margin-top:2.5vh;font-size:clamp(16px,1.7vw,27px);font-weight:850;line-height:1.2}
+.calHint{margin-top:2vh;font-size:clamp(8px,.72vw,11px);letter-spacing:.15em;color:#777}
+.calFooter{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-top:1vh}
+.calNav{appearance:none;border:0;background:transparent;font:inherit;font-size:clamp(11px,1vw,15px);font-weight:850;letter-spacing:.18em;cursor:pointer}
+.calNav.prev{text-align:left}.calNav.next{text-align:right}
+.calTodayBtn{appearance:none;border:0;background:transparent;font:inherit;font-size:10px;font-weight:850;letter-spacing:.25em;cursor:pointer}
+.calPager{display:flex;gap:9px;align-items:center;justify-content:center;margin-top:5px}
+.calPager i{width:8px;height:8px;border-radius:50%;background:#bbb;display:block}
+.calPager i.active{background:var(--red)}
+.calendarPage.slideUp .calBody{animation:calUp .28s ease}
+.calendarPage.slideDown .calBody{animation:calDown .28s ease}
+@keyframes calUp{from{transform:translateY(40px);opacity:.25}to{transform:none;opacity:1}}
+@keyframes calDown{from{transform:translateY(-40px);opacity:.25}to{transform:none;opacity:1}}
+
+
+/* CLOCK SIZE FIX — restore full-screen impact */
+.clockPage{
+  padding:max(6px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right))
+          max(6px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));
+  grid-template-rows:auto minmax(0,1fr) auto;
+}
+.clockTop{min-height:26px;padding:0 1vw}
+.clockCenter{height:100%;justify-content:space-evenly;padding:0}
+.flipClock{width:100%;gap:1.2vw}
+.flipCard{
+  width:clamp(250px,31vw,470px);
+  height:clamp(310px,46vh,540px);
+  border-radius:20px;
+}
+.flipNum{font-size:clamp(205px,25vw,390px)}
+.clockColon{font-size:clamp(72px,7vw,112px)}
+.weekdayCollage{margin-top:0;max-width:96vw;gap:.18em}
+.weekdayCollage span{font-size:clamp(42px,4.8vw,76px)}
+.holiday{margin-top:.4vh}
+.pager{padding-top:0;padding-bottom:0}
+
+
+/* CLOCK BLACK MODE */
+.clockPage{background:#050505;color:#f4f1e8}
+.clockTop{color:#f4f1e8;border-color:rgba(255,255,255,.24)}
+.clockTop .muted,.clockTopDate{color:#d7d3ca}
+.flipCard{
+  background:#101010;
+  color:#f7f4eb;
+  border:1px solid #282828;
+  box-shadow:0 12px 28px rgba(0,0,0,.55);
+}
+.flipCard:before{background:rgba(255,255,255,.08)}
+.clockColon{color:#f4f1e8}
+.waDate{color:#f4f1e8}
+.clockHoliday{color:#ff5a55}
+.pager button{color:#d0ccc2}
+.pager button.active{color:#fff}
+.pager .dot{background:#777}
+.pager .dot.active{background:#e03131}
+
+/* MONTH SCHEDULE SIDEBAR */
+.calSide{
+  justify-content:flex-start;
+  padding-top:.8vh;
+  overflow:hidden;
+}
+.calTodayBlock{flex:0 0 auto}
+.calSide .calTodayNum{font-size:clamp(66px,7.2vw,114px);letter-spacing:-.06em;white-space:nowrap}
+.calSide .calTodayDay{margin-top:.4vh;font-size:clamp(18px,2vw,31px)}
+.calSide .calTodayEvent{margin-top:1vh;font-size:clamp(14px,1.35vw,21px)}
+.monthSchedule{
+  margin-top:2vh;
+  padding-top:1.5vh;
+  border-top:1px solid var(--line);
+  min-height:0;
+  overflow:hidden;
+}
+.monthScheduleTitle{
+  font-size:clamp(9px,.8vw,13px);
+  font-weight:900;letter-spacing:.2em;margin-bottom:1vh;
+}
+.monthScheduleList{display:flex;flex-direction:column;gap:.55vh}
+.scheduleRow{
+  display:grid;grid-template-columns:2.6em .35em minmax(0,1fr);
+  align-items:baseline;gap:.35em;
+  font-size:clamp(9px,.82vw,13px);line-height:1.15;font-weight:800;
+}
+.scheduleDay{font-size:1.15em;font-weight:900}
+.scheduleMark{font-size:1.1em}
+.scheduleRow.exam .scheduleMark,.scheduleRow.exam .scheduleName{color:#d62828}
+.scheduleRow.career .scheduleMark,.scheduleRow.career .scheduleName{color:#1683d8}
+.scheduleRow.school .scheduleMark{color:#d4aa00}
+.scheduleRow.holiday .scheduleMark,.scheduleRow.holiday .scheduleName{color:#d62828}
+.scheduleEmpty{font-size:11px;color:#888}
+
+
+/* MONTH SCHEDULE — spacing/readability fix */
+.monthSchedule{margin-top:1.6vh;padding-top:1.3vh}
+.monthScheduleTitle{
+  font-size:clamp(11px,1.05vw,16px);
+  margin-bottom:1.25vh;
+}
+.monthScheduleList{gap:.85vh}
+.scheduleRow{
+  display:grid;
+  grid-template-columns:3.2em 1.25em minmax(0,1fr);
+  column-gap:.65em;
+  align-items:center;
+  font-size:clamp(12px,1.15vw,18px);
+  line-height:1.2;
+  font-weight:800;
+}
+.scheduleDay{
+  font-size:1.08em;
+  font-weight:900;
+  text-align:left;
+  white-space:nowrap;
+}
+.scheduleMark{
+  display:block;
+  width:1.25em;
+  text-align:center;
+  font-size:.82em;
+  line-height:1;
+}
+.scheduleName{
+  min-width:0;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.scheduleEmpty{font-size:clamp(12px,1.05vw,16px)}
+
+
+.gcalStatus{
+  margin:-.55vh 0 1vh;
+  font-size:clamp(7px,.58vw,9px);
+  font-weight:800;
+  letter-spacing:.14em;
+  color:#aaa;
+}
+.gcalStatus.live{color:#168447}
+.gcalStatus.error{color:#d62828}
+
+
+/* FINAL semantic calendar colors — intentionally placed last to override legacy rules */
+.calGrid .calEvent.exam{color:#d62828 !important}
+.calGrid .calEvent.career{color:#1976d2 !important}
+.calGrid .calEvent.event{color:#168447 !important}
+.calGrid .calEvent.dismissal{color:#e67e22 !important}
+.calGrid .calEvent.garbage{color:#8b8b8b !important}
+.calGrid .calEvent.holiday{color:#d62828 !important}
+.calGrid .calEvent.school{color:#222 !important}
+
+
+/* ===== V8 HERO + DISMISSAL BOARD ===== */
+.heroV8{
+  min-height:0;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  justify-content:flex-start;
+  padding:.15vh .9vw .45vh;
+}
+.heroV8 h1{
+  text-align:center;
+  margin:0;
+  font-size:clamp(43px,5.1vw,78px);
+  line-height:.92;
+  font-weight:900;
+}
+.heroCountRow{
+  min-height:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(190px,24%);
+  align-items:center;
+  gap:.5vw;
+}
+.heroBigDays{min-width:0;display:flex;justify-content:flex-end;align-items:center}
+.heroV8 .digits{
+  font-size:clamp(150px,21vw,320px);
+  line-height:.72;
+  letter-spacing:-.08em;
+  transform:none;
+}
+.heroCompactInfo{
+  min-width:0;
+  align-self:center;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+}
+.heroV8 .heroCompactInfo .dayslabel{
+  margin:0 0 1vh;
+  font-size:clamp(25px,3vw,46px);
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.11em;
+}
+.heroV8 .compactTimer{
+  margin:0;
+  gap:.45vw;
+  align-items:flex-start;
+}
+.heroV8 .compactTimer .tnum{
+  font-size:clamp(26px,3vw,46px);
+  line-height:1;
+}
+.heroV8 .compactTimer .colon{
+  font-size:clamp(20px,2.3vw,34px);
+  line-height:1;
+}
+.heroV8 .compactTimer .tlabel{
+  margin-top:4px;
+  font-size:clamp(6px,.52vw,9px);
+}
+.heroV8 .examdate{
+  margin-top:1vh;
+  font-size:clamp(12px,1.15vw,18px);
+  font-weight:750;
+  white-space:nowrap;
+}
+
+.dismissalBoard{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:.8vw;
+  border-top:1px solid var(--line);
+  padding-top:.62vh;
+  margin-top:.18vh;
+}
+.dismissalCard{
+  min-width:0;
+  text-align:center;
+  border:1px solid rgba(0,0,0,.12);
+  border-radius:12px;
+  padding:.48vh .8vw .55vh;
+  background:rgba(255,255,255,.46);
+}
+.dismissalCard.junior{background:rgba(45,115,201,.055)}
+.dismissalCard.elementary{background:rgba(231,138,34,.055)}
+.dismissalSchool{
+  font-size:clamp(16px,1.55vw,24px);
+  line-height:1;
+  font-weight:900;
+}
+.dismissalSchoolEn{
+  margin-top:2px;
+  font-size:clamp(6px,.52vw,9px);
+  line-height:1;
+  letter-spacing:.22em;
+  font-weight:800;
+  color:#555;
+}
+.dismissalStatus{
+  margin-top:.42vh;
+  padding-top:.42vh;
+  border-top:1px solid rgba(0,0,0,.12);
+  font-size:clamp(17px,1.8vw,28px);
+  line-height:1.02;
+  font-weight:900;
+  letter-spacing:.015em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.dismissalCard.junior .dismissalStatus{color:#2d73c9}
+.dismissalCard.elementary .dismissalStatus{color:#e78a22}
+.dismissalDetail{
+  min-height:1em;
+  margin-top:3px;
+  font-size:clamp(9px,.78vw,12px);
+  line-height:1;
+  font-weight:750;
+  color:#333;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.dismissalCard.noSchool{opacity:.58;background:rgba(0,0,0,.025)}
+.dismissalCard.noSchool .dismissalStatus{color:#777}
+
+@media(max-height:820px) and (orientation:landscape){
+  .heroV8 h1{font-size:clamp(38px,4.7vw,68px)}
+  .heroV8 .digits{font-size:clamp(135px,19vw,285px)}
+  .dismissalCard{padding:.35vh .7vw .4vh}
+  .dismissalStatus{font-size:clamp(15px,1.6vw,24px)}
+}
+
+
+/* ===== V9: live countdown + exam date directly under 183 ===== */
+.heroV8 .heroCountRow{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:0;
+}
+.heroV8 .heroBigDays{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:1.4vw;
+  min-width:0;
+}
+.heroV8 .heroBigDays .dayslabel{
+  margin:0;
+  align-self:center;
+  font-size:clamp(26px,3vw,46px);
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.11em;
+}
+.heroUnderCountdown{
+  margin-top:.35vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.heroUnderCountdown .compactTimer{
+  margin:0;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  gap:.55vw;
+}
+.heroUnderCountdown .compactTimer .tnum{
+  font-size:clamp(28px,3.1vw,48px);
+  line-height:1;
+  font-weight:900;
+}
+.heroUnderCountdown .compactTimer .colon{
+  font-size:clamp(22px,2.4vw,36px);
+  line-height:1;
+}
+.heroUnderCountdown .compactTimer .tlabel{
+  margin-top:4px;
+  font-size:clamp(6px,.52vw,9px);
+}
+.heroUnderCountdown .examdate{
+  margin-top:.65vh;
+  font-size:clamp(12px,1.18vw,18px);
+  font-weight:750;
+  white-space:nowrap;
+}
+
+
+/* ===== V10: compact dismissal board ===== */
+.dismissalBoard{
+  gap:.6vw;
+  padding-top:.45vh;
+  margin-top:.12vh;
+}
+.dismissalCard{
+  padding:.3vh .65vw .34vh;
+  border-radius:10px;
+}
+.dismissalSchool{
+  font-size:clamp(14px,1.35vw,21px);
+}
+.dismissalSchoolEn{
+  font-size:clamp(5px,.46vw,8px);
+  letter-spacing:.18em;
+}
+.dismissalStatus{
+  margin-top:.28vh;
+  padding-top:.28vh;
+  font-size:clamp(14px,1.5vw,23px);
+}
+.dismissalDetail{
+  min-height:.9em;
+  margin-top:2px;
+  font-size:clamp(8px,.68vw,11px);
+}
+@media(max-height:820px) and (orientation:landscape){
+  .dismissalCard{padding:.22vh .55vw .26vh}
+  .dismissalStatus{font-size:clamp(13px,1.35vw,20px)}
+}
+
+
+/* ===== V11: dismissal replaces NEXT CAREER ===== */
+.dismissalCompact{
+  padding:.62vh .9vw .45vh;
+  min-height:0;
+  overflow:hidden;
+}
+.dismissalCompactRow{
+  margin-top:.45vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:.65vw;
+}
+.dismissalMini{
+  min-width:0;
+  border-radius:9px;
+  padding:.45vh .6vw;
+  background:rgba(255,255,255,.52);
+  border:1px solid rgba(0,0,0,.10);
+}
+.dismissalMini.junior{background:rgba(45,115,201,.055)}
+.dismissalMini.elementary{background:rgba(231,138,34,.055)}
+.dismissalMiniSchool{
+  display:block;
+  font-size:clamp(10px,.8vw,13px);
+  font-weight:900;
+  margin-bottom:3px;
+}
+.dismissalMini strong{
+  display:block;
+  font-size:clamp(12px,1.15vw,18px);
+  line-height:1.05;
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.dismissalMini.junior strong{color:#2d73c9}
+.dismissalMini.elementary strong{color:#e78a22}
+.dismissalMini small{
+  display:block;
+  min-height:.85em;
+  margin-top:2px;
+  font-size:clamp(7px,.6vw,10px);
+  line-height:1;
+  font-weight:750;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.dismissalMini.noSchool{opacity:.58;background:rgba(0,0,0,.025)}
+.dismissalMini.noSchool strong{color:#777}
+
+
+/* ===== V12 iPad landscape balance tuning ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  .screen.examScreen{
+    grid-template-rows:auto minmax(0,1fr) minmax(290px,34.5vh);
+  }
+
+  .heroV8{
+    padding-top:0;
+    justify-content:flex-start;
+  }
+
+  .heroV8 h1{
+    margin-top:-.2vh;
+    font-size:clamp(58px,5.55vw,88px);
+    line-height:.88;
+  }
+
+  .heroV8 .heroCountRow{
+    margin-top:-.25vh;
+  }
+
+  .heroV8 .heroBigDays{
+    gap:1.1vw;
+  }
+
+  .heroV8 .digits{
+    font-size:clamp(245px,25.2vw,390px);
+    line-height:.69;
+    letter-spacing:-.085em;
+  }
+
+  .heroV8 .heroBigDays .dayslabel{
+    font-size:clamp(38px,3.6vw,58px);
+    transform:translateY(1.1vh);
+  }
+
+  .heroUnderCountdown{
+    margin-top:.55vh;
+  }
+
+  .heroUnderCountdown .compactTimer{
+    gap:.8vw;
+  }
+
+  .heroUnderCountdown .compactTimer .tnum{
+    font-size:clamp(38px,3.45vw,55px);
+  }
+
+  .heroUnderCountdown .compactTimer .colon{
+    font-size:clamp(28px,2.75vw,42px);
+  }
+
+  .heroUnderCountdown .compactTimer .tlabel{
+    font-size:clamp(7px,.58vw,10px);
+    letter-spacing:.28em;
+  }
+
+  .heroUnderCountdown .examdate{
+    margin-top:.75vh;
+    font-size:clamp(16px,1.35vw,21px);
+    letter-spacing:.08em;
+  }
+
+  /* Give the lower information area a slightly stronger, cleaner top edge. */
+  .dashboardLower{
+    border-top-width:1.5px;
+  }
+
+  /* The dismissal panel is intentionally subordinate. */
+  .dismissalCompact{
+    padding-top:.5vh;
+    padding-bottom:.35vh;
+  }
+  .dismissalCompactRow{
+    margin-top:.32vh;
+  }
+  .dismissalMini{
+    padding:.34vh .55vw;
+  }
+}
+
+
+/* ===== V13: align live time width to the 183 block + reduce text collisions ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  /* Keep the hero centered on one visual axis. */
+  .heroV8{
+    overflow:visible;
+  }
+
+  /* 183 may overlap slightly by design; other text should not. */
+  .heroV8 .digits{
+    position:relative;
+    z-index:2;
+  }
+
+  .heroV8 h1,
+  .heroV8 .heroBigDays .dayslabel,
+  .heroUnderCountdown,
+  .heroUnderCountdown .examdate{
+    position:relative;
+    z-index:3;
+  }
+
+  /* Give title and digits a safer gap so title doesn't collide with 183. */
+  .heroV8 h1{
+    margin-bottom:.7vh;
+  }
+
+  /* DAYS gets a little more breathing room from the giant numerals. */
+  .heroV8 .heroBigDays{
+    column-gap:1.8vw;
+  }
+
+  /* Make the entire H:M:S block approximately the width of the 3 giant digits. */
+  .heroUnderCountdown{
+    width:min(42vw,650px);
+    margin-left:auto;
+    margin-right:auto;
+    overflow:visible;
+  }
+
+  .heroUnderCountdown .compactTimer{
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr auto 1fr auto 1fr;
+    align-items:start;
+    justify-items:center;
+    column-gap:.55vw;
+  }
+
+  .heroUnderCountdown .compactTimer .tunit{
+    width:100%;
+    min-width:0;
+  }
+
+  .heroUnderCountdown .compactTimer .tnum{
+    font-size:clamp(34px,3.15vw,50px);
+    line-height:.95;
+    white-space:nowrap;
+  }
+
+  .heroUnderCountdown .compactTimer .colon{
+    align-self:start;
+    font-size:clamp(26px,2.5vw,38px);
+    line-height:.95;
+    padding:0 .15vw;
+    white-space:nowrap;
+  }
+
+  .heroUnderCountdown .compactTimer .tlabel{
+    margin-top:5px;
+    font-size:clamp(6px,.52vw,9px);
+    letter-spacing:.24em;
+    white-space:nowrap;
+  }
+
+  /* Date stays within the time block and will not collide with neighboring text. */
+  .heroUnderCountdown .examdate{
+    width:100%;
+    text-align:center;
+    margin-top:.8vh;
+    font-size:clamp(15px,1.25vw,20px);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:clip;
+  }
+
+  /* Slightly more vertical air before the lower dashboard so the date never kisses the divider. */
+  .dashboardLower{
+    margin-top:.7vh;
+  }
+
+  /* Lower area: keep labels from touching borders or neighboring columns. */
+  .infoTitle,
+  .infoDate,
+  .dismissalMini strong,
+  .dismissalMini small,
+  .scheduleName{
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .dismissalCompactRow{
+    gap:.8vw;
+  }
+
+  .dismissalMini{
+    min-width:0;
+  }
+}
+
+
+/* ===== V14: hero row spacing + compact time numerals/labels ===== */
+@media (min-width:1000px) and (orientation:landscape){
+
+  /* 1) 高校入試まで */
+  .heroV8 h1{
+    margin:0 0 1.55vh 0 !important;
+  }
+
+  /* 2) 183 DAYS */
+  .heroV8 .heroCountRow{
+    margin:0 !important;
+  }
+
+  .heroV8 .heroBigDays{
+    align-items:center;
+    column-gap:1.65vw !important;
+  }
+
+  .heroV8 .digits{
+    line-height:.68 !important;
+  }
+
+  .heroV8 .heroBigDays .dayslabel{
+    margin:0 !important;
+    transform:translateY(.7vh) !important;
+  }
+
+  /* Space between 183 DAYS and the live time row */
+  .heroUnderCountdown{
+    width:min(39vw,610px) !important;
+    margin:2.0vh auto 0 auto !important;
+  }
+
+  /* 3) 17:24:31
+     Keep the digits visually tight, while preserving equal columns. */
+  .heroUnderCountdown .compactTimer{
+    width:100% !important;
+    display:grid !important;
+    grid-template-columns:1fr auto 1fr auto 1fr !important;
+    align-items:start !important;
+    justify-items:center !important;
+    column-gap:.28vw !important;
+  }
+
+  .heroUnderCountdown .compactTimer .tunit{
+    width:clamp(64px,5vw,82px) !important;
+    min-width:0 !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+  }
+
+  .heroUnderCountdown .compactTimer .tnum{
+    width:100% !important;
+    text-align:center !important;
+    font-size:clamp(38px,3.45vw,54px) !important;
+    line-height:.92 !important;
+    letter-spacing:-.095em !important;
+    font-variant-numeric:tabular-nums !important;
+    font-feature-settings:"tnum" 1 !important;
+    white-space:nowrap !important;
+  }
+
+  .heroUnderCountdown .compactTimer .colon{
+    align-self:start !important;
+    padding:0 .05vw !important;
+    font-size:clamp(28px,2.6vw,40px) !important;
+    line-height:.92 !important;
+    white-space:nowrap !important;
+  }
+
+  /* 4) HOURS / MINUTES / SECONDS
+     Each label uses exactly the same column width as the two digits above it. */
+  .heroUnderCountdown .compactTimer .tlabel{
+    width:100% !important;
+    box-sizing:border-box !important;
+    margin-top:1.05vh !important;
+    padding:0 !important;
+    text-align:center !important;
+    font-size:clamp(6px,.48vw,8px) !important;
+    line-height:1 !important;
+    letter-spacing:.08em !important;
+    white-space:nowrap !important;
+    overflow:visible !important;
+  }
+
+  /* 5) Exam date — clearly separated from the unit labels */
+  .heroUnderCountdown .examdate{
+    width:100% !important;
+    margin-top:1.75vh !important;
+    text-align:center !important;
+    font-size:clamp(16px,1.3vw,21px) !important;
+    line-height:1 !important;
+    letter-spacing:.075em !important;
+    white-space:nowrap !important;
+  }
+
+  /* Keep enough air below the final line before the lower information area. */
+  .dashboardLower{
+    margin-top:1.5vh !important;
+  }
+}
+
+
+/* ===== V15: stronger vertical + horizontal centering in hero ===== */
+@media (min-width:1000px) and (orientation:landscape){
+
+  .heroV8{
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    align-items:center !important;
+    padding-top:0 !important;
+    padding-bottom:0 !important;
+  }
+
+  .heroV8 h1,
+  .heroV8 .heroCountRow,
+  .heroUnderCountdown{
+    width:100% !important;
+    text-align:center !important;
+  }
+
+  .heroV8 h1{
+    align-self:center !important;
+  }
+
+  .heroV8 .heroCountRow{
+    display:flex !important;
+    justify-content:center !important;
+    align-items:center !important;
+  }
+
+  .heroV8 .heroBigDays{
+    display:flex !important;
+    justify-content:center !important;
+    align-items:center !important;
+  }
+
+  .heroUnderCountdown{
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    align-items:center !important;
+  }
+
+  .heroUnderCountdown .compactTimer{
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+
+  .heroUnderCountdown .examdate{
+    align-self:center !important;
+  }
+}
+
+
+/* ===== V16: naturally tighten 17:17:11 ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  .heroUnderCountdown{
+    width:auto !important;
+  }
+
+  .heroUnderCountdown .compactTimer{
+    width:auto !important;
+    display:grid !important;
+    grid-template-columns:auto auto auto auto auto !important;
+    column-gap:.10em !important;
+    justify-content:center !important;
+    align-items:start !important;
+  }
+
+  .heroUnderCountdown .compactTimer .tunit{
+    width:clamp(68px,5.15vw,84px) !important;
+  }
+
+  .heroUnderCountdown .compactTimer .tnum{
+    letter-spacing:-.07em !important;
+  }
+
+  .heroUnderCountdown .compactTimer .colon{
+    padding:0 !important;
+    margin:0 -.04em !important;
+    width:auto !important;
+  }
+
+  .heroUnderCountdown .examdate{
+    width:auto !important;
+    min-width:100% !important;
+  }
+}
+
+
+/* ===== V17: HH:MM:SS is a genuinely continuous line ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  .heroUnderCountdown .compactTimer{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:auto !important;
+    gap:0 !important;
+  }
+
+  .timeDigitsLine{
+    display:flex !important;
+    align-items:baseline !important;
+    justify-content:center !important;
+    gap:0 !important;
+    white-space:nowrap !important;
+    font-variant-numeric:tabular-nums !important;
+  }
+
+  .timeDigitsLine .tnum{
+    width:auto !important;
+    min-width:0 !important;
+    display:inline !important;
+    text-align:center !important;
+    font-size:clamp(40px,3.55vw,56px) !important;
+    line-height:.9 !important;
+    letter-spacing:-.075em !important;
+  }
+
+  .timeDigitsLine .colon{
+    display:inline !important;
+    width:auto !important;
+    min-width:0 !important;
+    padding:0 !important;
+    margin:0 .045em !important;
+    font-size:clamp(34px,3.05vw,48px) !important;
+    line-height:.9 !important;
+  }
+
+  .timeLabelsLine{
+    width:100% !important;
+    margin-top:1.0vh !important;
+    display:grid !important;
+    grid-template-columns:repeat(3,1fr) !important;
+    align-items:center !important;
+    justify-items:center !important;
+    column-gap:0 !important;
+  }
+
+  .timeLabelsLine .tlabel{
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    text-align:center !important;
+    font-size:clamp(6px,.5vw,8px) !important;
+    line-height:1 !important;
+    letter-spacing:.08em !important;
+    white-space:nowrap !important;
+  }
+}
+
+
+/* ===== V18: H/M/S labels + school assembly keywords ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  .timeLabelsLine{
+    width:100% !important;
+  }
+  .timeLabelsLine .tlabel{
+    font-size:clamp(8px,.65vw,11px) !important;
+    font-weight:850 !important;
+    letter-spacing:0 !important;
+    text-align:center !important;
+  }
+}
+
+
+/* ===== V19: no H/M/S, slightly smaller live time ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  .timeDigitsLine .tnum{
+    font-size:clamp(34px,3.0vw,48px) !important;
+    letter-spacing:-.07em !important;
+  }
+  .timeDigitsLine .colon{
+    font-size:clamp(28px,2.55vw,40px) !important;
+    margin:0 .04em !important;
+  }
+
+  /* With the unit row gone, use the space as intentional breathing room. */
+  .heroUnderCountdown{
+    margin-top:1.8vh !important;
+  }
+  .heroUnderCountdown .examdate{
+    margin-top:1.55vh !important;
+  }
+}
+
+
+/* ===== V20: half-width-space feel around colons ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  .timeDigitsLine .colon{
+    margin-left:.28em !important;
+    margin-right:.28em !important;
+  }
+}
+
+
+/* ===== V21: same font size for digits and colons ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  .timeDigitsLine .tnum,
+  .timeDigitsLine .colon{
+    font-size:clamp(34px,3.0vw,48px) !important;
+    font-family:inherit !important;
+    font-weight:inherit !important;
+    line-height:.92 !important;
+  }
+
+  .timeDigitsLine .colon{
+    margin-left:.28em !important;
+    margin-right:.28em !important;
+  }
+}
+
+
+/* ===== V23: bold live countdown + half-width spacing around colons ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  .timeDigitsLine .tnum,
+  .timeDigitsLine .colon{
+    font-weight:900 !important;
+  }
+
+  .timeDigitsLine .colon{
+    /* roughly one half-width space on each side */
+    margin-left:.30em !important;
+    margin-right:.30em !important;
+  }
+}
+
+
+/* ===== V24: wider colon spacing ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  .timeDigitsLine .colon{
+    margin-left:.42em !important;
+    margin-right:.42em !important;
+  }
+}
+
+
+/* ===== V25: full industrial split-flap CLOCK + calendar 3+ events ===== */
+.clockPage{
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255,255,255,.055), transparent 31%),
+    linear-gradient(145deg,#171717 0%,#090909 52%,#141414 100%) !important;
+  color:#f4f1e9 !important;
+}
+.clockTop .line{background:rgba(255,255,255,.28) !important}
+.clockTop .dateText,.clockTop .label{color:#e9e5dc !important}
+.clockPage .pagerLabel{color:#c9c5bc}
+.clockPage .dot{background:#5c5a55}
+.clockPage .pagerBtn.active .dot{background:#e7e2d7}
+
+.industrialClock{
+  padding:.8vh 0 1.2vh;
+}
+.clockMachine{
+  width:min(94vw,1450px);
+  max-height:100%;
+  padding:2.0vh 2.15vw 2.1vh;
+  border-radius:22px;
+  border:1px solid rgba(255,221,166,.24);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.035),transparent 11%),
+    linear-gradient(135deg,#262421 0%,#111 42%,#1d1b18 100%);
+  box-shadow:
+    0 28px 65px rgba(0,0,0,.54),
+    inset 0 1px 0 rgba(255,239,206,.18),
+    inset 0 -1px 0 rgba(0,0,0,.85),
+    inset 8px 0 18px rgba(255,255,255,.018);
+}
+.clockMachineTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:1.45vh;
+  color:#918a80;
+  font-size:clamp(7px,.62vw,10px);
+  font-weight:800;
+  letter-spacing:.26em;
+}
+
+.mainFlipClock{gap:1.45vw !important}
+.mainFlipClock .mainFlip{
+  width:clamp(220px,24vw,365px) !important;
+  height:clamp(260px,35vh,420px) !important;
+}
+.clockPage .flipCard,
+.miniFlipCard{
+  position:relative;
+  overflow:hidden;
+  border-radius:14px;
+  background:
+    linear-gradient(180deg,#171716 0%,#22211f 48.8%,#0d0d0c 49.5%,#171715 100%);
+  border:1px solid rgba(255,231,190,.24);
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.72),
+    inset 0 1px 1px rgba(255,255,255,.13),
+    inset 0 -8px 16px rgba(0,0,0,.36),
+    inset 7px 0 12px rgba(255,255,255,.022),
+    inset -7px 0 12px rgba(0,0,0,.18);
+}
+.clockPage .flipCard::before,
+.miniFlipCard::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:50%;
+  height:2px;
+  background:#050505;
+  box-shadow:0 -1px 0 rgba(255,255,255,.07),0 2px 2px rgba(0,0,0,.7);
+  z-index:8;
+}
+.clockPage .flipCard::after,
+.miniFlipCard::after{
+  content:"";
+  position:absolute;
+  left:8%;right:8%;top:1px;
+  height:10%;
+  border-radius:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.085),transparent);
+  filter:blur(5px);
+  pointer-events:none;
+  z-index:2;
+}
+.clockPage .flipNum{
+  color:#f5f1e8 !important;
+  text-shadow:0 2px 0 #000,0 0 12px rgba(255,255,255,.04);
+  font-size:clamp(160px,18vw,285px) !important;
+  font-family:"Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  font-weight:800 !important;
+  letter-spacing:-.075em;
+  z-index:5;
+}
+.clockPage .clockColon{
+  color:#f5f1e8;
+  font-size:clamp(70px,6.5vw,105px);
+  font-weight:800;
+  text-shadow:0 2px 0 #000;
+}
+
+.dateFlipRow{
+  margin-top:2.1vh;
+  display:grid;
+  grid-template-columns:1.15fr .88fr .78fr .9fr;
+  gap:1.2vw;
+}
+.dateFlipUnit{min-width:0}
+.miniFlipCard{
+  height:clamp(92px,13.5vh,150px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.miniFlipText{
+  position:relative;
+  z-index:5;
+  color:#f5f1e8;
+  font-family:"Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  font-size:clamp(48px,5.3vw,83px);
+  line-height:1;
+  font-weight:800;
+  letter-spacing:-.045em;
+  white-space:nowrap;
+  text-shadow:0 2px 0 #000;
+}
+.miniFlipLabel{
+  margin-top:.65vh;
+  text-align:center;
+  color:#9c958a;
+  font-size:clamp(7px,.72vw,11px);
+  font-weight:800;
+  letter-spacing:.2em;
+}
+.industrialHoliday{
+  min-height:1.1em !important;
+  margin-top:.7vh !important;
+  font-size:clamp(11px,1vw,16px) !important;
+  letter-spacing:.16em;
+}
+.industrialHoliday:empty{visibility:hidden;display:block !important}
+
+/* Calendar: no longer discard event #3 and onward. */
+.calCell.manyEvents{
+  padding-top:.55vh;
+  padding-bottom:.35vh;
+}
+.calCell.manyEvents .calNum{
+  font-size:clamp(22px,2.55vw,40px);
+}
+.calCell.manyEvents .calEvent{
+  margin-top:.18vh;
+  font-size:clamp(8px,.72vw,11.5px);
+  line-height:1.05;
+  -webkit-line-clamp:1;
+}
+.calCell.denseEvents .calEvent{
+  margin-top:.10vh;
+  font-size:clamp(7px,.62vw,10px);
+  line-height:1;
+}
+
+@media(max-height:820px) and (orientation:landscape){
+  .clockMachine{padding:1.2vh 1.7vw 1.25vh}
+  .mainFlipClock .mainFlip{
+    width:clamp(190px,21vw,315px) !important;
+    height:clamp(215px,29vh,340px) !important;
+  }
+  .clockPage .flipNum{font-size:clamp(135px,15.5vw,235px) !important}
+  .dateFlipRow{margin-top:1.4vh}
+  .miniFlipCard{height:clamp(78px,10.5vh,120px)}
+  .miniFlipText{font-size:clamp(39px,4.5vw,68px)}
+}
+
+
+/* ===== V26 APPROVED CLOCK LAYOUT ===== */
+.approvedFlipLayout{
+  width:min(96vw,1500px);
+  padding:2vh 2vw 1.8vh !important;
+}
+
+.approvedTopRow{
+  display:grid;
+  grid-template-columns:minmax(250px,.9fr) minmax(620px,2.2fr);
+  gap:1.8vw;
+  align-items:stretch;
+}
+.approvedTimeGroup{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:1.05vw;
+  align-items:center;
+}
+.approvedDateRow{
+  display:grid;
+  grid-template-columns:1.05fr 1.05fr 1fr 1fr;
+  gap:1vw;
+  margin-top:1.55vh;
+}
+.approvedExamRow{
+  display:grid;
+  grid-template-columns:minmax(0,3fr) minmax(230px,1fr);
+  gap:1.4vw;
+  margin-top:1.7vh;
+}
+.approvedExamLeft{
+  min-width:0;
+}
+.approvedHeading{
+  font-size:clamp(34px,4vw,62px);
+  line-height:1;
+  font-weight:950;
+  letter-spacing:.015em;
+  margin:0 0 .75vh .2vw;
+  color:#f5f1e8;
+}
+.approvedExamCountdown{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+.approvedCountdownLabel{
+  text-align:center;
+  color:#f5f1e8;
+  font-size:clamp(18px,1.8vw,28px);
+  font-weight:900;
+  letter-spacing:.02em;
+  margin-bottom:.55vh;
+}
+.approvedDateLine{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:.7vw;
+  align-items:center;
+  margin-top:1vh;
+}
+.approvedDateLabel{
+  color:#f5f1e8;
+  font-size:clamp(30px,3.2vw,50px);
+  font-weight:950;
+  line-height:1;
+}
+
+.approvedCard{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.7);
+  background:
+    linear-gradient(180deg,#1a1413 0%,#241918 48.7%,#070707 49.5%,#1a1413 100%);
+  box-shadow:
+    0 11px 24px rgba(0,0,0,.7),
+    inset 0 1px 1px rgba(255,255,255,.16),
+    inset 0 -8px 16px rgba(0,0,0,.42),
+    inset 7px 0 12px rgba(255,255,255,.022),
+    inset -7px 0 12px rgba(0,0,0,.22);
+}
+.approvedCard::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:50%;
+  height:2px;
+  background:#050505;
+  box-shadow:0 -1px 0 rgba(255,255,255,.07),0 2px 2px rgba(0,0,0,.75);
+  z-index:7;
+}
+.approvedCard::after{
+  content:"";
+  position:absolute;
+  left:7%;right:7%;top:1px;height:10%;
+  border-radius:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.075),transparent);
+  filter:blur(4px);
+  z-index:2;
+}
+
+.approvedText{
+  position:relative;
+  z-index:5;
+  color:#fff;
+  font-family:"Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  font-weight:900;
+  text-shadow:0 2px 0 #000;
+  white-space:nowrap;
+}
+.jstCard{height:clamp(245px,33vh,390px)}
+.jstCard .approvedText{font-size:clamp(85px,9vw,145px)}
+.timeCard{height:clamp(245px,33vh,390px)}
+.timeText{font-size:clamp(150px,17vw,270px);letter-spacing:-.06em}
+.approvedColon{
+  color:#fff;
+  font-size:clamp(95px,10vw,155px);
+  font-weight:900;
+  line-height:1;
+  text-shadow:0 2px 0 #000;
+}
+.smallCard{height:clamp(88px,12.5vh,140px)}
+.smallText{font-size:clamp(46px,5vw,78px);letter-spacing:-.03em}
+
+.examNameCard{height:clamp(95px,12.5vh,145px)}
+.examNameText{
+  width:100%;
+  padding:0 1vw;
+  text-align:center;
+  font-size:clamp(34px,4.2vw,66px);
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.examDateCard{height:clamp(78px,9.8vh,115px)}
+.examDateText{font-size:clamp(32px,3.6vw,55px);letter-spacing:.02em}
+.countdownCard{flex:1;min-height:clamp(180px,25vh,300px)}
+.countdownText{font-size:clamp(125px,14vw,220px);letter-spacing:-.05em}
+
+@media(max-height:820px) and (orientation:landscape){
+  .approvedFlipLayout{padding:1.1vh 1.4vw 1vh !important}
+  .approvedTopRow{grid-template-columns:minmax(190px,.78fr) minmax(520px,2.2fr)}
+  .jstCard,.timeCard{height:clamp(185px,27vh,280px)}
+  .jstCard .approvedText{font-size:clamp(68px,7.4vw,112px)}
+  .timeText{font-size:clamp(115px,13.5vw,205px)}
+  .approvedColon{font-size:clamp(74px,8vw,120px)}
+  .smallCard{height:clamp(70px,9vh,100px)}
+  .smallText{font-size:clamp(34px,4vw,58px)}
+  .approvedHeading{font-size:clamp(28px,3.2vw,48px)}
+  .examNameCard{height:clamp(70px,9vh,105px)}
+  .examNameText{font-size:clamp(26px,3.3vw,50px)}
+  .examDateCard{height:clamp(60px,7.8vh,90px)}
+  .examDateText{font-size:clamp(24px,2.9vw,42px)}
+  .approvedDateLabel{font-size:clamp(24px,2.6vw,40px)}
+  .approvedCountdownLabel{font-size:clamp(14px,1.4vw,21px)}
+  .countdownCard{min-height:clamp(130px,18vh,210px)}
+  .countdownText{font-size:clamp(90px,10vw,155px)}
+}
+
+
+/* ===== V27: EXAM countdown — full-width-space feel around colons ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  .examScreen .timeDigitsLine .colon{
+    margin-left:1em !important;
+    margin-right:1em !important;
+  }
+}
+
+
+/* ===== V29: relaxed top HH : MM : SS + mini Japanese himekuri ===== */
+@media (min-width:1000px) and (orientation:landscape){
+
+  /* A real gap between the five visual items:
+     HH  :  MM  :  SS
+     This is more reliable than only padding the colon itself. */
+  .examScreen .timeDigitsLine{
+    display:flex !important;
+    align-items:baseline !important;
+    justify-content:center !important;
+    gap:.58em !important;
+    white-space:nowrap !important;
+  }
+  .examScreen .timeDigitsLine .tnum,
+  .examScreen .timeDigitsLine .colon{
+    margin:0 !important;
+    padding:0 !important;
+    font-size:clamp(34px,3.0vw,48px) !important;
+    font-weight:900 !important;
+    line-height:.95 !important;
+  }
+
+  /* 183 row */
+  .heroV8 .heroBigDays{
+    display:grid !important;
+    grid-template-columns:auto auto auto !important;
+    align-items:center !important;
+    justify-content:center !important;
+    column-gap:1.45vw !important;
+  }
+
+  /* Japanese mini tear-off calendar */
+  .miniTodayCard{
+    width:clamp(94px,8.2vw,128px);
+    min-height:clamp(112px,13.4vh,154px);
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    transform:translateY(.7vh);
+    border:1.5px solid rgba(0,0,0,.72);
+    border-radius:4px;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.78),rgba(247,242,227,.96)),
+      #f7f2e3;
+    box-shadow:
+      0 5px 10px rgba(0,0,0,.10),
+      inset 0 1px 0 rgba(255,255,255,.8);
+    color:#111;
+    position:relative;
+    overflow:hidden;
+  }
+  .miniTodayCard::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;right:0;
+    height:clamp(21px,2.3vh,28px);
+    background:#141414;
+  }
+  .miniTodayHead{
+    position:relative;
+    z-index:2;
+    margin-top:-.1vh;
+    margin-bottom:.45vh;
+    color:#fff;
+    font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+    font-size:clamp(11px,.95vw,15px);
+    font-weight:800;
+    letter-spacing:.16em;
+    line-height:1;
+  }
+  .miniTodayDate{
+    margin-top:.65vh;
+    font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+    font-size:clamp(34px,3.3vw,52px);
+    font-weight:900;
+    letter-spacing:-.055em;
+    line-height:.92;
+  }
+  .miniTodayWeek{
+    margin-top:.55vh;
+    font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+    font-size:clamp(18px,1.65vw,26px);
+    font-weight:900;
+    line-height:1;
+  }
+  .miniTodayCard.sun .miniTodayDate,
+  .miniTodayCard.sun .miniTodayWeek{
+    color:#d62828;
+  }
+  .miniTodayCard.sat .miniTodayDate,
+  .miniTodayCard.sat .miniTodayWeek{
+    color:#1976d2;
+  }
+}
+
+@media(max-height:820px) and (orientation:landscape){
+  .miniTodayCard{
+    width:clamp(82px,7.2vw,108px);
+    min-height:clamp(96px,11.7vh,126px);
+  }
+  .miniTodayDate{font-size:clamp(29px,2.8vw,43px)}
+  .miniTodayWeek{font-size:clamp(15px,1.4vw,22px)}
+}
+
+
+/* ===== V30: larger gothic mini himekuri ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  .miniTodayCard{
+    width:clamp(118px,10vw,156px) !important;
+    min-height:clamp(138px,16vh,182px) !important;
+  }
+
+  .miniTodayCard::before{
+    height:clamp(25px,2.8vh,34px) !important;
+  }
+
+  .miniTodayHead,
+  .miniTodayDate,
+  .miniTodayWeek{
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN",
+      "Yu Gothic","YuGothic","Noto Sans JP",sans-serif !important;
+  }
+
+  .miniTodayHead{
+    font-size:clamp(13px,1.1vw,18px) !important;
+    font-weight:800 !important;
+    letter-spacing:.12em !important;
+  }
+
+  .miniTodayDate{
+    margin-top:.85vh !important;
+    font-size:clamp(42px,4vw,62px) !important;
+    font-weight:900 !important;
+    letter-spacing:-.065em !important;
+  }
+
+  .miniTodayWeek{
+    margin-top:.7vh !important;
+    font-size:clamp(22px,2vw,31px) !important;
+    font-weight:900 !important;
+  }
+}
+
+@media(max-height:820px) and (orientation:landscape){
+  .miniTodayCard{
+    width:clamp(102px,8.8vw,134px) !important;
+    min-height:clamp(118px,14vh,150px) !important;
+  }
+  .miniTodayDate{font-size:clamp(36px,3.4vw,52px) !important}
+  .miniTodayWeek{font-size:clamp(19px,1.7vw,27px) !important}
+}
+
+
+/* ===== V31: wider time colon spacing + TODAY above binding ===== */
+@media (min-width:1000px) and (orientation:landscape){
+
+  /* Make HH : MM : SS visibly more open */
+  .examScreen .timeDigitsLine{
+    gap:1.05em !important;
+  }
+
+  /* The label sits above the black binding, in black */
+  .miniTodayWrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-end;
+  }
+  .miniTodayWrap > .miniTodayHead{
+    position:static !important;
+    z-index:auto !important;
+    margin:0 0 .55vh 0 !important;
+    color:#111 !important;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN",
+      "Yu Gothic","YuGothic","Noto Sans JP",sans-serif !important;
+    font-size:clamp(15px,1.25vw,20px) !important;
+    font-weight:900 !important;
+    letter-spacing:.08em !important;
+    line-height:1 !important;
+  }
+
+  /* Keep the approved card size, but give the paper a clean top binding */
+  .miniTodayCard{
+    transform:none !important;
+  }
+  .miniTodayCard::before{
+    height:clamp(25px,2.8vh,34px) !important;
+  }
+  .miniTodayCard .miniTodayDate{
+    margin-top:clamp(18px,2.3vh,28px) !important;
+  }
+}
+
+@media(max-height:820px) and (orientation:landscape){
+  .examScreen .timeDigitsLine{
+    gap:.92em !important;
+  }
+  .miniTodayWrap > .miniTodayHead{
+    font-size:clamp(13px,1.05vw,17px) !important;
+    margin-bottom:.4vh !important;
+  }
+}
+
+
+/* ===== V32: even wider HH : MM : SS spacing ===== */
+@media (min-width:1000px) and (orientation:landscape){
+  .examScreen .timeDigitsLine{
+    gap:1.65em !important;
+  }
+}
+@media(max-height:820px) and (orientation:landscape){
+  .examScreen .timeDigitsLine{
+    gap:1.45em !important;
+  }
+}
+
+
+/* ===== V35 RECOVERY + REAL TIME SPACING FIX ===== */
+
+/* Keep the original header elements in the DOM for JavaScript,
+   but hide them visually. This avoids the 000/calendar crash. */
+.track > .screen:first-child .top{
+  display:none !important;
+}
+
+/* Pull "高校入試まで" into the freed space. */
+.track > .screen:first-child .heroV8{
+  padding-top:.7vh !important;
+}
+.track > .screen:first-child .heroV8 h1{
+  margin-top:0 !important;
+  margin-bottom:1.25vh !important;
+}
+
+/* Earlier spacing rules targeted .examScreen, but this page has no such class.
+   Target the actual first screen so the wider spacing really applies. */
+@media (min-width:1000px) and (orientation:landscape){
+  .track > .screen:first-child .heroUnderCountdown{
+    width:min(62vw,920px) !important;
+  }
+
+  .track > .screen:first-child .heroUnderCountdown .timeDigitsLine{
+    width:100% !important;
+    display:flex !important;
+    align-items:baseline !important;
+    justify-content:center !important;
+    gap:2.35em !important;
+    white-space:nowrap !important;
+  }
+
+  .track > .screen:first-child .heroUnderCountdown .timeDigitsLine .tnum,
+  .track > .screen:first-child .heroUnderCountdown .timeDigitsLine .colon{
+    margin:0 !important;
+    padding:0 !important;
+  }
+}
+
+@media(max-height:820px) and (orientation:landscape){
+  .track > .screen:first-child .heroUnderCountdown{
+    width:min(58vw,840px) !important;
+  }
+  .track > .screen:first-child .heroUnderCountdown .timeDigitsLine{
+    gap:2.05em !important;
+  }
+}
+
+
+/* ===== V36: iPad landscape vertical-balance tuning ===== */
+@media (min-width:1000px) and (max-width:1500px) and (orientation:landscape){
+
+  /* Use more of the available screen height instead of packing everything high. */
+  .track > .screen:first-child{
+    padding-top:1.4vh !important;
+    padding-bottom:1.6vh !important;
+  }
+
+  /* Entrance hero: slightly more air above title and between major rows. */
+  .track > .screen:first-child .heroV8{
+    padding-top:2.2vh !important;
+  }
+
+  .track > .screen:first-child .heroV8 h1{
+    margin-top:0 !important;
+    margin-bottom:1.7vh !important;
+  }
+
+  .track > .screen:first-child .heroCountRow{
+    margin-top:.25vh !important;
+    margin-bottom:1.05vh !important;
+  }
+
+  /* Give the HH : MM : SS row its own breathing room. */
+  .track > .screen:first-child .heroUnderCountdown{
+    margin-top:1.15vh !important;
+  }
+
+  .track > .screen:first-child .heroUnderCountdown .timeDigitsLine{
+    margin-bottom:1.15vh !important;
+  }
+
+  /* Date row separated a little more clearly from the clock. */
+  .track > .screen:first-child .targetDate{
+    margin-top:.55vh !important;
+    margin-bottom:1.75vh !important;
+  }
+
+  /* Lower information board: push it down a touch and give it a little more
+     bottom breathing room, balancing the large blank area below. */
+  .track > .screen:first-child .lowerDashboard,
+  .track > .screen:first-child .bottomGrid,
+  .track > .screen:first-child .dashboardGrid{
+    margin-top:1.35vh !important;
+    margin-bottom:2.1vh !important;
+  }
+}
+
+/* Specific 4:3 iPad-ish viewport refinement */
+@media (min-width:1100px) and (max-width:1450px) and
+       (min-aspect-ratio:1.28/1) and (max-aspect-ratio:1.45/1) and
+       (orientation:landscape){
+  .track > .screen:first-child .heroV8{
+    transform:translateY(.7vh);
+  }
+
+  .track > .screen:first-child .heroUnderCountdown{
+    transform:translateY(.35vh);
+  }
+
+  .track > .screen:first-child .lowerDashboard,
+  .track > .screen:first-child .bottomGrid,
+  .track > .screen:first-child .dashboardGrid{
+    transform:translateY(1.15vh);
+  }
+}
+
+
+/* ===== V37: reproduce supplied iPad balance ===== */
+@media (min-width:1000px) and (max-width:1500px) and (orientation:landscape){
+
+  /* Exact overall composition: hero occupies the upper ~2/3,
+     dashboard starts around the lower third, as in the reference. */
+  .track > .screen:first-child .page{
+    grid-template-rows:0 minmax(0,65%) minmax(0,27%) !important;
+    align-content:start !important;
+    row-gap:2.1% !important;
+  }
+
+  .track > .screen:first-child .top{
+    display:block !important;
+    height:0 !important;
+    min-height:0 !important;
+    overflow:hidden !important;
+    opacity:0 !important;
+    pointer-events:none !important;
+  }
+
+  .track > .screen:first-child .heroV8{
+    padding:3.4vh .8vw 0 !important;
+    transform:none !important;
+    justify-content:flex-start !important;
+    overflow:visible !important;
+  }
+
+  .track > .screen:first-child .heroV8 h1{
+    font-size:clamp(48px,5vw,68px) !important;
+    line-height:.95 !important;
+    margin:0 0 1.2vh !important;
+    transform:none !important;
+  }
+
+  .track > .screen:first-child .examdateTop{
+    order:0;
+    margin:0 0 2.8vh !important;
+    font-size:clamp(20px,2.15vw,30px) !important;
+    line-height:1 !important;
+    font-weight:850 !important;
+    letter-spacing:.06em !important;
+    text-align:center !important;
+  }
+
+  .track > .screen:first-child .heroCountRow{
+    width:100% !important;
+    display:block !important;
+    margin:0 !important;
+  }
+
+  .track > .screen:first-child .heroBigDays{
+    display:grid !important;
+    grid-template-columns:auto auto auto !important;
+    justify-content:center !important;
+    align-items:center !important;
+    column-gap:1.55vw !important;
+    width:100% !important;
+  }
+
+  /* Keep the approved himekuri size and place it just left of 183. */
+  .track > .screen:first-child .miniTodayWrap{
+    margin-right:1.2vw !important;
+    transform:translateY(-.2vh) !important;
+  }
+
+  .track > .screen:first-child .heroV8 .digits{
+    font-size:clamp(190px,22.5vw,305px) !important;
+    line-height:.72 !important;
+  }
+
+  .track > .screen:first-child .heroBigDays .dayslabel{
+    margin-top:2.4vh !important;
+    font-size:clamp(30px,3.15vw,46px) !important;
+    letter-spacing:.12em !important;
+  }
+
+  /* Time row sits immediately below 183, centered and well separated. */
+  .track > .screen:first-child .heroUnderCountdown{
+    width:min(58vw,780px) !important;
+    margin:1.7vh auto 0 !important;
+    transform:none !important;
+  }
+
+  .track > .screen:first-child .heroUnderCountdown .timeDigitsLine{
+    gap:1.45em !important;
+    margin:0 !important;
+  }
+
+  .track > .screen:first-child .heroUnderCountdown .timeDigitsLine .tnum,
+  .track > .screen:first-child .heroUnderCountdown .timeDigitsLine .colon{
+    font-size:clamp(34px,3.7vw,50px) !important;
+    line-height:.9 !important;
+  }
+
+  /* Dashboard position and scale from the supplied screenshot. */
+  .track > .screen:first-child .dashboardLower{
+    margin:0 !important;
+    transform:none !important;
+    align-self:stretch !important;
+  }
+}
+
+/* 4:3 iPad refinement */
+@media (min-width:1100px) and (max-width:1450px) and
+       (min-aspect-ratio:1.28/1) and (max-aspect-ratio:1.45/1) and
+       (orientation:landscape){
+  .track > .screen:first-child .page{
+    grid-template-rows:0 minmax(0,64.5%) minmax(0,27%) !important;
+    row-gap:2.35% !important;
+  }
+
+  .track > .screen:first-child .heroV8{
+    padding-top:3.1vh !important;
+  }
+
+  .track > .screen:first-child .examdateTop{
+    margin-bottom:2.5vh !important;
+  }
+
+  .track > .screen:first-child .heroUnderCountdown{
+    margin-top:1.45vh !important;
+  }
+}
+
+
+/* ===== V38: prevent lower dashboard clipping on iPad ===== */
+@media (min-width:1000px) and (max-width:1500px) and (orientation:landscape){
+
+  /* Reserve more height for the lower information board. */
+  .track > .screen:first-child .page{
+    grid-template-rows:0 minmax(0,60.5%) minmax(0,33.5%) !important;
+    row-gap:1.3% !important;
+  }
+
+  /* Tighten the hero just enough to recover vertical space. */
+  .track > .screen:first-child .heroV8{
+    padding-top:1.6vh !important;
+  }
+
+  .track > .screen:first-child .heroV8 h1{
+    margin-bottom:.65vh !important;
+  }
+
+  .track > .screen:first-child .examdateTop{
+    margin-bottom:1.35vh !important;
+  }
+
+  .track > .screen:first-child .heroUnderCountdown{
+    margin-top:.75vh !important;
+  }
+
+  /* Pull the lower board slightly upward and keep it fully visible. */
+  .track > .screen:first-child .dashboardLower{
+    margin:0 !important;
+    transform:translateY(-.8vh) !important;
+    max-height:none !important;
+    overflow:visible !important;
+  }
+}
+
+/* 4:3 iPad landscape refinement */
+@media (min-width:1100px) and (max-width:1450px) and
+       (min-aspect-ratio:1.28/1) and (max-aspect-ratio:1.45/1) and
+       (orientation:landscape){
+  .track > .screen:first-child .page{
+    grid-template-rows:0 minmax(0,59.8%) minmax(0,34.2%) !important;
+    row-gap:1.1% !important;
+  }
+}
+
+
+/* ===== V41: true column centering — 1/8/3 ↕ hour/minute/second ===== */
+@media (min-width:1000px) and (max-width:1500px) and (orientation:landscape){
+
+  .track > .screen:first-child .heroBigDays{
+    display:grid !important;
+    grid-template-columns:auto auto auto !important;
+    align-items:center !important;
+    justify-content:center !important;
+    column-gap:1.4vw !important;
+  }
+
+  .track > .screen:first-child .countdownCenterStack{
+    width:min(49vw,690px) !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:stretch !important;
+  }
+
+  /* Three equal columns: center of 1, 8, 3 are mathematically fixed. */
+  .track > .screen:first-child #mainDays{
+    width:100% !important;
+    display:grid !important;
+    grid-template-columns:repeat(3,1fr) !important;
+    align-items:center !important;
+    justify-items:center !important;
+    letter-spacing:0 !important;
+  }
+
+  .track > .screen:first-child #mainDays > span{
+    display:block !important;
+    width:100% !important;
+    text-align:center !important;
+  }
+
+  /* Use the SAME three columns for hour / minute / second. */
+  .track > .screen:first-child .heroUnderCountdown{
+    position:relative !important;
+    left:auto !important;
+    width:100% !important;
+    margin:1.35vh 0 0 !important;
+    transform:none !important;
+  }
+
+  .track > .screen:first-child .timeDigitsLine{
+    position:relative !important;
+    width:100% !important;
+    display:grid !important;
+    grid-template-columns:repeat(3,1fr) !important;
+    align-items:baseline !important;
+    justify-items:center !important;
+    gap:0 !important;
+    white-space:nowrap !important;
+  }
+
+  .track > .screen:first-child #hours{grid-column:1 !important}
+  .track > .screen:first-child #minutes{grid-column:2 !important}
+  .track > .screen:first-child #seconds{grid-column:3 !important}
+
+  /* Colons sit exactly halfway between the three aligned columns. */
+  .track > .screen:first-child .timeDigitsLine .colon{
+    position:absolute !important;
+    top:50% !important;
+    transform:translate(-50%,-52%) !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+  .track > .screen:first-child .timeDigitsLine .colon:nth-child(2){
+    left:33.333333% !important;
+  }
+  .track > .screen:first-child .timeDigitsLine .colon:nth-child(4){
+    left:66.666667% !important;
+  }
+}
+
+/* 4:3 iPad: keep the exact same axis relationship. */
+@media (min-width:1100px) and (max-width:1450px) and
+       (min-aspect-ratio:1.28/1) and (max-aspect-ratio:1.45/1) and
+       (orientation:landscape){
+  .track > .screen:first-child .countdownCenterStack{
+    width:min(48vw,670px) !important;
+  }
+}
+
+
+/* ===== V42: shared center axis + symmetric himekuri / DAYS ===== */
+@media (min-width:1000px) and (max-width:1500px) and (orientation:landscape){
+
+  /*
+    Shared master width.
+    The middle of this block is the middle of the yellow "8",
+    and therefore also the center of the minute block.
+  */
+  .track > .screen:first-child .entranceHeaderStack,
+  .track > .screen:first-child .countdownCenterStack{
+    width:min(49vw,690px) !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+
+  .track > .screen:first-child .entranceHeaderStack{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    text-align:center !important;
+  }
+
+  .track > .screen:first-child .entranceHeaderStack h1,
+  .track > .screen:first-child .entranceHeaderStack .examdateTop{
+    width:100% !important;
+    text-align:center !important;
+  }
+
+  /*
+    Rebuild the 183 row as:
+    [ himekuri ][ centered 183 stack ][ DAYS ]
+    with equal outer columns, so himekuri and DAYS are symmetric
+    around the 183 center axis.
+  */
+  .track > .screen:first-child .heroBigDays{
+    width:min(82vw,1120px) !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    display:grid !important;
+    grid-template-columns:minmax(150px,1fr) minmax(0,690px) minmax(150px,1fr) !important;
+    align-items:center !important;
+    justify-items:center !important;
+    column-gap:1.4vw !important;
+  }
+
+  .track > .screen:first-child .miniTodayWrap{
+    grid-column:1 !important;
+    justify-self:center !important;
+    margin:0 !important;
+    transform:none !important;
+  }
+
+  .track > .screen:first-child .countdownCenterStack{
+    grid-column:2 !important;
+    justify-self:center !important;
+  }
+
+  .track > .screen:first-child .heroBigDays .dayslabel{
+    grid-column:3 !important;
+    justify-self:center !important;
+    margin:0 !important;
+    text-align:center !important;
+  }
+}
+
+/* 4:3 iPad refinement */
+@media (min-width:1100px) and (max-width:1450px) and
+       (min-aspect-ratio:1.28/1) and (max-aspect-ratio:1.45/1) and
+       (orientation:landscape){
+  .track > .screen:first-child .entranceHeaderStack,
+  .track > .screen:first-child .countdownCenterStack{
+    width:min(48vw,670px) !important;
+  }
+
+  .track > .screen:first-child .heroBigDays{
+    width:min(84vw,1100px) !important;
+    grid-template-columns:minmax(145px,1fr) minmax(0,670px) minmax(145px,1fr) !important;
+  }
+}
+
+
+/* ===== V45: iPad bottom-safe layout ===== */
+@media (min-width:1000px) and (max-width:1500px) and (orientation:landscape){
+  /* Give the lower board a little more guaranteed height. */
+  .track > .screen:first-child .page{
+    grid-template-rows:0 minmax(0,58.2%) minmax(0,36.0%) !important;
+    row-gap:.8% !important;
+  }
+
+  /* Recover the space from the hero without changing horizontal centering. */
+  .track > .screen:first-child .heroV8{
+    padding-top:.8vh !important;
+  }
+
+  .track > .screen:first-child .entranceHeaderStack h1{
+    margin-bottom:.4vh !important;
+  }
+
+  .track > .screen:first-child .examdateTop{
+    margin-bottom:.8vh !important;
+  }
+
+  .track > .screen:first-child .heroUnderCountdown{
+    margin-top:.55vh !important;
+  }
+
+  /* No downward overflow at the bottom. */
+  .track > .screen:first-child .dashboardLower{
+    transform:translateY(-.45vh) !important;
+    min-height:0 !important;
+    max-height:100% !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+  }
+
+  .track > .screen:first-child .lowerLeft,
+  .track > .screen:first-child .lowerRight{
+    min-height:0 !important;
+  }
+}
+
+/* 4:3 iPad landscape: strongest bottom-safety rule */
+@media (min-width:1100px) and (max-width:1450px) and
+       (min-aspect-ratio:1.28/1) and (max-aspect-ratio:1.45/1) and
+       (orientation:landscape){
+  .track > .screen:first-child .page{
+    grid-template-rows:0 minmax(0,57.6%) minmax(0,36.8%) !important;
+    row-gap:.7% !important;
+  }
+
+  .track > .screen:first-child .dashboardLower{
+    transform:translateY(-.6vh) !important;
+  }
+}
+
+
+/* V46 — rotating TODAY / TOMORROW agenda */
+.track > .screen:first-child .agendaTicker{
+  height:2rem; display:flex; align-items:center; justify-content:center;
+  gap:.65em; margin:.15vh auto .25vh; padding:0 2vw; box-sizing:border-box;
+  white-space:nowrap; overflow:hidden; opacity:0; transform:translateY(4px);
+  transition:opacity .5s ease,transform .5s ease;
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+}
+.track > .screen:first-child .agendaTicker.show{opacity:1;transform:none}
+.track > .screen:first-child .agendaTicker.empty{visibility:hidden}
+.track > .screen:first-child .agendaWhen{font-size:clamp(11px,1vw,15px);font-weight:800;letter-spacing:.13em;color:#555}
+.track > .screen:first-child .agendaDot{font-size:clamp(10px,.85vw,13px)}
+.track > .screen:first-child .agendaText{max-width:62vw;overflow:hidden;text-overflow:ellipsis;font-size:clamp(14px,1.35vw,20px);font-weight:800;color:#222}
+.track > .screen:first-child .agendaTicker.type-exam .agendaDot{color:#d62828}
+.track > .screen:first-child .agendaTicker.type-career .agendaDot{color:#1976d2}
+.track > .screen:first-child .agendaTicker.type-event .agendaDot{color:#168447}
+.track > .screen:first-child .agendaTicker.type-dismissal .agendaDot{color:#e67e22}
+.track > .screen:first-child .agendaTicker.type-garbage .agendaDot{color:#8b8b8b}
+.track > .screen:first-child .agendaTicker.type-school .agendaDot{color:#222}
+
+@media (min-width:1000px) and (max-width:1500px) and (orientation:landscape){
+ .track > .screen:first-child .page{
+   grid-template-rows:0 minmax(0,54.6%) 2rem minmax(0,36.2%) !important;
+   row-gap:.35% !important;
+ }
+ .track > .screen:first-child .heroV8{grid-row:2!important}
+ .track > .screen:first-child .agendaTicker{grid-row:3!important}
+ .track > .screen:first-child .dashboardLower{grid-row:4!important;transform:translateY(-.25vh)!important}
+}
+@media (min-width:1100px) and (max-width:1450px) and (min-aspect-ratio:1.28/1) and (max-aspect-ratio:1.45/1) and (orientation:landscape){
+ .track > .screen:first-child .page{
+   grid-template-rows:0 minmax(0,53.9%) 2rem minmax(0,37%) !important;
+   row-gap:.3% !important;
+ }
+}
+
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="track" id="track">
+
+    <section class="screen">
+      <div class="page">
+        <header class="top">
+          <div class="entrance">ENTRANCE EXAMINATION</div>
+          <div class="topline"></div>
+          <div class="today"><b>TODAY</b><span id="today">----</span></div>
+        </header>
+
+        <main class="hero heroV8">
+          <div class="entranceHeaderStack">
+            <h1>高校入試まで</h1>
+            <div class="examdate examdateTop">2027年3月9日（火）　8:30</div>
+          </div>
+
+          <div class="heroCountRow">
+            <div class="heroBigDays">
+              <div class="miniTodayWrap">
+                <div class="miniTodayHead">今日は</div>
+                <div class="miniTodayCard" id="miniTodayCard">
+                  <div class="miniTodayDate" id="miniTodayDate">9/6</div>
+                  <div class="miniTodayWeek" id="miniTodayWeek">（日）</div>
+                </div>
+              </div>
+
+              <div class="countdownCenterStack">
+                <div class="digits" id="mainDays"><span>0</span><span>0</span><span>0</span></div>
+                <div class="heroUnderCountdown">
+                  <div class="timer compactTimer">
+                    <div class="timeDigitsLine">
+                      <span class="tnum" id="hours">00</span><span class="colon">:</span><span class="tnum" id="minutes">00</span><span class="colon">:</span><span class="tnum" id="seconds">00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="dayslabel">DAYS</div>
+            </div>
+          </div>
+        </main>
+
+        <div class="agendaTicker empty" id="agendaTicker" aria-live="polite">
+  <span class="agendaWhen" id="agendaWhen"></span>
+  <span class="agendaDot">●</span>
+  <span class="agendaText" id="agendaText"></span>
+</div>
+<section class="dashboardLower">
+          <div class="lowerLeft">
+            <section class="nextExam compactExam">
+              <div>
+                <div class="kicker">NEXT EXAM</div>
+                <div class="nextName" id="nextExamName">---</div>
+                <div class="smallDate" id="nextExamDate">---</div>
+              </div>
+              <div class="vertical"></div>
+              <div class="nextRight">
+                <div class="nextDays" id="nextExamDays">--</div>
+                <div class="nextDaysLabel" id="nextExamDaysLabel">DAYS</div>
+              </div>
+            </section>
+
+            <section class="eikenPanel">
+              <div class="eikenHead">
+                <div class="eikenIcon">英</div>
+                <div class="eikenText">
+                  <div class="kicker">CERTIFICATION EXAM</div>
+                  <div class="eikenName" id="eikenName">英検</div>
+                  <div class="smallDate" id="eikenDate">NO EXAMS SCHEDULED</div>
+                </div>
+                <div class="eikenCount">
+                  <span id="eikenDays">--</span>
+                  <b>DAYS</b>
+                </div>
+              </div>
+            </section>
+
+            <section class="careerOnly dismissalCompact">
+              <div class="kicker">TODAY'S DISMISSAL</div>
+              <div class="dismissalCompactRow">
+                <div class="dismissalMini junior">
+                  <span class="dismissalMiniSchool">中学校</span>
+                  <strong id="juniorDismissal">NORMAL DISMISSAL</strong>
+                  <small id="juniorDismissalDetail"></small>
+                </div>
+                <div class="dismissalMini elementary">
+                  <span class="dismissalMiniSchool">小学校</span>
+                  <strong id="elementaryDismissal">NORMAL DISMISSAL</strong>
+                  <small id="elementaryDismissalDetail"></small>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <section class="upcomingPanel">
+            <div class="upcomingHeader">
+              <div class="kicker">SCHOOL EVENT</div>
+              <div class="upcomingSub">今後の予定（直近5件）</div>
+            </div>
+            <div class="upcomingList" id="upcomingSchoolList"></div>
+          </section>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen">
+      <div class="clockPage">
+        <header class="clockTop">
+          <div class="label">TODAY</div>
+          <div class="line"></div>
+          <div class="dateText" id="clockTopDate">----</div>
+        </header>
+
+        <main class="clockCenter industrialClock">
+          <div class="clockMachine approvedFlipLayout">
+            <div class="approvedTopRow">
+              <div class="approvedCard jstCard"><div class="approvedText">JST</div></div>
+
+              <div class="approvedTimeGroup">
+                <div class="approvedCard timeCard"><div class="approvedText timeText" id="hourNum">00</div></div>
+                <div class="approvedColon">:</div>
+                <div class="approvedCard timeCard"><div class="approvedText timeText" id="minuteNum">00</div></div>
+              </div>
+            </div>
+
+            <div class="approvedDateRow">
+              <div class="approvedCard smallCard"><div class="approvedText smallText" id="clockYear">2026</div></div>
+              <div class="approvedCard smallCard"><div class="approvedText smallText" id="clockMonthShort">SEP</div></div>
+              <div class="approvedCard smallCard"><div class="approvedText smallText" id="clockDayNum">06</div></div>
+              <div class="approvedCard smallCard"><div class="approvedText smallText" id="clockWeekday">SUN</div></div>
+            </div>
+
+            <div class="approvedExamRow">
+              <div class="approvedExamLeft">
+                <div class="approvedHeading">NEXT EXAM IS...</div>
+                <div class="approvedCard examNameCard">
+                  <div class="approvedText examNameText" id="clockNextExamName">---</div>
+                </div>
+                <div class="approvedDateLine">
+                  <div class="approvedDateLabel">DATE</div>
+                  <div class="approvedCard examDateCard">
+                    <div class="approvedText examDateText" id="clockNextExamDate">----</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="approvedExamCountdown">
+                <div class="approvedCountdownLabel">COUNT DOWN HERE</div>
+                <div class="approvedCard countdownCard">
+                  <div class="approvedText countdownText" id="clockNextExamDays">--</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="holiday industrialHoliday" id="holidayName"></div>
+          </div>
+        </main>
+
+        <nav class="pager">
+          <button type="button" class="pagerBtn active" id="examBtn"><span class="dot"></span><span class="pagerLabel">EXAM</span></button>
+          <button type="button" class="pagerBtn" id="clockBtn"><span class="dot"></span><span class="pagerLabel">CLOCK</span></button>
+        </nav>
+      </div>
+    </section>
+
+
+    <section class="screen">
+      <div class="calendarPage" id="calendarPage">
+        <header class="calHeader">
+          <div class="calMonthNo" id="calMonthNo">09</div>
+          <div class="calMonthWords">
+            <div class="calMonthName" id="calMonthName">SEPTEMBER</div>
+            <div class="calYear" id="calYear">2026</div>
+          </div>
+        </header>
+        <main class="calBody">
+          <div class="calGridWrap">
+            <div class="calWeekdays">
+              <div class="calWeekday sun">SUN</div><div class="calWeekday">MON</div><div class="calWeekday">TUE</div>
+              <div class="calWeekday">WED</div><div class="calWeekday">THU</div><div class="calWeekday">FRI</div>
+              <div class="calWeekday sat">SAT</div>
+            </div>
+            <div class="calGrid" id="calGrid"></div>
+          </div>
+          <aside class="calSide">
+            <div class="calTodayBlock">
+              <div class="calSideLabel">TODAY</div>
+              <div class="calTodayNum" id="calTodayNum">05</div>
+              <div class="calTodayDay" id="calTodayDay">SATURDAY</div>
+              <div class="calTodayEvent" id="calTodayEvent"></div>
+            </div>
+            <div class="monthSchedule">
+              <div class="monthScheduleTitle" id="monthScheduleTitle">SEPTEMBER SCHEDULE</div>
+              <div class="gcalStatus" id="gcalStatus">LOCAL SCHEDULE</div>
+              <div class="monthScheduleList" id="monthScheduleList"></div>
+            </div>
+          </aside>
+        </main>
+        <footer class="calFooter">
+          <button class="calNav prev" id="prevMonth">← AUGUST</button>
+          <div>
+            <button class="calTodayBtn" id="calTodayBtn">TODAY</button>
+            <div class="calPager"><i></i><i></i><i class="active"></i></div>
+          </div>
+          <button class="calNav next" id="nextMonth">OCTOBER →</button>
+        </footer>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+(() => {
+  const JST="+09:00";
+  const entrance=Date.parse("2027-03-09T08:30:00+09:00");
+
+  // ─────────────────────────────────────────────────────────────
+  // GOOGLE CALENDAR
+  // Public DASHBOARD calendar ID is already set.
+  // Paste a browser-restricted Google Calendar API key below.
+  // Restrict the key to: https://dubcityrockers.github.io/*
+  // and to the Google Calendar API.
+  // ─────────────────────────────────────────────────────────────
+  const GOOGLE_CALENDAR_ID="35bebd3125894b47492d372fa8948ac77ca7512fb297e42907e015f2e10d2abe@group.calendar.google.com";
+  const GOOGLE_API_KEY="AIzaSyDUAkrxeNxnbUOKzEo4fJkP-au9yAgmNXw";
+  let googleCalendarLoaded=false;
+
+  const app=document.getElementById("app"), track=document.getElementById("track");
+  const examBtn=document.getElementById("examBtn"), clockBtn=document.getElementById("clockBtn");
+  let page=0,startX=0,startY=0,dragging=false,prevMinute=null,prevHour=null,prevWeekday="";
+
+  // Calendar / NEXT schedule data comes only from Google Calendar.
+  // The main entrance-exam countdown above remains fixed in HTML.
+  let exams=[];
+  let careers=[];
+  let schoolEvents=[];
+
+  // 内閣府公表の2026年・2027年の国民の祝日／休日
+  const holidays={
+    "2026-01-01":"元日","2026-01-12":"成人の日","2026-02-11":"建国記念の日",
+    "2026-02-23":"天皇誕生日","2026-03-20":"春分の日","2026-04-29":"昭和の日",
+    "2026-05-03":"憲法記念日","2026-05-04":"みどりの日","2026-05-05":"こどもの日",
+    "2026-05-06":"休日","2026-07-20":"海の日","2026-08-11":"山の日",
+    "2026-09-21":"敬老の日","2026-09-22":"休日","2026-09-23":"秋分の日",
+    "2026-10-12":"スポーツの日","2026-11-03":"文化の日","2026-11-23":"勤労感謝の日",
+    "2027-01-01":"元日","2027-01-11":"成人の日","2027-02-11":"建国記念の日",
+    "2027-02-23":"天皇誕生日","2027-03-21":"春分の日","2027-03-22":"休日",
+    "2027-04-29":"昭和の日","2027-05-03":"憲法記念日","2027-05-04":"みどりの日",
+    "2027-05-05":"こどもの日","2027-07-19":"海の日","2027-08-11":"山の日",
+    "2027-09-20":"敬老の日","2027-09-23":"秋分の日","2027-10-11":"スポーツの日",
+    "2027-11-03":"文化の日","2027-11-23":"勤労感謝の日"
+  };
+
+  const weekdayEN=["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
+  const collageStyles=[
+    {bg:"#efe6d0",fg:"#111",font:"Georgia,serif",r:"-3deg"},
+    {bg:"#f4f0e7",fg:"#e62a20",font:"Arial Black,sans-serif",r:"2deg"},
+    {bg:"#2d5e91",fg:"#fff",font:"Impact,sans-serif",r:"-1deg"},
+    {bg:"#e8b92d",fg:"#111",font:"Georgia,serif",r:"1deg"},
+    {bg:"#e9e2cf",fg:"#207a73",font:"Times New Roman,serif",r:"-2deg"},
+    {bg:"#d9d9d3",fg:"#111",font:"Impact,sans-serif",r:"2deg"},
+    {bg:"#d92b21",fg:"#fff",font:"Georgia,serif",r:"-1deg"},
+    {bg:"#eadfc8",fg:"#111",font:"Times New Roman,serif",r:"2deg"},
+    {bg:"#111",fg:"#fff",font:"Arial Black,sans-serif",r:"-2deg"}
+  ];
+
+  const pad=n=>String(n).padStart(2,"0");
+
+  function jstParts(){
+    const f=new Intl.DateTimeFormat("en-US",{
+      timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit",
+      hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false
+    }).formatToParts(new Date());
+    const o={}; f.forEach(x=>o[x.type]=x.value); return o;
+  }
+  function todayKey(){const o=jstParts();return `${o.year}-${o.month}-${o.day}`}
+  function weekday(date){return ["日","月","火","水","木","金","土"][new Date(`${date}T12:00:00+09:00`).getDay()]}
+  function jpDate(date){const [y,m,d]=date.split("-").map(Number);return `${y}年${m}月${d}日（${weekday(date)}）`}
+  function parseJST(date,time="00:00"){return Date.parse(`${date}T${time}:00${JST}`)}
+  function parts(diff){const s=Math.max(0,Math.floor(diff/1000));return {d:Math.floor(s/86400),h:Math.floor((s%86400)/3600),m:Math.floor((s%3600)/60),s:s%60}}
+  function daysUntil(date,time="08:30"){
+    const diff=parseJST(date,time)-Date.now();
+    return Math.max(0,Math.floor(diff/86400000));
+  }
+  function setThreeDigits(n){const s=String(Math.max(0,n)).padStart(3,"0").slice(-3);document.querySelectorAll("#mainDays span").forEach((el,i)=>el.textContent=s[i])}
+
+  function isEiken(name){return /英検/.test(name||"")}
+  function isCertification(name){return /英検|漢検|数検/.test(name||"")}
+  function isListHidden(name){
+    const n=(name||"").replace(/\s+/g,"").toUpperCase();
+    return n.includes("ゴミ") || n.includes("ごみ") || n.includes("KUMON") || n.includes("学習塾") || n.includes("下校");
+  }
+
+  function eventVisualType(name, fallback="school"){
+    const n=(name||"").replace(/\s+/g,"");
+    if(/ゴミ|ごみ/.test(n)) return "garbage";
+    if(/下校/.test(n)) return "dismissal";
+    if(/三者面談|進路|高校進学説明会|願書|調印/.test(n)) return "career";
+    if(/テスト|試験|模試|考査|基礎学力|英語弁論大会/.test(n) && !isCertification(n)) return "exam";
+    if(/文化祭|体育祭|代休|遠足|修学旅行|オープンスクール|学校行事|始業式|終業式|卒業式|授業参観|全校朝会|全校集会|学年集会|ハロウィン集会/.test(n)) return "event";
+    return fallback;
+  }
+
+  function eventTagLabel(type){
+    if(type==="exam") return "テスト";
+    if(type==="career") return "進路";
+    if(type==="event") return "学校行事";
+    if(type==="dismissal") return "下校";
+    if(type==="garbage") return "ゴミ";
+    return "予定";
+  }
+
+  function dismissalToDisplay(name){
+    const original=(name||"").trim();
+    let detail=original.replace(/^(中学校|小学校)[\s　:：・-]*/,"").trim();
+    const compact=detail.replace(/\s+/g,"");
+
+    let m=compact.match(/(\d{1,2})時(?:(\d{1,2})分)?下校/);
+    if(!m) m=compact.match(/(\d{1,2}):(\d{2})下校/);
+
+    if(m){
+      let h=Number(m[1]);
+      const min=(m[2] ?? "00").padStart(2,"0");
+      const ap=h>=12?"PM":"AM";
+      const h12=h%12||12;
+      return {status:`DISMISSAL AT ${h12}:${min} ${ap}`,detail};
+    }
+    if(/短縮/.test(compact)) return {status:"EARLY DISMISSAL",detail};
+    if(/給食後下校/.test(compact)) return {status:"DISMISSAL AFTER LUNCH",detail};
+    if(/午前中下校|午前下校/.test(compact)) return {status:"MORNING DISMISSAL",detail};
+    return {status:"SPECIAL DISMISSAL",detail};
+  }
+
+  let agendaTimer=null, agendaIndex=0, agendaSig="";
+
+  function agendaDateOffset(key,days){
+    const d=new Date(`${key}T12:00:00+09:00`);
+    d.setDate(d.getDate()+days);
+    return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit"}).format(d);
+  }
+
+  function getAgendaItems(){
+    const today=todayKey(), tomorrow=agendaDateOffset(today,1);
+    const seen=new Set();
+    return [...exams,...careers,...schoolEvents]
+      .filter(x=>x && (x.date===today || x.date===tomorrow))
+      .sort((a,b)=>a.date.localeCompare(b.date)||(a.time||"99:99").localeCompare(b.time||"99:99"))
+      .filter(x=>{
+        const k=`${x.date}|${x.time||""}|${x.name||""}`;
+        if(seen.has(k)) return false; seen.add(k); return true;
+      })
+      .map(x=>({when:x.date===today?"TODAY":"TOMORROW",name:x.name||"",type:eventVisualType(x.name||"",x.type||"school")}));
+  }
+
+  function renderAgendaTicker(force=false){
+    const box=document.getElementById("agendaTicker"), when=document.getElementById("agendaWhen"), text=document.getElementById("agendaText");
+    if(!box||!when||!text)return;
+    const items=getAgendaItems(), sig=items.map(x=>`${x.when}|${x.name}|${x.type}`).join("||");
+    if(!items.length){
+      if(agendaTimer){clearInterval(agendaTimer);agendaTimer=null}
+      agendaIndex=0; agendaSig=""; box.className="agendaTicker empty"; when.textContent=""; text.textContent=""; return;
+    }
+    if(force||sig!==agendaSig){
+      agendaSig=sig; agendaIndex=0;
+      if(agendaTimer){clearInterval(agendaTimer);agendaTimer=null}
+    }
+    const show=()=>{
+      const arr=getAgendaItems();
+      if(!arr.length){renderAgendaTicker(true);return}
+      if(agendaIndex>=arr.length)agendaIndex=0;
+      const item=arr[agendaIndex];
+      box.classList.remove("show");
+      setTimeout(()=>{
+        when.textContent=item.when; text.textContent=item.name;
+        box.className=`agendaTicker type-${item.type||"school"}`;
+        requestAnimationFrame(()=>requestAnimationFrame(()=>box.classList.add("show")));
+      },500);
+    };
+    show();
+    if(!agendaTimer&&items.length>1){
+      agendaTimer=setInterval(()=>{const arr=getAgendaItems();if(!arr.length){renderAgendaTicker(true);return}agendaIndex=(agendaIndex+1)%arr.length;show()},5500);
+    }
+  }
+
+  function renderDismissalBoard(){
+    const key=todayKey();
+    const day=new Date(`${key}T12:00:00+09:00`).getDay();
+    const offDay=(day===0 || day===6 || !!holidays[key]);
+    const todayEvents=schoolEvents.filter(x=>x.date===key);
+    const todayDismissals=todayEvents.filter(x=>/下校/.test(x.name||""));
+
+    // School-specific substitute holiday:
+    // 「中学校代休」→ 中学校だけ NO SCHOOL
+    // 「小学校代休」→ 小学校だけ NO SCHOOL
+    function hasSchoolDayOff(label){
+      return todayEvents.some(x=>{
+        const name=x.name||"";
+        return name.includes(label) && /代休/.test(name);
+      });
+    }
+
+    function pick(label){
+      if(hasSchoolDayOff(label)) return {status:"NO SCHOOL",detail:""};
+
+      // School trip takes priority over the normal dismissal display.
+      // e.g. 「中学校修学旅行」 / 「小学校修学旅行」
+      const schoolTrip=todayEvents.find(x=>{
+        const name=x.name||"";
+        return name.includes(label) && /修学旅行/.test(name);
+      });
+      if(schoolTrip) return {status:"✈ SCHOOL TRIP",detail:""};
+
+      const item=todayDismissals.find(x=>(x.name||"").includes(label));
+      if(item) return dismissalToDisplay(item.name);
+      if(offDay) return {status:"NO SCHOOL",detail:""};
+      return {status:"NORMAL DISMISSAL",detail:""};
+    }
+
+    const junior=pick("中学校");
+    const elementary=pick("小学校");
+
+    document.getElementById("juniorDismissal").textContent=junior.status;
+    document.getElementById("juniorDismissalDetail").textContent=junior.detail;
+    document.getElementById("elementaryDismissal").textContent=elementary.status;
+    document.getElementById("elementaryDismissalDetail").textContent=elementary.detail;
+
+    document.querySelector(".dismissalMini.junior")?.classList.toggle("noSchool",junior.status==="NO SCHOOL");
+    document.querySelector(".dismissalMini.elementary")?.classList.toggle("noSchool",elementary.status==="NO SCHOOL");
+  }
+
+  function nextExam(now){
+    const today=todayKey();
+    const candidates=exams
+      .filter(x=>!isCertification(x.name))
+      .slice()
+      .sort((a,b)=>(a.date||a.sort||"").localeCompare(b.date||b.sort||""));
+    for(const x of candidates){
+      if(x.date){const ts=parseJST(x.date,x.time||"08:30");if(ts>=now)return {...x,ts,exact:true}}
+      else if(x.approx && x.sort>=today)return {...x,exact:false};
+    }
+    return null;
+  }
+
+  function nextEiken(now){
+    const today=todayKey();
+    const candidates=exams
+      .filter(x=>isEiken(x.name))
+      .slice()
+      .sort((a,b)=>(a.date||a.sort||"").localeCompare(b.date||b.sort||""));
+    for(const x of candidates){
+      if(x.date){
+        const ts=parseJST(x.date,x.time||"00:00");
+        // All-day Eiken events count through the event date.
+        const endOfDay=parseJST(x.date,"23:59");
+        if((x.time ? ts : endOfDay)>=now) return {...x,ts:(x.time?ts:parseJST(x.date,"23:59")),exact:true};
+      }else if(x.approx && x.sort>=today) return {...x,exact:false};
+    }
+    return null;
+  }
+
+  function upcomingSchoolItems(limit=5){
+    const today=todayKey();
+    const items=[
+      ...exams.filter(x=>!isCertification(x.name)).map(x=>({...x,type:"exam"})),
+      ...careers.map(x=>({...x,type:"career"})),
+      ...schoolEvents.filter(x=>!isListHidden(x.name)).map(x=>({...x,type:eventVisualType(x.name,"school")}))
+    ];
+    return items
+      .filter(x=>x.date && x.date>=today)
+      .sort((a,b)=>a.date.localeCompare(b.date) || (a.time||"").localeCompare(b.time||""))
+      .slice(0,limit);
+  }
+
+  function renderUpcomingSchool(){
+    const root=document.getElementById("upcomingSchoolList");
+    if(!root) return;
+    root.innerHTML="";
+    const items=upcomingSchoolItems(5);
+    if(!items.length){
+      const empty=document.createElement("div");
+      empty.className="upEmpty";
+      empty.textContent="NO SCHOOL EVENTS SCHEDULED";
+      root.appendChild(empty);
+      return;
+    }
+    for(const x of items){
+      const [y,m,d]=x.date.split("-").map(Number);
+      const row=document.createElement("div");
+      row.className="upcomingRow";
+      const dow=weekday(x.date);
+      row.innerHTML=`
+        <div class="upDate">${m}/${d}<small>（${dow}）</small></div>
+        <div class="upIcon ${x.type}"></div>
+        <div class="upName"></div>
+        <div class="upTag ${x.type}">${eventTagLabel(x.type)}</div>`;
+      row.querySelector(".upName").textContent=x.name;
+      root.appendChild(row);
+    }
+  }
+
+  function nextCalendarItem(list){
+    const today=todayKey();
+    return list.filter(x=>(x.date&&x.date>=today)||(x.approx&&x.sort>=today))
+      .sort((a,b)=>(a.date||a.sort).localeCompare(b.date||b.sort))[0]||null;
+  }
+  function displayCalendarItem(item,nameEl,dateEl){
+    if(!item){nameEl.textContent="日程未定";dateEl.textContent="—";return}
+    nameEl.textContent=item.name;
+    dateEl.textContent=item.date?(item.date===todayKey()?`本日　${jpDate(item.date)}`:jpDate(item.date)):item.approx;
+  }
+  function animateFlip(el){el.classList.remove("animate");void el.offsetWidth;el.classList.add("animate")}
+  function renderWeekday(word){
+    const root=document.getElementById("weekdayCollage");root.innerHTML="";
+    [...word].forEach((ch,i)=>{
+      const s=collageStyles[i%collageStyles.length],span=document.createElement("span");
+      span.textContent=ch;span.style.setProperty("--bg",s.bg);span.style.setProperty("--fg",s.fg);
+      span.style.setProperty("--font",s.font);span.style.setProperty("--r",s.r);root.appendChild(span);
+    });
+  }
+  function setPage(next){
+    page=Math.max(0,Math.min(2,next));
+    track.classList.toggle("clock-active",page===1);
+    track.classList.toggle("calendar-active",page===2);
+    examBtn.classList.toggle("active",page===0);
+    clockBtn.classList.toggle("active",page===1);
+  }
+
+  function tick(){
+    const now=Date.now(), p=parts(entrance-now);
+    setThreeDigits(p.d);
+    document.getElementById("hours").textContent=pad(p.h);
+    document.getElementById("minutes").textContent=pad(p.m);
+    document.getElementById("seconds").textContent=pad(p.s);
+    document.getElementById("today").textContent=jpDate(todayKey());
+
+    // Mini himekuri calendar next to the entrance countdown.
+    const miniKey=todayKey();
+    const miniDate=new Date(`${miniKey}T12:00:00+09:00`);
+    const miniDow=miniDate.getDay();
+    const miniParts=miniKey.split("-").map(Number);
+    const miniWeekJP=["日","月","火","水","木","金","土"][miniDow];
+    const miniDateEl=document.getElementById("miniTodayDate");
+    const miniWeekEl=document.getElementById("miniTodayWeek");
+    const miniCard=document.getElementById("miniTodayCard");
+    if(miniDateEl) miniDateEl.textContent=`${miniParts[1]}/${miniParts[2]}`;
+    if(miniWeekEl) miniWeekEl.textContent=`（${miniWeekJP}）`;
+    if(miniCard){
+      miniCard.classList.toggle("sun",miniDow===0 || !!holidays[miniKey]);
+      miniCard.classList.toggle("sat",miniDow===6 && !holidays[miniKey]);
+    }
+
+    renderDismissalBoard();
+    renderAgendaTicker();
+
+    const ex=nextExam(now);
+    if(ex){
+      document.getElementById("nextExamName").textContent=`${ex.name}まで`;
+      if(ex.exact){
+        document.getElementById("nextExamDate").textContent=jpDate(ex.date);
+        document.getElementById("nextExamDays").textContent=parts(ex.ts-now).d;
+        document.getElementById("nextExamDaysLabel").textContent="DAYS";
+      }else{
+        document.getElementById("nextExamDate").textContent=ex.approx;
+        document.getElementById("nextExamDays").textContent="—";
+        document.getElementById("nextExamDaysLabel").textContent="日程未確定";
+      }
+    }
+
+    const ek=nextEiken(now);
+    if(ek){
+      document.getElementById("eikenName").textContent=ek.name.includes("まで")?ek.name:`${ek.name}まで`;
+      if(ek.exact){
+        document.getElementById("eikenDate").textContent=jpDate(ek.date);
+        document.getElementById("eikenDays").textContent=parts(ek.ts-now).d;
+      }else{
+        document.getElementById("eikenDate").textContent=ek.approx||"日程未確定";
+        document.getElementById("eikenDays").textContent="--";
+      }
+    }else{
+      document.getElementById("eikenName").textContent="英検";
+      document.getElementById("eikenDate").textContent="NO EXAMS SCHEDULED";
+      document.getElementById("eikenDays").textContent="--";
+    }
+
+    renderUpcomingSchool();
+
+    const t=jstParts(), hour=pad(Number(t.hour)%24), minute=pad(Number(t.minute)), second=pad(Number(t.second));
+    const hourEl=document.getElementById("hourNum"), minuteEl=document.getElementById("minuteNum");
+    if(prevHour!==null && hour!==prevHour)animateFlip(hourEl);
+    if(prevMinute!==null && minute!==prevMinute)animateFlip(minuteEl);
+    hourEl.textContent=hour;minuteEl.textContent=minute;
+    prevHour=hour;prevMinute=minute;
+
+    const key=`${t.year}-${t.month}-${t.day}`;
+    const dow=new Date(`${key}T12:00:00+09:00`).getDay();
+    const w=weekdayEN[dow];
+    const monthShort=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][Number(t.month)-1];
+
+    document.getElementById("clockYear").textContent=t.year;
+    document.getElementById("clockMonthShort").textContent=monthShort;
+    document.getElementById("clockDayNum").textContent=pad(Number(t.day));
+    document.getElementById("clockWeekday").textContent=w.slice(0,3);
+
+    const nextClockExam=nextCalendarItem(exams.filter(x=>!isCertification(x.name)));
+    const cName=document.getElementById("clockNextExamName");
+    const cDate=document.getElementById("clockNextExamDate");
+    const cDays=document.getElementById("clockNextExamDays");
+    if(nextClockExam){
+      cName.textContent=nextClockExam.name;
+      cDate.textContent=nextClockExam.date.replaceAll("-",".");
+      cDays.textContent=String(daysUntil(nextClockExam.date));
+    }else{
+      cName.textContent="NO EXAMS SCHEDULED";
+      cDate.textContent="----.--.--";
+      cDays.textContent="--";
+    }
+
+    document.getElementById("clockTopDate").textContent=jpDate(key);
+    document.getElementById("holidayName").textContent=holidays[key]||"";
+  }
+
+  examBtn.addEventListener("click",()=>setPage(0));
+  clockBtn.addEventListener("click",()=>setPage(1));
+  app.addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button!==0)return;startX=e.clientX;startY=e.clientY;dragging=true});
+  app.addEventListener("pointerup",e=>{
+    if(!dragging)return;dragging=false;
+    const dx=e.clientX-startX,dy=e.clientY-startY;
+    if(page===2 && Math.abs(dy)>55 && Math.abs(dy)>Math.abs(dx)*1.15){
+      changeMonth(dy<0?1:-1);
+      return;
+    }
+    if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.15){
+      if(dx<0) setPage(Math.min(2,page+1));
+      else setPage(Math.max(0,page-1));
+    }
+  });
+  app.addEventListener("pointercancel",()=>dragging=false);
+
+
+
+  function classifyGoogleEvent(title){
+    const raw=(title||"").trim();
+    const upper=raw.toUpperCase();
+    let type="school", name=raw;
+
+    const prefix=raw.match(/^\s*(?:【|\[)?(TEST|EXAM|SCHOOL|CAREER|LESSON|FAMILY)(?:】|\])?\s*[｜|:：\-–—]?\s*/i);
+    if(prefix){
+      const tag=prefix[1].toUpperCase();
+      name=raw.slice(prefix[0].length).trim() || raw;
+      if(tag==="TEST"||tag==="EXAM") type="exam";
+      else if(tag==="CAREER") type="career";
+      else type="school";
+      return {name,type};
+    }
+
+    // Prefixes are optional. Common Japanese words are classified automatically.
+    if(/テスト|試験|模試|英検|漢検|数検|考査|基礎学力/.test(raw)) type="exam";
+    else if(/進路|説明会|三者面談|願書|調印/.test(raw)) type="career";
+    else type="school";
+    return {name,type};
+  }
+
+  function googleDateKey(ev){
+    if(ev.start && ev.start.date) return ev.start.date;
+    if(ev.start && ev.start.dateTime){
+      const d=new Date(ev.start.dateTime);
+      return new Intl.DateTimeFormat("en-CA",{
+        timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit"
+      }).format(d);
+    }
+    return null;
+  }
+
+  function googleTime(ev){
+    if(!ev.start || !ev.start.dateTime) return null;
+    const d=new Date(ev.start.dateTime);
+    return new Intl.DateTimeFormat("en-GB",{
+      timeZone:"Asia/Tokyo",hour:"2-digit",minute:"2-digit",hour12:false
+    }).format(d);
+  }
+
+  function dedupeByNameDate(arr){
+    const seen=new Set();
+    return arr.filter(x=>{
+      const k=`${x.date||x.sort||""}|${x.name}`;
+      if(seen.has(k)) return false;
+      seen.add(k); return true;
+    });
+  }
+
+  async function loadGoogleCalendar(){
+    const status=document.getElementById("gcalStatus");
+    if(!GOOGLE_API_KEY || GOOGLE_API_KEY.includes("PASTE_YOUR")){
+      if(status) status.textContent="GOOGLE CALENDAR · API KEY NOT SET";
+      return;
+    }
+    try{
+      if(status){status.textContent="SYNCING GOOGLE CALENDAR…";status.className="gcalStatus";}
+      const now=new Date();
+      const min=new Date(Date.UTC(now.getUTCFullYear()-1,0,1)).toISOString();
+      const max=new Date(Date.UTC(now.getUTCFullYear()+2,11,31,23,59,59)).toISOString();
+      const params=new URLSearchParams({
+        key:GOOGLE_API_KEY,
+        singleEvents:"true",
+        orderBy:"startTime",
+        timeMin:min,
+        timeMax:max,
+        maxResults:"2500",
+        timeZone:"Asia/Tokyo"
+      });
+      const url=`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(GOOGLE_CALENDAR_ID)}/events?${params}`;
+      const res=await fetch(url,{cache:"no-store"});
+      if(!res.ok) throw new Error(`Google Calendar API ${res.status}`);
+      const data=await res.json();
+
+      const gx=[],gc=[],gs=[];
+      for(const ev of (data.items||[])){
+        if(ev.status==="cancelled" || !ev.summary) continue;
+        const date=googleDateKey(ev); if(!date) continue;
+        const c=classifyGoogleEvent(ev.summary);
+        const item={name:c.name,date};
+        const tm=googleTime(ev); if(tm) item.time=tm;
+        if(c.type==="exam") gx.push(item);
+        else if(c.type==="career") gc.push(item);
+        else gs.push(item);
+      }
+
+      // Google Calendar is the single source of truth.
+      // Replace the arrays on every sync so nothing is duplicated or accumulated.
+      exams=dedupeByNameDate(gx);
+      careers=dedupeByNameDate(gc);
+      schoolEvents=dedupeByNameDate(gs);
+      googleCalendarLoaded=true;
+
+      if(status){
+        status.textContent=`GOOGLE CALENDAR · LIVE · ${(data.items||[]).filter(x=>x.status!=="cancelled").length} EVENTS`;
+        status.className="gcalStatus live";
+      }
+      renderCalendar(0);
+      renderUpcomingSchool();
+      renderDismissalBoard();
+    renderAgendaTicker();
+      tick(); // EXAM / EIKEN / CAREER / SCHOOL list refresh from Google data.
+    }catch(err){
+      console.error(err);
+      if(status){
+        status.textContent="GOOGLE CALENDAR · SYNC ERROR";
+        status.className="gcalStatus error";
+      }
+    }
+  }
+
+  const monthNames=["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
+  let calView=null;
+
+  function todayDateJST(){
+    const t=jstParts();
+    return {y:Number(t.year),m:Number(t.month)-1,d:Number(t.day),key:`${t.year}-${t.month}-${t.day}`};
+  }
+  function keyOf(y,m,d){return `${y}-${pad(m+1)}-${pad(d)}`}
+  function eventsForDate(key){
+    const found=[];
+    exams.forEach(x=>{if(x.date===key)found.push({name:x.name,type:"exam"})});
+    careers.forEach(x=>{if(x.date===key)found.push({name:x.name,type:"career"})});
+    schoolEvents.forEach(x=>{
+      if(x.date===key) found.push({name:x.name,type:eventVisualType(x.name,"school")});
+    });
+    if(holidays[key])found.push({name:holidays[key],type:"holiday"});
+    return found;
+  }
+  function renderCalendar(anim){
+    if(!calView){const t=todayDateJST();calView={y:t.y,m:t.m}}
+    const y=calView.y,m=calView.m,t=todayDateJST();
+    document.getElementById("calMonthNo").textContent=pad(m+1);
+    document.getElementById("calMonthName").textContent=monthNames[m];
+    document.getElementById("calYear").textContent=y;
+
+    const grid=document.getElementById("calGrid");grid.innerHTML="";
+    const first=new Date(Date.UTC(y,m,1)).getUTCDay();
+    const days=new Date(Date.UTC(y,m+1,0)).getUTCDate();
+    const prevDays=new Date(Date.UTC(y,m,0)).getUTCDate();
+
+    for(let i=0;i<42;i++){
+      let cy=y,cm=m,day,out=false;
+      if(i<first){day=prevDays-first+i+1;cm=m-1;out=true}
+      else if(i>=first+days){day=i-first-days+1;cm=m+1;out=true}
+      else day=i-first+1;
+      if(cm<0){cm=11;cy--} if(cm>11){cm=0;cy++}
+      const key=keyOf(cy,cm,day),dow=i%7;
+      const cell=document.createElement("div");
+      cell.className="calCell"+(dow===0?" sun":"")+(dow===6?" sat":"")+(out?" out":"")+(key===t.key?" today":"");
+      const num=document.createElement("div");num.className="calNum";num.textContent=day;cell.appendChild(num);
+      if(!out){
+        const dayEvents=eventsForDate(key);
+        if(dayEvents.length>=3) cell.classList.add("manyEvents");
+        if(dayEvents.length>=5) cell.classList.add("denseEvents");
+        dayEvents.forEach(ev=>{
+          const el=document.createElement("div");
+          const vt=eventVisualType(ev.name,ev.type||"school");
+          el.className=`calEvent ${vt}`;
+          el.textContent=ev.name;
+          cell.appendChild(el);
+        });
+      }
+      grid.appendChild(cell);
+    }
+
+    document.getElementById("calTodayNum").textContent=`${t.m+1}.${t.d}`;
+    document.getElementById("calTodayDay").textContent=weekdayEN[new Date(`${t.key}T12:00:00+09:00`).getDay()];
+    document.getElementById("calTodayEvent").textContent=eventsForDate(t.key).map(e=>e.name).join(" / ");
+
+    const schedule=[];
+    for(let d=1;d<=days;d++){
+      const k=keyOf(y,m,d);
+      exams.forEach(x=>{if(x.date===k && !isListHidden(x.name))schedule.push({day:d,name:x.name,type:"exam"})});
+      careers.forEach(x=>{if(x.date===k && !isListHidden(x.name))schedule.push({day:d,name:x.name,type:"career"})});
+      schoolEvents.forEach(x=>{if(x.date===k && !isListHidden(x.name))schedule.push({day:d,name:x.name,type:eventVisualType(x.name,"school")})});
+      // Holidays intentionally omitted from MONTH SCHEDULE.
+    }
+    document.getElementById("monthScheduleTitle").textContent=`${monthNames[m]} SCHEDULE`;
+    const sl=document.getElementById("monthScheduleList"); sl.innerHTML="";
+    if(!schedule.length){
+      const e=document.createElement("div");e.className="scheduleEmpty";e.textContent="NO SCHEDULE";sl.appendChild(e);
+    }else{
+      schedule.forEach(ev=>{
+        const row=document.createElement("div");row.className=`scheduleRow ${ev.type}`;
+        const mark=ev.type==="exam"?"●":ev.type==="career"?"■":ev.type==="school"?"▲":"◆";
+        row.innerHTML=`<span class="scheduleDay">${pad(ev.day)}</span><span class="scheduleMark">${mark}</span><span class="scheduleName"></span>`;
+        row.querySelector(".scheduleName").textContent=ev.name;
+        sl.appendChild(row);
+      });
+    }
+
+    const pm=new Date(Date.UTC(y,m-1,1)),nm=new Date(Date.UTC(y,m+1,1));
+    document.getElementById("prevMonth").textContent=`← ${monthNames[pm.getUTCMonth()]}`;
+    document.getElementById("nextMonth").textContent=`${monthNames[nm.getUTCMonth()]} →`;
+
+    if(anim){
+      const cp=document.getElementById("calendarPage");
+      cp.classList.remove("slideUp","slideDown");void cp.offsetWidth;
+      cp.classList.add(anim>0?"slideUp":"slideDown");
+    }
+  }
+  function changeMonth(delta){
+    if(!calView){const t=todayDateJST();calView={y:t.y,m:t.m}}
+    calView.m+=delta;
+    if(calView.m>11){calView.m=0;calView.y++}
+    if(calView.m<0){calView.m=11;calView.y--}
+    renderCalendar(delta);
+  }
+  document.getElementById("prevMonth").addEventListener("click",()=>changeMonth(-1));
+  document.getElementById("nextMonth").addEventListener("click",()=>changeMonth(1));
+  document.getElementById("calTodayBtn").addEventListener("click",()=>{
+    const t=todayDateJST();calView={y:t.y,m:t.m};renderCalendar(0);
+  });
+  // Swipe left from CLOCK to CALENDAR.
+  clockBtn.addEventListener("dblclick",()=>setPage(2));
+  renderCalendar(0);
+  loadGoogleCalendar();
+  setInterval(loadGoogleCalendar, 5*60*1000);
+
+  tick();
+  setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>
