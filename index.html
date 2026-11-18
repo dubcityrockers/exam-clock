@@ -3701,47 +3701,6 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 }
 @media (max-height:750px){.surveyMiniCard{gap:0;padding-top:2px;padding-bottom:2px}.surveyMiniReduction{font-size:9px}.surveyMiniFoot{font-size:8px}}
 
-
-/* R8 admission survey vs final examinees: dedicated fourth slide */
-.track{width:600%}
-.screen{width:16.6666666667%;flex:0 0 16.6666666667%}
-.track.schools-active{transform:translateX(-16.6666666667%)}
-.track.survey-active{transform:translateX(-33.3333333333%)}
-.track.history-active{transform:translateX(-50%)}
-.track.clock-active{transform:translateX(-66.6666666667%)}
-.track.calendar-active{transform:translateX(-83.3333333333%)}
-.historyPage{height:100%;display:flex;flex-direction:column;gap:1.15vh;padding:max(16px,env(safe-area-inset-top)) 3.4vw max(12px,env(safe-area-inset-bottom));background:var(--paper);overflow:hidden}
-.historyHead{border-bottom:3px solid #111;padding-bottom:.65vh}
-.historyHead h2{font-size:clamp(23px,3.5vw,42px);font-weight:950;margin:0;line-height:1.15}
-.historyHead p{font-size:clamp(11px,1.5vw,17px);font-weight:750;margin:.35vh 0 0}
-.historyLegend{display:flex;gap:2vw;flex-wrap:wrap;font-size:clamp(10px,1.4vw,16px);font-weight:800;align-items:center}
-.historyLegend span{display:inline-flex;align-items:center;gap:5px}
-.historyLegend i{display:inline-block;width:12px;height:12px;border-radius:2px}
-.historyPanels{flex:1;min-height:0;display:grid;grid-template-rows:1fr 1fr;gap:1.2vh}
-.historyPanel{min-height:0;border:2px solid #151515;border-radius:12px;padding:1vh 1.3vw .7vh;display:flex;flex-direction:column}
-.historyPanel h3{margin:0 0 .25vh;font-size:clamp(17px,2.35vw,26px);font-weight:950}
-.historyPanel svg{width:100%;height:100%;min-height:0;display:block;overflow:visible}
-.historyNote{font-size:clamp(10px,1.25vw,14px);font-weight:650;line-height:1.35;color:#555}
-@media(orientation:landscape){.historyPanels{grid-template-columns:1fr 1fr;grid-template-rows:1fr}.historyPage{gap:1.6vh}}
-
-
-/* 4ページ目：5学科・横棒グラフ（iPad縦画面優先） */
-.historyHorizontal{gap:.7vh;padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(9px,env(safe-area-inset-bottom))}
-.historyHorizontal .historyHead h2{font-size:clamp(24px,3.1vw,40px)}
-.historyHorizontalList{flex:1;min-height:0;display:grid;grid-template-rows:repeat(5,minmax(0,1fr));gap:.65vh}
-.historyHorizontalCard{min-height:0;border:1.5px solid #b9b9b9;border-left:7px solid #888;border-radius:9px;padding:.45vh 1.6vw .45vh;display:flex;flex-direction:column;justify-content:center;gap:.4vh;background:rgba(255,255,255,.72)}
-.historyHorizontalCard.north{border-left-color:#d85145}.historyHorizontalCard.johoku{border-left-color:#2587c4}.historyHorizontalCard.benchmark{border-left-color:#777}
-.historyHorizontalTitle{display:flex;justify-content:space-between;align-items:baseline;gap:10px;line-height:1.05}
-.historyHorizontalTitle strong{font-size:clamp(17px,2.1vw,25px);font-weight:950}.historyHorizontalTitle strong span{font-size:.78em;margin-left:.65em}
-.historyHorizontalTitle>b{font-size:clamp(14px,1.7vw,21px);white-space:nowrap}
-.historyHorizontalBars{display:grid;gap:.28vh;min-height:0}
-.historyHorizontalBar{display:grid;grid-template-columns:clamp(76px,11vw,125px) minmax(0,1fr) clamp(47px,6vw,68px);gap:1.1vw;align-items:center;min-height:0}
-.historyBarLabel{font-size:clamp(11px,1.4vw,16px);font-weight:800;white-space:nowrap}
-.historyBarTrack{height:clamp(9px,1.65vh,19px);background:#e6e6e6;border-radius:3px;overflow:hidden}
-.historyBarFill{height:100%;border-radius:3px}
-.historyHorizontalBar>strong{font-size:clamp(13px,1.7vw,20px);font-weight:950;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
-.historyHorizontal .historyNote{font-size:clamp(10px,1.16vw,13px)}
-@media(orientation:landscape){.historyHorizontalList{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,minmax(0,1fr))}.historyHorizontalCard{padding:.5vh 1vw}.historyHorizontalTitle strong{font-size:clamp(14px,1.55vw,23px)}.historyHorizontalBar{grid-template-columns:clamp(72px,8vw,115px) minmax(0,1fr) 50px}.historyHorizontalTitle>b{font-size:clamp(12px,1.3vw,18px)}}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3902,8 +3861,6 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 </div><div class="admissionFoot">※普通科の人数は定員×17%・3%・14%の理論値（小数第1位）。実際の募集人数ではありません。専門学科の40人・30人も一般選抜の確定枠ではありません。前年実績は令和8年度の参考値で、今年度の枠から差し引く数字ではありません。</div></div></section>
 
     <section class="screen" aria-label="令和9年度進学希望調査・9学科比較"><div class="surveyPage surveyCompact"><header class="surveyTop"><h2>高校進学希望調査</h2><span>2027 ADMISSIONS</span></header><div class="surveyDate"><strong>9月4日時点</strong><small>2026年・第1回調査 ／ 志望順位順</small></div><div class="surveyMiniList"><article class="surveyMiniCard north"><div class="surveyMiniHeading"><span class="surveyMiniName"><b class="surveyMiniRank">01</b><strong>徳島北高校</strong><span>（普通科・学区外）</span></span><b class="surveyMiniRate">2.28<small>倍</small></b></div><div class="surveyMiniMetrics"><div><small>定員・枠</small><strong>39.1人</strong></div><div><small>希望者</small><strong>89人</strong></div><div><small>過不足</small><strong>+49.9人</strong></div></div><div class="surveyMiniReduction">育成型による減少上限：<strong>最大−6.9人</strong></div></article><article class="surveyMiniCard north"><div class="surveyMiniHeading"><span class="surveyMiniName"><b class="surveyMiniRank">02</b><strong>徳島北高校</strong><span>（国際英語科）</span></span><b class="surveyMiniRate">1.08<small>倍</small></b></div><div class="surveyMiniMetrics"><div><small>定員・枠</small><strong>40人</strong></div><div><small>希望者</small><strong>43人</strong></div><div><small>過不足</small><strong>+3人</strong></div></div><div class="surveyMiniReduction">育成型による減少上限：<strong>―</strong></div></article><article class="surveyMiniCard johoku"><div class="surveyMiniHeading"><span class="surveyMiniName"><b class="surveyMiniRank">03</b><strong>城北高校</strong><span>（理数科学科）</span></span><b class="surveyMiniRate">0.67<small>倍</small></b></div><div class="surveyMiniMetrics"><div><small>定員・枠</small><strong>30人</strong></div><div><small>希望者</small><strong>20人</strong></div><div><small>過不足</small><strong>−10人</strong></div></div><div class="surveyMiniReduction">育成型による減少上限：<strong>―</strong></div></article><article class="surveyMiniCard johoku"><div class="surveyMiniHeading"><span class="surveyMiniName"><b class="surveyMiniRank">04</b><strong>城北高校</strong><span>（普通科・学区外）</span></span><b class="surveyMiniRate">1.64<small>倍</small></b></div><div class="surveyMiniMetrics"><div><small>定員・枠</small><strong>40.8人</strong></div><div><small>希望者</small><strong>67人</strong></div><div><small>過不足</small><strong>+26.2人</strong></div></div><div class="surveyMiniReduction">育成型による減少上限：<strong>最大−7.2人</strong></div></article><article class="surveyMiniCard "><div class="surveyMiniHeading"><span class="surveyMiniName"><b class="surveyMiniRank">05</b><strong>城東高校</strong><span>（普通科・全県一区）</span></span><b class="surveyMiniRate">1.22<small>倍</small></b></div><div class="surveyMiniMetrics"><div><small>定員・枠</small><strong>280人</strong></div><div><small>希望者</small><strong>341人</strong></div><div><small>過不足</small><strong>+61人</strong></div></div><div class="surveyMiniReduction">育成型による減少上限：<strong>未確認</strong></div></article><article class="surveyMiniCard "><div class="surveyMiniHeading"><span class="surveyMiniName"><b class="surveyMiniRank">06</b><strong>徳島市立高校</strong><span>（普通科・学区外）</span></span><b class="surveyMiniRate">1.65<small>倍</small></b></div><div class="surveyMiniMetrics"><div><small>定員・枠</small><strong>22.4人</strong></div><div><small>希望者</small><strong>37人</strong></div><div><small>過不足</small><strong>+14.6人</strong></div></div><div class="surveyMiniReduction">育成型による減少上限：<strong>最大−5.6人</strong></div></article><article class="surveyMiniCard "><div class="surveyMiniHeading"><span class="surveyMiniName"><b class="surveyMiniRank">07</b><strong>徳島市立高校</strong><span>（理数科）</span></span><b class="surveyMiniRate">1.18<small>倍</small></b></div><div class="surveyMiniMetrics"><div><small>定員・枠</small><strong>40人</strong></div><div><small>希望者</small><strong>47人</strong></div><div><small>過不足</small><strong>+7人</strong></div></div><div class="surveyMiniReduction">育成型による減少上限：<strong>―</strong></div></article><article class="surveyMiniCard "><div class="surveyMiniHeading"><span class="surveyMiniName"><b class="surveyMiniRank">08</b><strong>城南高校</strong><span>（応用数理科）</span></span><b class="surveyMiniRate">0.77<small>倍</small></b></div><div class="surveyMiniMetrics"><div><small>定員・枠</small><strong>30人</strong></div><div><small>希望者</small><strong>23人</strong></div><div><small>過不足</small><strong>−7人</strong></div></div><div class="surveyMiniReduction">育成型による減少上限：<strong>―</strong></div></article><article class="surveyMiniCard "><div class="surveyMiniHeading"><span class="surveyMiniName"><b class="surveyMiniRank">09</b><strong>城南高校</strong><span>（普通科・学区外）</span></span><b class="surveyMiniRate">1.57<small>倍</small></b></div><div class="surveyMiniMetrics"><div><small>定員・枠</small><strong>40.8人</strong></div><div><small>希望者</small><strong>64人</strong></div><div><small>過不足</small><strong>+23.2人</strong></div></div><div class="surveyMiniReduction">育成型による減少上限：<strong>最大−7.2人</strong></div></article></div><footer class="surveyMiniFoot">※学区外枠・減少上限は割合からの理論値。専門学科の「―」は今回の比較で減少を考慮しない意味。倍率・過不足は育成型を差し引く前の参考値で、正式な出願倍率ではありません。</footer></div></section>
-<section class="screen" aria-label="令和8年度入試・昨年度の希望調査と受検者数">
-<div class="historyPage historyHorizontal"><header class="historyHead"><h2>昨年度｜希望者数から最終受検へ</h2><p>令和8年度入試（2026年春）／9月希望調査 → 最終受検</p></header><div class="historyLegend"><span><i style="background:#d85145"></i>9月希望者</span><span><i style="background:#2587c4"></i>最終受検者</span><span><i style="background:#7a9a83"></i>最終定員</span></div><div class="historyHorizontalList"><article class="historyHorizontalCard north"><div class="historyHorizontalTitle"><strong>徳島北<span>普通科・学区外</span></strong><b>最終倍率 1.11倍</b></div><div class="historyHorizontalBars"><div class="historyHorizontalBar"><span class="historyBarLabel">9月希望者</span><div class="historyBarTrack"><div class="historyBarFill" style="width:100.00%;background:#d85145"></div></div><strong>93人</strong></div><div class="historyHorizontalBar"><span class="historyBarLabel">最終受検者</span><div class="historyBarTrack"><div class="historyBarFill" style="width:33.33%;background:#2587c4"></div></div><strong>31人</strong></div><div class="historyHorizontalBar"><span class="historyBarLabel">最終定員</span><div class="historyBarTrack"><div class="historyBarFill" style="width:30.11%;background:#7a9a83"></div></div><strong>28人</strong></div></div></article><article class="historyHorizontalCard north"><div class="historyHorizontalTitle"><strong>徳島北<span>国際英語科</span></strong><b>最終倍率 0.92倍</b></div><div class="historyHorizontalBars"><div class="historyHorizontalBar"><span class="historyBarLabel">9月希望者</span><div class="historyBarTrack"><div class="historyBarFill" style="width:100.00%;background:#d85145"></div></div><strong>49人</strong></div><div class="historyHorizontalBar"><span class="historyBarLabel">最終受検者</span><div class="historyBarTrack"><div class="historyBarFill" style="width:71.43%;background:#2587c4"></div></div><strong>35人</strong></div><div class="historyHorizontalBar"><span class="historyBarLabel">最終定員</span><div class="historyBarTrack"><div class="historyBarFill" style="width:77.55%;background:#7a9a83"></div></div><strong>38人</strong></div></div></article><article class="historyHorizontalCard johoku"><div class="historyHorizontalTitle"><strong>城北<span>普通科・学区外</span></strong><b>最終倍率 1.13倍</b></div><div class="historyHorizontalBars"><div class="historyHorizontalBar"><span class="historyBarLabel">9月希望者</span><div class="historyBarTrack"><div class="historyBarFill" style="width:100.00%;background:#d85145"></div></div><strong>53人</strong></div><div class="historyHorizontalBar"><span class="historyBarLabel">最終受検者</span><div class="historyBarTrack"><div class="historyBarFill" style="width:66.04%;background:#2587c4"></div></div><strong>35人</strong></div><div class="historyHorizontalBar"><span class="historyBarLabel">最終定員</span><div class="historyBarTrack"><div class="historyBarFill" style="width:58.49%;background:#7a9a83"></div></div><strong>31人</strong></div></div></article><article class="historyHorizontalCard johoku"><div class="historyHorizontalTitle"><strong>城北<span>理数科学科</span></strong><b>最終倍率 0.81倍</b></div><div class="historyHorizontalBars"><div class="historyHorizontalBar"><span class="historyBarLabel">9月希望者</span><div class="historyBarTrack"><div class="historyBarFill" style="width:55.56%;background:#d85145"></div></div><strong>15人</strong></div><div class="historyHorizontalBar"><span class="historyBarLabel">最終受検者</span><div class="historyBarTrack"><div class="historyBarFill" style="width:81.48%;background:#2587c4"></div></div><strong>22人</strong></div><div class="historyHorizontalBar"><span class="historyBarLabel">最終定員</span><div class="historyBarTrack"><div class="historyBarFill" style="width:100.00%;background:#7a9a83"></div></div><strong>27人</strong></div></div></article><article class="historyHorizontalCard benchmark"><div class="historyHorizontalTitle"><strong>城東<span>普通科・全県一区</span></strong><b>最終倍率 0.96倍</b></div><div class="historyHorizontalBars"><div class="historyHorizontalBar"><span class="historyBarLabel">9月希望者</span><div class="historyBarTrack"><div class="historyBarFill" style="width:100.00%;background:#d85145"></div></div><strong>347人</strong></div><div class="historyHorizontalBar"><span class="historyBarLabel">最終受検者</span><div class="historyBarTrack"><div class="historyBarFill" style="width:69.74%;background:#2587c4"></div></div><strong>242人</strong></div><div class="historyHorizontalBar"><span class="historyBarLabel">最終定員</span><div class="historyBarTrack"><div class="historyBarFill" style="width:72.33%;background:#7a9a83"></div></div><strong>251人</strong></div></div></article></div><footer class="historyNote">※普通科（徳島北・城北）は学区外のみ、城東は全県の人数。最終定員＝一般選抜の学区外枠／募集人員。棒の長さは各学科内で比較（学科間で縮尺は異なります）。</footer></div></section>
     <section class="screen">
       <div class="simpleClockPage">
         <div class="simpleClockInner">
@@ -4808,14 +4765,13 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
   }
 
   function setPage(next){
-    page=Math.max(0,Math.min(5,next));
+    page=Math.max(0,Math.min(4,next));
     track.classList.toggle("schools-active",page===1);
     track.classList.toggle("survey-active",page===2);
-    track.classList.toggle("history-active",page===3);
-    track.classList.toggle("clock-active",page===4);
-    track.classList.toggle("calendar-active",page===5);
+    track.classList.toggle("clock-active",page===3);
+    track.classList.toggle("calendar-active",page===4);
     examBtn.classList.toggle("active",page===0);
-    clockBtn.classList.toggle("active",page===4);
+    clockBtn.classList.toggle("active",page===3);
   }
 
   function tick(){
@@ -5121,13 +5077,13 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 
 
   examBtn.addEventListener("click",()=>setPage(0));
-  clockBtn.addEventListener("click",()=>setPage(4));
+  clockBtn.addEventListener("click",()=>setPage(3));
   app.addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button!==0)return;startX=e.clientX;startY=e.clientY;dragging=true});
   app.addEventListener("pointerup",e=>{
     if(!dragging)return;dragging=false;
     const dx=e.clientX-startX,dy=e.clientY-startY;
 
-    if(page===5 && Math.abs(dy)>55 && Math.abs(dy)>Math.abs(dx)*1.15){
+    if(page===4 && Math.abs(dy)>55 && Math.abs(dy)>Math.abs(dx)*1.15){
       changeMonth(dy<0?1:-1);
       return;
     }
@@ -5136,20 +5092,20 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
       setExamScheduleFace(examScheduleFace+(dy<0?1:-1));
       return;
     }
-    if(page===4 && Math.abs(dy)>55 && Math.abs(dy)>Math.abs(dx)*1.15){
+    if(page===3 && Math.abs(dy)>55 && Math.abs(dy)>Math.abs(dx)*1.15){
       setClockFace(clockFace+(dy<0?1:-1));
       return;
     }
 
     if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.15){
-      if(dx<0) setPage(Math.min(5,page+1));
+      if(dx<0) setPage(Math.min(4,page+1));
       else setPage(Math.max(0,page-1));
       return;
     }
 
     // A real stationary tap on the monthly calendar is a direct user gesture,
     // which is the most reliable trigger for SpeechSynthesis on iPad/Safari.
-    if(page===5 && Math.abs(dx)<18 && Math.abs(dy)<18 && e.target.closest("#calGrid")){
+    if(page===4 && Math.abs(dx)<18 && Math.abs(dy)<18 && e.target.closest("#calGrid")){
       speakSchedule("todayTomorrow");
     }
   });
