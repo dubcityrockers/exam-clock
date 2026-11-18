@@ -3597,35 +3597,32 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 @media(orientation:portrait){.schoolsPage{padding-left:5vw;padding-right:5vw}.schoolPanel{padding:1.1vh 3vw}.schoolYear .people{font-size:clamp(58px,12vw,116px)}}
 
 
-/* 2026-09-04 advancement preference survey */
+/* 2026-09-04 advancement preference survey — four programs */
 .track.survey-active{transform:translateX(-40%)}
-.surveyPage{height:100%;min-height:0;display:flex;flex-direction:column;gap:1.6vh;padding:max(20px,env(safe-area-inset-top)) 4.8vw max(18px,env(safe-area-inset-bottom));background:var(--paper);overflow:hidden}
-.surveyTop{display:flex;justify-content:space-between;align-items:baseline;gap:1vw;border-bottom:2px solid var(--ink);padding-bottom:1vh}
-.surveyTop h2{margin:0;font-size:clamp(22px,3vw,40px);font-weight:900}
-.surveyTop span{font-size:clamp(11px,1.4vw,17px);font-weight:850}
+.surveyPage{height:100%;min-height:0;display:flex;flex-direction:column;gap:1.3vh;padding:max(16px,env(safe-area-inset-top)) 4vw max(14px,env(safe-area-inset-bottom));background:var(--paper);overflow:hidden}
+.surveyTop{display:flex;justify-content:space-between;align-items:baseline;gap:1vw;border-bottom:2px solid var(--ink);padding-bottom:.5vh}
+.surveyTop h2{margin:0;font-size:clamp(21px,2.8vw,38px);font-weight:900}
+.surveyTop span{font-size:clamp(10px,1.25vw,16px);font-weight:850}
 .surveyDate{display:flex;align-items:baseline;gap:1.5vw;flex-wrap:wrap}
-.surveyDate strong{font-size:clamp(42px,7vw,96px);font-weight:950;line-height:1;letter-spacing:-.06em}
-.surveyDate small{font-size:clamp(13px,1.7vw,22px);font-weight:850}
-.surveyCards{display:grid;grid-template-columns:1fr 1fr;gap:2vw;min-height:0;flex:1}
-.surveyCard{border:2px solid var(--ink);border-radius:13px;padding:1.5vh 2vw;min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:space-between;gap:.6vh}
-.surveySchool{font-size:clamp(24px,3.3vw,46px);font-weight:950;line-height:1.1}
-.surveySub{font-size:clamp(12px,1.35vw,18px);font-weight:800}
-.surveyMainLabel{font-size:clamp(13px,1.7vw,22px);font-weight:900}
-.surveyMain{display:flex;align-items:baseline;gap:.6vw}
-.surveyMain strong{font-size:clamp(84px,13vw,174px);font-weight:950;line-height:.9;letter-spacing:-.07em;font-variant-numeric:tabular-nums}
-.surveyMain span{font-size:clamp(20px,2.5vw,36px);font-weight:900}
-.surveyCard.kita .surveyMain strong{color:#d62828}
-.surveyCard.johoku .surveyMain strong{color:#1683d8}
-.surveyMetric{border-top:1px solid var(--line);padding-top:.7vh;display:flex;justify-content:space-between;gap:1vw;align-items:baseline;font-size:clamp(13px,1.5vw,20px);font-weight:800}
-.surveyMetric strong{font-size:clamp(19px,2.4vw,34px);font-weight:950;font-variant-numeric:tabular-nums}
-.surveyFoot{font-size:clamp(10px,1.1vw,15px);font-weight:700;line-height:1.4;color:#444}
-@media (orientation:portrait){
-  .surveyPage{gap:1vh;padding-left:4vw;padding-right:4vw}
-  .surveyCards{grid-template-columns:1fr;gap:1vh}
-  .surveyDate strong{font-size:clamp(34px,8vw,64px)}
-  .surveyCard{padding:1vh 3vw}
-  .surveyMain strong{font-size:clamp(64px,13vw,120px)}
-}
+.surveyDate strong{font-size:clamp(36px,5.7vw,76px);font-weight:950;line-height:1;letter-spacing:-.05em}
+.surveyDate small{font-size:clamp(12px,1.5vw,19px);font-weight:850}
+.surveyCards{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1.4vh 1.6vw;min-height:0;flex:1}
+.surveyCard{border:2px solid var(--ink);border-radius:12px;padding:1.1vh 1.5vw;min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:space-between;gap:.3vh}
+.surveySchool{font-size:clamp(18px,2.35vw,31px);font-weight:950;line-height:1.1}
+.surveySub{font-size:clamp(11px,1.35vw,17px);font-weight:800;margin-top:.2vh}
+.surveyFigures{display:grid;grid-template-columns:1fr 1fr;gap:1vw;align-items:end}
+.surveyFigureLabel{font-size:clamp(10px,1.2vw,15px);font-weight:850}
+.surveyFigureValue{font-size:clamp(29px,4.3vw,58px);font-weight:950;line-height:1.05;font-variant-numeric:tabular-nums;white-space:nowrap}
+.surveyFigureValue small{font-size:.35em}
+.surveyCard.kita .surveyFigureValue.highlight{color:#d62828}
+.surveyCard.johoku .surveyFigureValue.highlight{color:#1683d8}
+.surveyStats{border-top:1px solid var(--line);padding-top:.5vh;display:flex;align-items:baseline;justify-content:space-between;gap:.7vw;flex-wrap:wrap}
+.surveyStats span{font-size:clamp(11px,1.3vw,17px);font-weight:800}
+.surveyStats strong{font-size:clamp(18px,2.45vw,32px);font-weight:950;white-space:nowrap;font-variant-numeric:tabular-nums}
+.surveyStats .positive{color:#c82b2b}
+.surveyStats .negative{color:#168447}
+.surveyFoot{font-size:clamp(10px,1.05vw,14px);font-weight:700;line-height:1.3;color:#444}
+@media (orientation:portrait){.surveyPage{gap:.8vh;padding-left:3vw;padding-right:3vw}.surveyDate strong{font-size:clamp(32px,7vw,56px)}.surveyCards{grid-template-columns:1fr;grid-template-rows:repeat(4,minmax(0,1fr));gap:.6vh}.surveyCard{padding:.5vh 2vw}.surveySchool{font-size:clamp(16px,3vw,24px)}.surveyFigureValue{font-size:clamp(24px,5vw,42px)}.surveyStats strong{font-size:clamp(17px,3vw,24px)}}
 
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3797,36 +3794,31 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 
     <section class="screen" aria-label="令和9年度進学希望調査">
       <div class="surveyPage">
-        <header class="surveyTop">
-          <h2>高校進学希望調査</h2><span>2027 ADMISSIONS</span>
-        </header>
+        <header class="surveyTop"><h2>高校進学希望調査</h2><span>2027 ADMISSIONS</span></header>
         <div class="surveyDate"><strong>9月4日時点</strong><small>2026年・第1回調査</small></div>
         <div class="surveyCards">
           <article class="surveyCard kita">
-            <div><div class="surveySchool">徳島北高校</div><div class="surveySub">普通科｜募集定員 230人</div></div>
-            <div><div class="surveyMainLabel">学区外希望者</div><div class="surveyMain"><strong>89</strong><span>人</span></div></div>
-            <div>
-              <div class="surveyMetric"><span>学区内希望者</span><strong>300人</strong></div>
-              <div class="surveyMetric"><span>希望者合計</span><strong>389人</strong></div>
-              <div class="surveyMetric"><span>全体の希望倍率</span><strong>1.69倍</strong></div>
-              <div class="surveyMetric"><span>学区外枠の計算値（17%）</span><strong>39.1人</strong></div>
-            </div>
+            <div><div class="surveySchool">徳島北高校</div><div class="surveySub">普通科・学区外</div></div>
+            <div class="surveyFigures"><div><div class="surveyFigureLabel">学区外枠（17%・計算値）</div><div class="surveyFigureValue">約39<small>人</small></div></div><div><div class="surveyFigureLabel">学区外希望者</div><div class="surveyFigureValue highlight">89<small>人</small></div></div></div>
+            <div class="surveyStats"><span>過不足 <strong class="positive">約+50人</strong></span><span>参考倍率 <strong>約2.28倍</strong></span></div>
+          </article>
+          <article class="surveyCard kita">
+            <div><div class="surveySchool">徳島北高校</div><div class="surveySub">国際英語科</div></div>
+            <div class="surveyFigures"><div><div class="surveyFigureLabel">募集定員</div><div class="surveyFigureValue">40<small>人</small></div></div><div><div class="surveyFigureLabel">希望者</div><div class="surveyFigureValue highlight">43<small>人</small></div></div></div>
+            <div class="surveyStats"><span>過不足 <strong class="positive">+3人</strong></span><span>希望倍率 <strong>1.08倍</strong></span></div>
           </article>
           <article class="surveyCard johoku">
-            <div><div class="surveySchool">城北高校</div><div class="surveySub">普通科｜募集定員 240人</div></div>
-            <div><div class="surveyMainLabel">学区外希望者</div><div class="surveyMain"><strong>67</strong><span>人</span></div></div>
-            <div>
-              <div class="surveyMetric"><span>学区内希望者</span><strong>255人</strong></div>
-              <div class="surveyMetric"><span>希望者合計</span><strong>322人</strong></div>
-              <div class="surveyMetric"><span>全体の希望倍率</span><strong>1.34倍</strong></div>
-              <div class="surveyMetric"><span>学区外枠の計算値（17%）</span><strong>40.8人</strong></div>
-            </div>
+            <div><div class="surveySchool">城北高校</div><div class="surveySub">普通科・学区外</div></div>
+            <div class="surveyFigures"><div><div class="surveyFigureLabel">学区外枠（17%・計算値）</div><div class="surveyFigureValue">約41<small>人</small></div></div><div><div class="surveyFigureLabel">学区外希望者</div><div class="surveyFigureValue highlight">67<small>人</small></div></div></div>
+            <div class="surveyStats"><span>過不足 <strong class="positive">約+26人</strong></span><span>参考倍率 <strong>約1.64倍</strong></span></div>
+          </article>
+          <article class="surveyCard johoku">
+            <div><div class="surveySchool">城北高校</div><div class="surveySub">理数科学科</div></div>
+            <div class="surveyFigures"><div><div class="surveyFigureLabel">募集定員</div><div class="surveyFigureValue">30<small>人</small></div></div><div><div class="surveyFigureLabel">希望者</div><div class="surveyFigureValue highlight">20<small>人</small></div></div></div>
+            <div class="surveyStats"><span>過不足 <strong class="negative">−10人</strong></span><span>希望倍率 <strong>0.67倍</strong></span></div>
           </article>
         </div>
-        <footer class="surveyFoot">
-          徳島北・国際英語科：希望者43人／定員40人（1.08倍）<br>
-          ※ 2026年9月4日時点の進学希望調査。出願倍率ではありません。学区外枠は定員×17%の計算値で、確定人数ではありません。
-        </footer>
+        <footer class="surveyFoot">※ 2026年9月4日時点の希望調査であり、最終出願倍率ではありません。普通科の学区外枠・過不足・倍率は定員×17%から算出した参考値です。</footer>
       </div>
     </section>
     <section class="screen">
