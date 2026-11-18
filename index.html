@@ -3597,33 +3597,42 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 @media(orientation:portrait){.schoolsPage{padding-left:5vw;padding-right:5vw}.schoolPanel{padding:1.1vh 3vw}.schoolYear .people{font-size:clamp(58px,12vw,116px)}}
 
 
-/* 2026-09-04 advancement preference survey — four programs */
+/* 2026-09-04 survey: nine ranked targets */
 .track.survey-active{transform:translateX(-40%)}
-.surveyPage{height:100%;min-height:0;display:flex;flex-direction:column;gap:1.3vh;padding:max(16px,env(safe-area-inset-top)) 4vw max(14px,env(safe-area-inset-bottom));background:var(--paper);overflow:hidden}
-.surveyTop{display:flex;justify-content:space-between;align-items:baseline;gap:1vw;border-bottom:2px solid var(--ink);padding-bottom:.5vh}
-.surveyTop h2{margin:0;font-size:clamp(21px,2.8vw,38px);font-weight:900}
-.surveyTop span{font-size:clamp(10px,1.25vw,16px);font-weight:850}
-.surveyDate{display:flex;align-items:baseline;gap:1.5vw;flex-wrap:wrap}
-.surveyDate strong{font-size:clamp(36px,5.7vw,76px);font-weight:950;line-height:1;letter-spacing:-.05em}
-.surveyDate small{font-size:clamp(12px,1.5vw,19px);font-weight:850}
-.surveyCards{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1.4vh 1.6vw;min-height:0;flex:1}
-.surveyCard{border:2px solid var(--ink);border-radius:12px;padding:1.1vh 1.5vw;min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:space-between;gap:.3vh}
-.surveySchool{font-size:clamp(18px,2.35vw,31px);font-weight:950;line-height:1.1}
-.surveySub{font-size:clamp(11px,1.35vw,17px);font-weight:800;margin-top:.2vh}
-.surveyFigures{display:grid;grid-template-columns:1fr 1fr;gap:1vw;align-items:end}
-.surveyFigureLabel{font-size:clamp(10px,1.2vw,15px);font-weight:850}
-.surveyFigureValue{font-size:clamp(29px,4.3vw,58px);font-weight:950;line-height:1.05;font-variant-numeric:tabular-nums;white-space:nowrap}
-.surveyFigureValue small{font-size:.35em}
-.surveyCard.kita .surveyFigureValue.highlight{color:#d62828}
-.surveyCard.johoku .surveyFigureValue.highlight{color:#1683d8}
-.surveyStats{border-top:1px solid var(--line);padding-top:.5vh;display:flex;align-items:baseline;justify-content:space-between;gap:.7vw;flex-wrap:wrap}
-.surveyStats span{font-size:clamp(11px,1.3vw,17px);font-weight:800}
-.surveyStats strong{font-size:clamp(18px,2.45vw,32px);font-weight:950;white-space:nowrap;font-variant-numeric:tabular-nums}
-.surveyStats .positive{color:#c82b2b}
-.surveyStats .negative{color:#168447}
-.surveyFoot{font-size:clamp(10px,1.05vw,14px);font-weight:700;line-height:1.3;color:#444}
-@media (orientation:portrait){.surveyPage{gap:.8vh;padding-left:3vw;padding-right:3vw}.surveyDate strong{font-size:clamp(32px,7vw,56px)}.surveyCards{grid-template-columns:1fr;grid-template-rows:repeat(4,minmax(0,1fr));gap:.6vh}.surveyCard{padding:.5vh 2vw}.surveySchool{font-size:clamp(16px,3vw,24px)}.surveyFigureValue{font-size:clamp(24px,5vw,42px)}.surveyStats strong{font-size:clamp(17px,3vw,24px)}}
+.surveyPage{height:100%;min-height:0;display:flex;flex-direction:column;gap:.8vh;padding:max(12px,env(safe-area-inset-top)) 3vw max(10px,env(safe-area-inset-bottom));background:var(--paper);overflow:hidden}
+.surveyTop{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:.25vh}
+.surveyTop h2{margin:0;font-size:clamp(20px,2.5vw,34px);font-weight:950}
+.surveyTop span{font-size:clamp(10px,1.1vw,15px);font-weight:800}
+.surveyDate{display:flex;align-items:baseline;gap:1.5vw}
+.surveyDate strong{font-size:clamp(34px,5vw,65px);font-weight:950;line-height:1;letter-spacing:-.045em}
+.surveyDate small{font-size:clamp(11px,1.35vw,17px);font-weight:800}
+.surveyTableWrap{flex:1;min-height:0;overflow:auto;border:2px solid var(--ink);border-radius:10px}
+.surveyTable{width:100%;border-collapse:collapse;table-layout:fixed;font-variant-numeric:tabular-nums}
+.surveyTable th{background:#252525;color:#fff;font-size:clamp(11px,1.15vw,15px);padding:.65vh .5vw;position:sticky;top:0;z-index:1}
+.surveyTable td{border-bottom:1px solid #c9c6c0;padding:clamp(5px,.85vh,10px) .55vw;font-size:clamp(12px,1.65vw,22px);font-weight:850;text-align:center;white-space:nowrap}
+.surveyTable tr:last-child td{border-bottom:0}
+.surveyTable tbody tr:nth-child(even){background:rgba(0,0,0,.045)}
+.surveyTable td:nth-child(2){text-align:left;font-weight:950}
+.surveyTable .rank{font-weight:950;color:#777}
+.surveyTable .plus{color:#bb3030}
+.surveyTable .minus{color:#187a49}
+.surveyTable .rate{font-weight:950}
+.surveyTable .first{background:rgba(214,40,40,.07)}
+.surveyTable .first td:nth-child(2){color:#c52b2b}
+.surveyTable .sub{font-size:.74em;font-weight:750;color:#555}
+.surveyFoot{font-size:clamp(9px,1.03vw,13px);font-weight:700;line-height:1.3;color:#444}
+@media (orientation:portrait){.surveyPage{padding-left:2vw;padding-right:2vw}.surveyDate strong{font-size:clamp(28px,6vw,50px)}.surveyTable td{font-size:clamp(10px,1.8vw,16px);padding:.9vh .2vw}.surveyTable th{font-size:clamp(9px,1.7vw,13px)}.surveyTable .sub{font-size:.68em}}
 
+/* Main targets: Tokushima Kita and Johoku stand out */
+.surveyTable tbody tr.focus-north{background:#fbe5e2}
+.surveyTable tbody tr.focus-johoku{background:#e1edfa}
+.surveyTable tbody tr.focus-north td{border-bottom-color:#e7b8b1}
+.surveyTable tbody tr.focus-johoku td{border-bottom-color:#b4cbe5}
+.surveyTable tbody tr.focus-north td:nth-child(2){color:#a72d27}
+.surveyTable tbody tr.focus-johoku td:nth-child(2){color:#205d9c}
+.surveyTable tbody tr.focus-north td,.surveyTable tbody tr.focus-johoku td{font-size:clamp(14px,1.9vw,26px);font-weight:950;padding-top:clamp(7px,1vh,12px);padding-bottom:clamp(7px,1vh,12px)}
+.surveyTable tbody tr.focus-north .sub,.surveyTable tbody tr.focus-johoku .sub{font-size:.69em;font-weight:850;color:inherit}
+@media(orientation:portrait){.surveyTable tbody tr.focus-north td,.surveyTable tbody tr.focus-johoku td{font-size:clamp(11px,2vw,18px);padding-left:.2vw;padding-right:.2vw}}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3792,33 +3801,16 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
       </div>
     </section>
 
-    <section class="screen" aria-label="令和9年度進学希望調査">
+    <section class="screen" aria-label="令和9年度進学希望調査・9学科比較">
       <div class="surveyPage">
         <header class="surveyTop"><h2>高校進学希望調査</h2><span>2027 ADMISSIONS</span></header>
         <div class="surveyDate"><strong>9月4日時点</strong><small>2026年・第1回調査</small></div>
-        <div class="surveyCards">
-          <article class="surveyCard kita">
-            <div><div class="surveySchool">徳島北高校</div><div class="surveySub">普通科・学区外</div></div>
-            <div class="surveyFigures"><div><div class="surveyFigureLabel">学区外枠（17%・計算値）</div><div class="surveyFigureValue">約39<small>人</small></div></div><div><div class="surveyFigureLabel">学区外希望者</div><div class="surveyFigureValue highlight">89<small>人</small></div></div></div>
-            <div class="surveyStats"><span>過不足 <strong class="positive">約+50人</strong></span><span>参考倍率 <strong>約2.28倍</strong></span></div>
-          </article>
-          <article class="surveyCard kita">
-            <div><div class="surveySchool">徳島北高校</div><div class="surveySub">国際英語科</div></div>
-            <div class="surveyFigures"><div><div class="surveyFigureLabel">募集定員</div><div class="surveyFigureValue">40<small>人</small></div></div><div><div class="surveyFigureLabel">希望者</div><div class="surveyFigureValue highlight">43<small>人</small></div></div></div>
-            <div class="surveyStats"><span>過不足 <strong class="positive">+3人</strong></span><span>希望倍率 <strong>1.08倍</strong></span></div>
-          </article>
-          <article class="surveyCard johoku">
-            <div><div class="surveySchool">城北高校</div><div class="surveySub">普通科・学区外</div></div>
-            <div class="surveyFigures"><div><div class="surveyFigureLabel">学区外枠（17%・計算値）</div><div class="surveyFigureValue">約41<small>人</small></div></div><div><div class="surveyFigureLabel">学区外希望者</div><div class="surveyFigureValue highlight">67<small>人</small></div></div></div>
-            <div class="surveyStats"><span>過不足 <strong class="positive">約+26人</strong></span><span>参考倍率 <strong>約1.64倍</strong></span></div>
-          </article>
-          <article class="surveyCard johoku">
-            <div><div class="surveySchool">城北高校</div><div class="surveySub">理数科学科</div></div>
-            <div class="surveyFigures"><div><div class="surveyFigureLabel">募集定員</div><div class="surveyFigureValue">30<small>人</small></div></div><div><div class="surveyFigureLabel">希望者</div><div class="surveyFigureValue highlight">20<small>人</small></div></div></div>
-            <div class="surveyStats"><span>過不足 <strong class="negative">−10人</strong></span><span>希望倍率 <strong>0.67倍</strong></span></div>
-          </article>
-        </div>
-        <footer class="surveyFoot">※ 2026年9月4日時点の希望調査であり、最終出願倍率ではありません。普通科の学区外枠・過不足・倍率は定員×17%から算出した参考値です。</footer>
+        <div class="surveyTableWrap"><table class="surveyTable" aria-label="志望順位順の9学科比較">
+          <colgroup><col style="width:5%"><col style="width:43%"><col style="width:12%"><col style="width:12%"><col style="width:13%"><col style="width:15%"></colgroup>
+          <thead><tr><th>順</th><th>高校・学科</th><th>定員/枠</th><th>希望者</th><th>過不足</th><th>倍率</th></tr></thead>
+          <tbody><tr class="focus-north"><td class="rank">1</td><td>徳島北高校<span class="sub">（普通科・学区外）</span></td><td>約39</td><td>89</td><td class="plus">約+50</td><td class="rate">約2.28倍</td></tr><tr class="focus-north"><td class="rank">2</td><td>徳島北高校<span class="sub">（国際英語科）</span></td><td>40</td><td>43</td><td class="plus">+3</td><td class="rate">1.08倍</td></tr><tr class="focus-johoku"><td class="rank">3</td><td>城北高校<span class="sub">（理数科学科）</span></td><td>30</td><td>20</td><td class="minus">−10</td><td class="rate">0.67倍</td></tr><tr class="focus-johoku"><td class="rank">4</td><td>城北高校<span class="sub">（普通科・学区外）</span></td><td>約41</td><td>67</td><td class="plus">約+26</td><td class="rate">約1.64倍</td></tr><tr class=""><td class="rank">5</td><td>城東高校<span class="sub">（普通科・全県一区）</span></td><td>280</td><td>341</td><td class="plus">+61</td><td class="rate">1.22倍</td></tr><tr class=""><td class="rank">6</td><td>徳島市立高校<span class="sub">（普通科・学区外）</span></td><td>約48</td><td>37</td><td class="minus">約−11</td><td class="rate">約0.78倍</td></tr><tr class=""><td class="rank">7</td><td>徳島市立高校<span class="sub">（理数科）</span></td><td>40</td><td>47</td><td class="plus">+7</td><td class="rate">1.18倍</td></tr><tr class=""><td class="rank">8</td><td>城南高校<span class="sub">（応用数理科）</span></td><td>30</td><td>23</td><td class="minus">−7</td><td class="rate">0.77倍</td></tr><tr class=""><td class="rank">9</td><td>城南高校<span class="sub">（普通科・学区外）</span></td><td>約41</td><td>64</td><td class="plus">約+23</td><td class="rate">約1.57倍</td></tr></tbody>
+        </table></div>
+        <footer class="surveyFoot">※普通科（城東を除く）は学区外枠17%の概算と学区外希望者で比較。城東は全県一区。専門学科は学科全体。倍率は希望調査時点の参考値で、正式な出願倍率ではありません。</footer>
       </div>
     </section>
     <section class="screen">
