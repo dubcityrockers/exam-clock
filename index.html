@@ -2860,12 +2860,12 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 /* ===== V61 PORTRAIT TUNING + CLOCK VERTICAL VARIANT ===== */
 
 /* CLOCK screen becomes a two-face vertical deck without disturbing horizontal paging. */
-.track > .screen:nth-child(3){
+.track > .screen:nth-child(4){
   position:relative;
   overflow:hidden;
 }
-.track > .screen:nth-child(3) > .simpleClockPage,
-.track > .screen:nth-child(3) > .classicClockPage{
+.track > .screen:nth-child(4) > .simpleClockPage,
+.track > .screen:nth-child(4) > .classicClockPage{
   position:absolute;
   inset:0;
   width:100%;
@@ -2873,18 +2873,18 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
   transition:transform .48s cubic-bezier(.22,.72,.2,1);
   will-change:transform;
 }
-.track > .screen:nth-child(3) > .simpleClockPage{
+.track > .screen:nth-child(4) > .simpleClockPage{
   transform:translate3d(0,0,0);
   z-index:2;
 }
-.track > .screen:nth-child(3) > .classicClockPage{
+.track > .screen:nth-child(4) > .classicClockPage{
   transform:translate3d(0,100%,0);
   z-index:3;
 }
-.track > .screen:nth-child(3).clockAltActive > .simpleClockPage{
+.track > .screen:nth-child(4).clockAltActive > .simpleClockPage{
   transform:translate3d(0,-100%,0);
 }
-.track > .screen:nth-child(3).clockAltActive > .classicClockPage{
+.track > .screen:nth-child(4).clockAltActive > .classicClockPage{
   transform:translate3d(0,0,0);
 }
 
@@ -3122,8 +3122,8 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 
 /* Avoid animation if the OS requests reduced motion. */
 @media (prefers-reduced-motion:reduce){
-  .track > .screen:nth-child(3) > .simpleClockPage,
-  .track > .screen:nth-child(3) > .classicClockPage{
+  .track > .screen:nth-child(4) > .simpleClockPage,
+  .track > .screen:nth-child(4) > .classicClockPage{
     transition:none;
   }
 }
@@ -3217,7 +3217,7 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 
 
 /* ===== V68 CLOCK FACE 3 : PORTRAIT COLOR DATE/TIME ===== */
-.track > .screen:nth-child(3) > .digitalDateClockPage{
+.track > .screen:nth-child(4) > .digitalDateClockPage{
   position:absolute;
   inset:0;
   width:100%;
@@ -3230,24 +3230,24 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 }
 
 /* face 2 state */
-.track > .screen:nth-child(3).clockAltActive:not(.clockThirdActive) > .simpleClockPage{
+.track > .screen:nth-child(4).clockAltActive:not(.clockThirdActive) > .simpleClockPage{
   transform:translate3d(0,-100%,0);
 }
-.track > .screen:nth-child(3).clockAltActive:not(.clockThirdActive) > .classicClockPage{
+.track > .screen:nth-child(4).clockAltActive:not(.clockThirdActive) > .classicClockPage{
   transform:translate3d(0,0,0);
 }
-.track > .screen:nth-child(3).clockAltActive:not(.clockThirdActive) > .digitalDateClockPage{
+.track > .screen:nth-child(4).clockAltActive:not(.clockThirdActive) > .digitalDateClockPage{
   transform:translate3d(0,100%,0);
 }
 
 /* face 3 state */
-.track > .screen:nth-child(3).clockThirdActive > .simpleClockPage{
+.track > .screen:nth-child(4).clockThirdActive > .simpleClockPage{
   transform:translate3d(0,-200%,0);
 }
-.track > .screen:nth-child(3).clockThirdActive > .classicClockPage{
+.track > .screen:nth-child(4).clockThirdActive > .classicClockPage{
   transform:translate3d(0,-100%,0);
 }
-.track > .screen:nth-child(3).clockThirdActive > .digitalDateClockPage{
+.track > .screen:nth-child(4).clockThirdActive > .digitalDateClockPage{
   transform:translate3d(0,0,0);
 }
 
@@ -3388,7 +3388,7 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 
 
 /* ===== V70 CLOCK FACE 4 : HUGE DIGITAL TIME ===== */
-.track > .screen:nth-child(3) > .hugeTimeClockPage{
+.track > .screen:nth-child(4) > .hugeTimeClockPage{
   position:absolute;
   inset:0;
   width:100%;
@@ -3399,16 +3399,16 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
   will-change:transform;
   z-index:5;
 }
-.track > .screen:nth-child(3).clockFourthActive > .simpleClockPage{
+.track > .screen:nth-child(4).clockFourthActive > .simpleClockPage{
   transform:translate3d(0,-300%,0);
 }
-.track > .screen:nth-child(3).clockFourthActive > .classicClockPage{
+.track > .screen:nth-child(4).clockFourthActive > .classicClockPage{
   transform:translate3d(0,-200%,0);
 }
-.track > .screen:nth-child(3).clockFourthActive > .digitalDateClockPage{
+.track > .screen:nth-child(4).clockFourthActive > .digitalDateClockPage{
   transform:translate3d(0,-100%,0);
 }
-.track > .screen:nth-child(3).clockFourthActive > .hugeTimeClockPage{
+.track > .screen:nth-child(4).clockFourthActive > .hugeTimeClockPage{
   transform:translate3d(0,0,0);
 }
 
@@ -3474,24 +3474,24 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 
 
 /* v70 precise stacking overrides */
-.track > .screen:nth-child(3).clockFourthActive > .simpleClockPage{transform:translate3d(0,-300%,0)!important}
-.track > .screen:nth-child(3).clockFourthActive > .classicClockPage{transform:translate3d(0,-200%,0)!important}
-.track > .screen:nth-child(3).clockFourthActive > .digitalDateClockPage{transform:translate3d(0,-100%,0)!important}
-.track > .screen:nth-child(3).clockFourthActive > .hugeTimeClockPage{transform:translate3d(0,0,0)!important}
+.track > .screen:nth-child(4).clockFourthActive > .simpleClockPage{transform:translate3d(0,-300%,0)!important}
+.track > .screen:nth-child(4).clockFourthActive > .classicClockPage{transform:translate3d(0,-200%,0)!important}
+.track > .screen:nth-child(4).clockFourthActive > .digitalDateClockPage{transform:translate3d(0,-100%,0)!important}
+.track > .screen:nth-child(4).clockFourthActive > .hugeTimeClockPage{transform:translate3d(0,0,0)!important}
 
 
 /* ===== V72 CLOCK FACE 5 : STORM CHASE ===== */
-.track > .screen:nth-child(3) > .stormChasePage{
+.track > .screen:nth-child(4) > .stormChasePage{
   position:absolute; inset:0; width:100%; height:100%;
   transform:translate3d(0,400%,0);
   transition:transform .48s cubic-bezier(.22,.72,.2,1);
   will-change:transform; z-index:6;
 }
-.track > .screen:nth-child(3).clockFifthActive > .simpleClockPage{transform:translate3d(0,-400%,0)!important}
-.track > .screen:nth-child(3).clockFifthActive > .classicClockPage{transform:translate3d(0,-300%,0)!important}
-.track > .screen:nth-child(3).clockFifthActive > .digitalDateClockPage{transform:translate3d(0,-200%,0)!important}
-.track > .screen:nth-child(3).clockFifthActive > .hugeTimeClockPage{transform:translate3d(0,-100%,0)!important}
-.track > .screen:nth-child(3).clockFifthActive > .stormChasePage{transform:translate3d(0,0,0)!important}
+.track > .screen:nth-child(4).clockFifthActive > .simpleClockPage{transform:translate3d(0,-400%,0)!important}
+.track > .screen:nth-child(4).clockFifthActive > .classicClockPage{transform:translate3d(0,-300%,0)!important}
+.track > .screen:nth-child(4).clockFifthActive > .digitalDateClockPage{transform:translate3d(0,-200%,0)!important}
+.track > .screen:nth-child(4).clockFifthActive > .hugeTimeClockPage{transform:translate3d(0,-100%,0)!important}
+.track > .screen:nth-child(4).clockFifthActive > .stormChasePage{transform:translate3d(0,0,0)!important}
 
 .stormChasePage{
   display:none;background:#070b0e;color:#f4f7f8;overflow:hidden;
@@ -3570,11 +3570,11 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 
 
 /* SCHOOL ADMISSIONS — inserted between EXAM and CLOCK */
-.track{width:400%;}
-.track.clock-active{transform:translateX(-50%)}
-.track.calendar-active{transform:translateX(-75%)}
-.track.schools-active{transform:translateX(-25%)}
-.screen{width:25%;flex:0 0 25%}
+.track{width:500%;}
+.track.clock-active{transform:translateX(-60%)}
+.track.calendar-active{transform:translateX(-80%)}
+.track.schools-active{transform:translateX(-20%)}
+.screen{width:20%;flex:0 0 20%}
 .schoolsPage{height:100%;padding:max(20px,env(safe-area-inset-top)) 5vw max(18px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:1.35vh;overflow:hidden;background:var(--paper)}
 .schoolsHead{display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:1.2vh;gap:8px}
 .schoolsHead h2{margin:0;font-size:clamp(26px,4.4vw,52px);font-weight:900;letter-spacing:-.05em}
@@ -3595,6 +3595,37 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 .schoolSpecial .people{font-size:clamp(40px,7.5vw,82px);font-weight:950;line-height:1}
 .schoolsNote{font-size:clamp(10px,1.25vw,14px);font-weight:650;line-height:1.4;color:#555}
 @media(orientation:portrait){.schoolsPage{padding-left:5vw;padding-right:5vw}.schoolPanel{padding:1.1vh 3vw}.schoolYear .people{font-size:clamp(58px,12vw,116px)}}
+
+
+/* 2026-09-04 advancement preference survey */
+.track.survey-active{transform:translateX(-40%)}
+.surveyPage{height:100%;min-height:0;display:flex;flex-direction:column;gap:1.6vh;padding:max(20px,env(safe-area-inset-top)) 4.8vw max(18px,env(safe-area-inset-bottom));background:var(--paper);overflow:hidden}
+.surveyTop{display:flex;justify-content:space-between;align-items:baseline;gap:1vw;border-bottom:2px solid var(--ink);padding-bottom:1vh}
+.surveyTop h2{margin:0;font-size:clamp(22px,3vw,40px);font-weight:900}
+.surveyTop span{font-size:clamp(11px,1.4vw,17px);font-weight:850}
+.surveyDate{display:flex;align-items:baseline;gap:1.5vw;flex-wrap:wrap}
+.surveyDate strong{font-size:clamp(42px,7vw,96px);font-weight:950;line-height:1;letter-spacing:-.06em}
+.surveyDate small{font-size:clamp(13px,1.7vw,22px);font-weight:850}
+.surveyCards{display:grid;grid-template-columns:1fr 1fr;gap:2vw;min-height:0;flex:1}
+.surveyCard{border:2px solid var(--ink);border-radius:13px;padding:1.5vh 2vw;min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:space-between;gap:.6vh}
+.surveySchool{font-size:clamp(24px,3.3vw,46px);font-weight:950;line-height:1.1}
+.surveySub{font-size:clamp(12px,1.35vw,18px);font-weight:800}
+.surveyMainLabel{font-size:clamp(13px,1.7vw,22px);font-weight:900}
+.surveyMain{display:flex;align-items:baseline;gap:.6vw}
+.surveyMain strong{font-size:clamp(84px,13vw,174px);font-weight:950;line-height:.9;letter-spacing:-.07em;font-variant-numeric:tabular-nums}
+.surveyMain span{font-size:clamp(20px,2.5vw,36px);font-weight:900}
+.surveyCard.kita .surveyMain strong{color:#d62828}
+.surveyCard.johoku .surveyMain strong{color:#1683d8}
+.surveyMetric{border-top:1px solid var(--line);padding-top:.7vh;display:flex;justify-content:space-between;gap:1vw;align-items:baseline;font-size:clamp(13px,1.5vw,20px);font-weight:800}
+.surveyMetric strong{font-size:clamp(19px,2.4vw,34px);font-weight:950;font-variant-numeric:tabular-nums}
+.surveyFoot{font-size:clamp(10px,1.1vw,15px);font-weight:700;line-height:1.4;color:#444}
+@media (orientation:portrait){
+  .surveyPage{gap:1vh;padding-left:4vw;padding-right:4vw}
+  .surveyCards{grid-template-columns:1fr;gap:1vh}
+  .surveyDate strong{font-size:clamp(34px,8vw,64px)}
+  .surveyCard{padding:1vh 3vw}
+  .surveyMain strong{font-size:clamp(64px,13vw,120px)}
+}
 
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -3761,6 +3792,41 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
           <div class="schoolSpecial"><div><div class="schoolSub">理数科学科</div><div class="schoolsNote">学区制限なし</div></div><div class="people">30<small style="font-size:.3em">人</small></div></div>
         </article>
         <div class="schoolsNote">※学区外人数は募集定員×割合の計算値（小数第1位表示）で、実際の募集人数ではありません。上限枠の拡大は合格を保証するものではありません。</div>
+      </div>
+    </section>
+
+    <section class="screen" aria-label="令和9年度進学希望調査">
+      <div class="surveyPage">
+        <header class="surveyTop">
+          <h2>高校進学希望調査</h2><span>2027 ADMISSIONS</span>
+        </header>
+        <div class="surveyDate"><strong>9月4日時点</strong><small>2026年・第1回調査</small></div>
+        <div class="surveyCards">
+          <article class="surveyCard kita">
+            <div><div class="surveySchool">徳島北高校</div><div class="surveySub">普通科｜募集定員 230人</div></div>
+            <div><div class="surveyMainLabel">学区外希望者</div><div class="surveyMain"><strong>89</strong><span>人</span></div></div>
+            <div>
+              <div class="surveyMetric"><span>学区内希望者</span><strong>300人</strong></div>
+              <div class="surveyMetric"><span>希望者合計</span><strong>389人</strong></div>
+              <div class="surveyMetric"><span>全体の希望倍率</span><strong>1.69倍</strong></div>
+              <div class="surveyMetric"><span>学区外枠の計算値（17%）</span><strong>39.1人</strong></div>
+            </div>
+          </article>
+          <article class="surveyCard johoku">
+            <div><div class="surveySchool">城北高校</div><div class="surveySub">普通科｜募集定員 240人</div></div>
+            <div><div class="surveyMainLabel">学区外希望者</div><div class="surveyMain"><strong>67</strong><span>人</span></div></div>
+            <div>
+              <div class="surveyMetric"><span>学区内希望者</span><strong>255人</strong></div>
+              <div class="surveyMetric"><span>希望者合計</span><strong>322人</strong></div>
+              <div class="surveyMetric"><span>全体の希望倍率</span><strong>1.34倍</strong></div>
+              <div class="surveyMetric"><span>学区外枠の計算値（17%）</span><strong>40.8人</strong></div>
+            </div>
+          </article>
+        </div>
+        <footer class="surveyFoot">
+          徳島北・国際英語科：希望者43人／定員40人（1.08倍）<br>
+          ※ 2026年9月4日時点の進学希望調査。出願倍率ではありません。学区外枠は定員×17%の計算値で、確定人数ではありません。
+        </footer>
       </div>
     </section>
     <section class="screen">
@@ -4667,12 +4733,13 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
   }
 
   function setPage(next){
-    page=Math.max(0,Math.min(3,next));
+    page=Math.max(0,Math.min(4,next));
     track.classList.toggle("schools-active",page===1);
-    track.classList.toggle("clock-active",page===2);
-    track.classList.toggle("calendar-active",page===3);
+    track.classList.toggle("survey-active",page===2);
+    track.classList.toggle("clock-active",page===3);
+    track.classList.toggle("calendar-active",page===4);
     examBtn.classList.toggle("active",page===0);
-    clockBtn.classList.toggle("active",page===2);
+    clockBtn.classList.toggle("active",page===3);
   }
 
   function tick(){
@@ -4819,7 +4886,7 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
     const maxFace=portrait?4:1;
     clockFace=Math.max(0,Math.min(maxFace,next));
 
-    const screen=document.querySelector(".track > .screen:nth-child(3)");
+    const screen=document.querySelector(".track > .screen:nth-child(4)");
     const alt=document.getElementById("classicClockPage");
     const third=document.getElementById("digitalDateClockPage");
     const fourth=document.getElementById("hugeTimeClockPage");
@@ -4978,13 +5045,13 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 
 
   examBtn.addEventListener("click",()=>setPage(0));
-  clockBtn.addEventListener("click",()=>setPage(2));
+  clockBtn.addEventListener("click",()=>setPage(3));
   app.addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button!==0)return;startX=e.clientX;startY=e.clientY;dragging=true});
   app.addEventListener("pointerup",e=>{
     if(!dragging)return;dragging=false;
     const dx=e.clientX-startX,dy=e.clientY-startY;
 
-    if(page===3 && Math.abs(dy)>55 && Math.abs(dy)>Math.abs(dx)*1.15){
+    if(page===4 && Math.abs(dy)>55 && Math.abs(dy)>Math.abs(dx)*1.15){
       changeMonth(dy<0?1:-1);
       return;
     }
@@ -4993,20 +5060,20 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
       setExamScheduleFace(examScheduleFace+(dy<0?1:-1));
       return;
     }
-    if(page===2 && Math.abs(dy)>55 && Math.abs(dy)>Math.abs(dx)*1.15){
+    if(page===3 && Math.abs(dy)>55 && Math.abs(dy)>Math.abs(dx)*1.15){
       setClockFace(clockFace+(dy<0?1:-1));
       return;
     }
 
     if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.15){
-      if(dx<0) setPage(Math.min(3,page+1));
+      if(dx<0) setPage(Math.min(4,page+1));
       else setPage(Math.max(0,page-1));
       return;
     }
 
     // A real stationary tap on the monthly calendar is a direct user gesture,
     // which is the most reliable trigger for SpeechSynthesis on iPad/Safari.
-    if(page===2 && Math.abs(dx)<18 && Math.abs(dy)<18 && e.target.closest("#calGrid")){
+    if(page===4 && Math.abs(dx)<18 && Math.abs(dy)<18 && e.target.closest("#calGrid")){
       speakSchedule("todayTomorrow");
     }
   });
@@ -5230,7 +5297,7 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
     const t=todayDateJST();calView={y:t.y,m:t.m};renderCalendar(0);
   });
   // Swipe left from CLOCK to CALENDAR.
-  clockBtn.addEventListener("dblclick",()=>setPage(3));
+  clockBtn.addEventListener("dblclick",()=>setPage(4));
   renderCalendar(0);
   setupScheduleVoice();
   loadGoogleCalendar();
