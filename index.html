@@ -3590,7 +3590,7 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
         <main class="hero heroV8">
           <div class="entranceHeaderStack">
             <h1>高校入試まで</h1>
-            <div class="examdate examdateTop">2027年3月9日（火）　8:30</div>
+            <div class="examdate examdateTop">2027年3月3日（水）　8:30</div>
           </div>
 
           <div class="heroCountRow">
@@ -3686,7 +3686,7 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
       </div>
 
       <div class="portraitHimekuri" id="portraitHimekuri" aria-hidden="true">
-        <div class="phTopBand">THE DAY&nbsp;&nbsp;2027.03.09 TUE</div>
+        <div class="phTopBand">THE DAY&nbsp;&nbsp;2027.03.03 WED</div>
         <div class="phPaper">
           <div class="phTitle">高校入試まで</div>
 
@@ -4081,7 +4081,7 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 <script>
 (() => {
   const JST="+09:00";
-  const entrance=Date.parse("2027-03-09T08:30:00+09:00");
+  const entrance=Date.parse("2027-03-03T08:30:00+09:00");
 
   // ─────────────────────────────────────────────────────────────
   // GOOGLE CALENDAR
@@ -4629,7 +4629,7 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 
   function tick(){
     const now=Date.now(), p=parts(entrance-now);
-    setThreeDigits(p.d);
+    setThreeDigits(Math.max(0, Math.round((parseJST("2027-03-03") - parseJST(todayKey())) / 86400000)));
     document.getElementById("hours").textContent=pad(p.h);
     document.getElementById("minutes").textContent=pad(p.m);
     document.getElementById("seconds").textContent=pad(p.s);
