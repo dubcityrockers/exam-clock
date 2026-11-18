@@ -3633,6 +3633,35 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 .surveyTable tbody tr.focus-north td,.surveyTable tbody tr.focus-johoku td{font-size:clamp(14px,1.9vw,26px);font-weight:950;padding-top:clamp(7px,1vh,12px);padding-bottom:clamp(7px,1vh,12px)}
 .surveyTable tbody tr.focus-north .sub,.surveyTable tbody tr.focus-johoku .sub{font-size:.69em;font-weight:850;color:inherit}
 @media(orientation:portrait){.surveyTable tbody tr.focus-north td,.surveyTable tbody tr.focus-johoku td{font-size:clamp(11px,2vw,18px);padding-left:.2vw;padding-right:.2vw}}
+
+/* 2026-11: admissions and survey revision */
+.schoolsRev{gap:.8vh;padding: max(12px,env(safe-area-inset-top)) 3vw max(10px,env(safe-area-inset-bottom))}
+.schoolsRev .schoolsHead h2{font-size:clamp(24px,3vw,38px)}
+.schoolsIntro{font-size:clamp(12px,1.3vw,16px);font-weight:800;color:#555}
+.admissionGrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1.4vh 1.4vw;flex:1;min-height:0}
+.admissionCard{min-height:0;border:2px solid #555;border-radius:12px;padding:1.5vh 1.5vw;display:flex;flex-direction:column;justify-content:space-between;gap:.6vh}
+.admissionCard.north{background:#fbe5e2;border-color:#c77a70}.admissionCard.johoku{background:#e1edfa;border-color:#6e9ac9}
+.admissionTitle{font-size:clamp(19px,2.35vw,30px);font-weight:950;line-height:1.1}
+.admissionTitle span{font-size:.64em;display:inline-block;white-space:nowrap}
+.admissionStat{display:flex;align-items:center;justify-content:space-between;gap:1vw}
+.admissionStat>span{font-size:clamp(13px,1.45vw,19px);font-weight:800}
+.admissionStat strong{font-size:clamp(37px,5.4vw,68px);font-weight:950;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
+.admissionStat small{font-size:.35em;margin-left:.2em}
+.admissionMinus{display:flex;justify-content:space-between;gap:.7vw;font-size:clamp(11px,1.3vw,17px);font-weight:800;border-top:1px solid #aaa;padding-top:.7vh}
+.admissionMinus b{color:#a72d27;font-size:1.15em;white-space:nowrap}
+.admissionMinus.neutral b{color:#666}
+.admissionBottom{font-size:clamp(11px,1.2vw,16px);font-weight:800}
+.admissionBottom b{font-size:1.2em}
+.admissionFoot{font-size:clamp(10px,1.05vw,14px);line-height:1.3;font-weight:700;color:#555}
+.surveyRev .surveyTable th{font-size:clamp(10px,1.03vw,14px);line-height:1.2;padding:.7vh .2vw}
+.surveyRev .surveyTable td{font-size:clamp(11px,1.28vw,17px);padding:clamp(5px,.8vh,10px) .3vw}
+.surveyRev .surveyTable td:nth-child(2){white-space:normal;line-height:1.12}
+.surveyRev .surveyTable .sub{display:block;font-size:.78em;margin-top:2px}
+.surveyRev .surveyTable tbody tr.focus-north td,.surveyRev .surveyTable tbody tr.focus-johoku td{font-size:clamp(11px,1.28vw,17px);font-weight:950;padding:clamp(5px,.8vh,10px) .3vw}
+.surveyRev .surveyTable tbody tr.focus-north .sub,.surveyRev .surveyTable tbody tr.focus-johoku .sub{font-size:.78em}
+.surveyRev .surveyTable td.reduce{font-size:clamp(10px,1.2vw,16px);white-space:normal}
+.surveyRev .surveyFoot{font-size:clamp(9px,.95vw,12px)}
+@media(orientation:portrait){.admissionGrid{grid-template-columns:1fr;grid-template-rows:repeat(4,1fr)}.admissionCard{padding:.8vh 2vw}.admissionStat strong{font-size:clamp(28px,6vw,52px)}.surveyRev .surveyTable td{font-size:10px}.surveyRev .surveyTable tbody tr.focus-north td,.surveyRev .surveyTable tbody tr.focus-johoku td{font-size:10px}}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3782,37 +3811,17 @@ body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neu
 </section>
 
 
-    <section class="screen" aria-label="高校入試情報">
-      <div class="schoolsPage">
-        <header class="schoolsHead"><h2>高校入試情報</h2><small>2027 ADMISSIONS</small></header>
-        <article class="schoolPanel">
-          <div class="schoolTitle">徳島北高校</div><div class="schoolSub">普通科｜募集定員 230人｜学区外枠の比較</div>
-          <div class="schoolCompare"><div class="schoolYear"><div class="yr">2026年度</div><div class="people">32.2<small>人</small></div><div class="percent">14%</div></div><div class="schoolArrow">→</div><div class="schoolYear new"><div class="yr">2027年度</div><div class="people">39.1<small>人</small></div><div class="percent">17%</div></div></div>
-          <div class="schoolGain">計算上 +6.9人</div>
-          <div class="schoolSpecial"><div><div class="schoolSub">国際英語科</div><div class="schoolsNote">学区制限なし</div></div><div class="people">40<small style="font-size:.3em">人</small></div></div>
-        </article>
-        <article class="schoolPanel">
-          <div class="schoolTitle">城北高校</div><div class="schoolSub">普通科｜募集定員 240人｜学区外枠の比較</div>
-          <div class="schoolCompare"><div class="schoolYear"><div class="yr">2026年度</div><div class="people">33.6<small>人</small></div><div class="percent">14%</div></div><div class="schoolArrow">→</div><div class="schoolYear new"><div class="yr">2027年度</div><div class="people">40.8<small>人</small></div><div class="percent">17%</div></div></div>
-          <div class="schoolGain">計算上 +7.2人</div>
-          <div class="schoolSpecial"><div><div class="schoolSub">理数科学科</div><div class="schoolsNote">学区制限なし</div></div><div class="people">30<small style="font-size:.3em">人</small></div></div>
-        </article>
-        <div class="schoolsNote">※学区外人数は募集定員×割合の計算値（小数第1位表示）で、実際の募集人数ではありません。上限枠の拡大は合格を保証するものではありません。</div>
-      </div>
-    </section>
+    <section class="screen" aria-label="高校入試情報"><div class="schoolsPage schoolsRev">
+<header class="schoolsHead"><h2>高校入試情報</h2><small>2027 ADMISSIONS</small></header>
+<div class="schoolsIntro">普通科は学区外枠で比較 ／ 数字は割合による計算値</div>
+<div class="admissionGrid">
+<article class="admissionCard north"><div class="admissionTitle">徳島北高校 <span>普通科・学区外</span></div><div class="admissionStat"><span>学区外上限 <b>17%</b></span><strong>39.1<small>人</small></strong></div><div class="admissionMinus">育成型による定員の減少上限 <b>最大−6.9人</b></div><div class="admissionBottom">一般選抜の学区外枠・最少目安 <b>32.2人</b></div></article>
+<article class="admissionCard north"><div class="admissionTitle">徳島北高校 <span>国際英語科</span></div><div class="admissionStat"><span>学科定員</span><strong>40<small>人</small></strong></div><div class="admissionMinus neutral">育成型による定員の減少上限 <b>―</b></div><div class="admissionBottom">比較上は育成型による減少を考慮しない</div></article>
+<article class="admissionCard johoku"><div class="admissionTitle">城北高校 <span>理数科学科</span></div><div class="admissionStat"><span>学科定員</span><strong>30<small>人</small></strong></div><div class="admissionMinus neutral">育成型による定員の減少上限 <b>―</b></div><div class="admissionBottom">比較上は育成型による減少を考慮しない</div></article>
+<article class="admissionCard johoku"><div class="admissionTitle">城北高校 <span>普通科・学区外</span></div><div class="admissionStat"><span>学区外上限 <b>17%</b></span><strong>40.8<small>人</small></strong></div><div class="admissionMinus">育成型による定員の減少上限 <b>最大−7.2人</b></div><div class="admissionBottom">一般選抜の学区外枠・最少目安 <b>33.6人</b></div></article>
+</div><div class="admissionFoot">※普通科の人数は定員×17%・3%・14%の理論値（小数第1位）。実際の募集人数ではありません。専門学科の40人・30人も一般選抜の確定枠ではありません。</div></div></section>
 
-    <section class="screen" aria-label="令和9年度進学希望調査・9学科比較">
-      <div class="surveyPage">
-        <header class="surveyTop"><h2>高校進学希望調査</h2><span>2027 ADMISSIONS</span></header>
-        <div class="surveyDate"><strong>9月4日時点</strong><small>2026年・第1回調査</small></div>
-        <div class="surveyTableWrap"><table class="surveyTable" aria-label="志望順位順の9学科比較">
-          <colgroup><col style="width:5%"><col style="width:43%"><col style="width:12%"><col style="width:12%"><col style="width:13%"><col style="width:15%"></colgroup>
-          <thead><tr><th>順</th><th>高校・学科</th><th>定員/枠</th><th>希望者</th><th>過不足</th><th>倍率</th></tr></thead>
-          <tbody><tr class="focus-north"><td class="rank">1</td><td>徳島北高校<span class="sub">（普通科・学区外）</span></td><td>約39</td><td>89</td><td class="plus">約+50</td><td class="rate">約2.28倍</td></tr><tr class="focus-north"><td class="rank">2</td><td>徳島北高校<span class="sub">（国際英語科）</span></td><td>40</td><td>43</td><td class="plus">+3</td><td class="rate">1.08倍</td></tr><tr class="focus-johoku"><td class="rank">3</td><td>城北高校<span class="sub">（理数科学科）</span></td><td>30</td><td>20</td><td class="minus">−10</td><td class="rate">0.67倍</td></tr><tr class="focus-johoku"><td class="rank">4</td><td>城北高校<span class="sub">（普通科・学区外）</span></td><td>約41</td><td>67</td><td class="plus">約+26</td><td class="rate">約1.64倍</td></tr><tr class=""><td class="rank">5</td><td>城東高校<span class="sub">（普通科・全県一区）</span></td><td>280</td><td>341</td><td class="plus">+61</td><td class="rate">1.22倍</td></tr><tr class=""><td class="rank">6</td><td>徳島市立高校<span class="sub">（普通科・学区外）</span></td><td>約48</td><td>37</td><td class="minus">約−11</td><td class="rate">約0.78倍</td></tr><tr class=""><td class="rank">7</td><td>徳島市立高校<span class="sub">（理数科）</span></td><td>40</td><td>47</td><td class="plus">+7</td><td class="rate">1.18倍</td></tr><tr class=""><td class="rank">8</td><td>城南高校<span class="sub">（応用数理科）</span></td><td>30</td><td>23</td><td class="minus">−7</td><td class="rate">0.77倍</td></tr><tr class=""><td class="rank">9</td><td>城南高校<span class="sub">（普通科・学区外）</span></td><td>約41</td><td>64</td><td class="plus">約+23</td><td class="rate">約1.57倍</td></tr></tbody>
-        </table></div>
-        <footer class="surveyFoot">※普通科（城東を除く）は学区外枠17%の概算と学区外希望者で比較。城東は全県一区。専門学科は学科全体。倍率は希望調査時点の参考値で、正式な出願倍率ではありません。</footer>
-      </div>
-    </section>
+    <section class="screen" aria-label="令和9年度進学希望調査・9学科比較"><div class="surveyPage surveyRev"><header class="surveyTop"><h2>高校進学希望調査</h2><span>2027 ADMISSIONS</span></header><div class="surveyDate"><strong>9月4日時点</strong><small>2026年・第1回調査</small></div><div class="surveyTableWrap"><table class="surveyTable" aria-label="志望順位順の9学科比較"><colgroup><col style="width:4%"><col style="width:27%"><col style="width:12%"><col style="width:22%"><col style="width:11%"><col style="width:12%"><col style="width:12%"></colgroup><thead><tr><th>順</th><th>高校・学科</th><th>定員・枠</th><th>育成型による<br>定員の減少上限</th><th>希望者</th><th>過不足</th><th>参考倍率</th></tr></thead><tbody><tr class="focus-north"><td class="rank">1</td><td>徳島北高校<span class="sub">（普通科・学区外）</span></td><td>39.1人</td><td class="reduce">最大−6.9人</td><td>89人</td><td class="plus">+49.9人</td><td class="rate">2.28倍</td></tr><tr class="focus-north"><td class="rank">2</td><td>徳島北高校<span class="sub">（国際英語科）</span></td><td>40人</td><td class="reduce">―</td><td>43人</td><td class="plus">+3人</td><td class="rate">1.08倍</td></tr><tr class="focus-johoku"><td class="rank">3</td><td>城北高校<span class="sub">（理数科学科）</span></td><td>30人</td><td class="reduce">―</td><td>20人</td><td class="minus">−10人</td><td class="rate">0.67倍</td></tr><tr class="focus-johoku"><td class="rank">4</td><td>城北高校<span class="sub">（普通科・学区外）</span></td><td>40.8人</td><td class="reduce">最大−7.2人</td><td>67人</td><td class="plus">+26.2人</td><td class="rate">1.64倍</td></tr><tr class=""><td class="rank">5</td><td>城東高校<span class="sub">（普通科・全県一区）</span></td><td>280人</td><td class="reduce">未確認</td><td>341人</td><td class="plus">+61人</td><td class="rate">1.22倍</td></tr><tr class=""><td class="rank">6</td><td>徳島市立高校<span class="sub">（普通科・学区外）</span></td><td>22.4人</td><td class="reduce">最大−5.6人</td><td>37人</td><td class="plus">+14.6人</td><td class="rate">1.65倍</td></tr><tr class=""><td class="rank">7</td><td>徳島市立高校<span class="sub">（理数科）</span></td><td>40人</td><td class="reduce">―</td><td>47人</td><td class="plus">+7人</td><td class="rate">1.18倍</td></tr><tr class=""><td class="rank">8</td><td>城南高校<span class="sub">（応用数理科）</span></td><td>30人</td><td class="reduce">―</td><td>23人</td><td class="minus">−7人</td><td class="rate">0.77倍</td></tr><tr class=""><td class="rank">9</td><td>城南高校<span class="sub">（普通科・学区外）</span></td><td>40.8人</td><td class="reduce">最大−7.2人</td><td>64人</td><td class="plus">+23.2人</td><td class="rate">1.57倍</td></tr></tbody></table></div><footer class="surveyFoot">※普通科は学区外枠（徳島北・城北・城南17%、徳島市立8%）の理論値。育成型による減少上限は普通科の学区外枠に関する概算。専門学科の「―」は今回の比較で減少を考慮しない意味。過不足・倍率は育成型を差し引く前の9月4日時点の参考値で、正式な出願倍率ではありません。</footer></div></section>
     <section class="screen">
       <div class="simpleClockPage">
         <div class="simpleClockInner">
